@@ -784,7 +784,7 @@ build ZeusEngineCoreBuild/include/glfw/src/install/strip: phony ZeusEngineCoreBu
 # Custom command for ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/update_mappings
 
 build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/update_mappings | ${cmake_ninja_workdir}ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/update_mappings: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
   DESC = Updating gamepad mappings from upstream repository
 
 # =============================================================================
