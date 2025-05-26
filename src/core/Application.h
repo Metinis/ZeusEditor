@@ -7,6 +7,8 @@
 #include <ZeusEngineCore/IRenderer.h>
 #include <ZeusEngineCore/RendererAPI.h>
 
+#include "ZeusEngineCore/Material.h"
+
 class Application {
 public:
     Application(RendererAPI api);
@@ -24,6 +26,7 @@ private:
     std::unique_ptr<IRenderer> m_Renderer;
     std::unique_ptr<ImGUILayer> m_ImGuiLayer;
     std::unique_ptr<Window> m_Window;
-    glm::vec4 m_TriangleColor = {1.0f, 0.5f, 0.2f, 1.0f};
+    std::shared_ptr<Material> m_Material;
+    std::shared_ptr<IMesh> m_Mesh;
     bool m_Running = false;
 };
