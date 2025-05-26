@@ -1,4 +1,7 @@
 #include "Application.h"
+
+#include <glm/gtc/type_ptr.inl>
+
 #include "../imgui/ImGUILayer.h"
 #include "ZeusEngineCore/Shader.h"
 #include "ZeusEngineCore/ShaderManager.h"
@@ -42,11 +45,13 @@ void Application::Init() {
     const std::string fragmentSrc = R"(
         #version 410 core
 
+        uniform vec4 u_Color;
         in vec4 vColor;    // interpolated color from vertex shader
         out vec4 FragColor;
 
         void main() {
-            FragColor = vColor;
+            //FragColor = vColor;
+            FragColor = u_Color;
         }
 
     )";
@@ -71,6 +76,9 @@ void Application::Shutdown() {
     }
     if(m_Renderer) {
         m_Renderer->Cleanup();
+    }
+    if(m_Mesh) {
+        m_Mesh->Cleanup();
     }
 }
 void Application::Run() {
@@ -98,7 +106,7 @@ void Application::Render() {
     m_Renderer->DrawMesh(*m_Mesh, *m_Material);
     m_ImGuiLayer->BeginFrame();
 
-    //ImGui::ColorEdit4("Material Color", );
+    ImGui::ColorEdit4("Material Color", glm::value_ptr(m_Material->ColorRef("u_Color")));
 
     m_ImGuiLayer->Render();
 
