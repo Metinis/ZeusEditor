@@ -19,10 +19,13 @@ void ImGUILayerVulkan::Shutdown() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
-void ImGUILayerVulkan::Render() {
+void ImGUILayerVulkan::BeginFrame() {
     ImGui_ImplGlfw_NewFrame();
 
     ImGui::NewFrame();
+}
+void ImGUILayerVulkan::Render() {
+
 
     ImGui::ShowDemoWindow();
 

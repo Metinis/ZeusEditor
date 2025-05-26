@@ -16,7 +16,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVK_PROTOTYPES")
 
 # GLFW
 if(NOT GLFW_DIR)
-   set(GLFW_DIR ../../../glfw) # Set this to point to an up-to-date GLFW repo
+   set(GLFW_DIR ../../../../../ZeusEngineCore/include/glfw) # Set this to point to an up-to-date GLFW repo
 endif()
 option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
 option(GLFW_BUILD_TESTS "Build the GLFW test programs" OFF)

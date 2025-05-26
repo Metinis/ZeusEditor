@@ -23,12 +23,13 @@ void ImGUILayerOpenGL::Shutdown() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
-void ImGUILayerOpenGL::Render() {
+void ImGUILayerOpenGL::BeginFrame() {
     ImGui_ImplGlfw_NewFrame();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui::NewFrame();
-
-    ImGui::ShowDemoWindow();
+}
+void ImGUILayerOpenGL::Render() {
+    //ImGui::ShowDemoWindow();
 
     ImGui::Render();
 

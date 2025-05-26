@@ -41,93 +41,60 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target glad
-
-
-#############################################
-# Order-only phony target for glad
-
-build cmake_object_order_depends_target_glad: phony || CMakeFiles/glad.dir
-
-build CMakeFiles/glad.dir/include/glad/src/glad.c.o: C_COMPILER__glad_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/src/glad.c || cmake_object_order_depends_target_glad
-  DEP_FILE = CMakeFiles/glad.dir/include/glad/src/glad.c.o.d
-  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include
-  OBJECT_DIR = CMakeFiles/glad.dir
-  OBJECT_FILE_DIR = CMakeFiles/glad.dir/include/glad/src
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target glad
-
-
-#############################################
-# Link the static library libglad.a
-
-build libglad.a: C_STATIC_LIBRARY_LINKER__glad_Debug CMakeFiles/glad.dir/include/glad/src/glad.c.o
-  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk
-  LANGUAGE_COMPILE_FLAGS = -g
-  OBJECT_DIR = CMakeFiles/glad.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = libglad.a
-  TARGET_PDB = glad.a.dbg
-
-# =============================================================================
 # Object build statements for STATIC_LIBRARY target imgui
 
 
 #############################################
 # Order-only phony target for imgui
 
-build cmake_object_order_depends_target_imgui: phony || CMakeFiles/imgui.dir
+build cmake_object_order_depends_target_imgui: phony || cmake_object_order_depends_target_ZeusEngineCore cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw
 
 build CMakeFiles/imgui.dir/include/imgui/imgui.cpp.o: CXX_COMPILER__imgui_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/imgui.cpp || cmake_object_order_depends_target_imgui
   DEP_FILE = CMakeFiles/imgui.dir/include/imgui/imgui.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include
   OBJECT_DIR = CMakeFiles/imgui.dir
   OBJECT_FILE_DIR = CMakeFiles/imgui.dir/include/imgui
 
 build CMakeFiles/imgui.dir/include/imgui/imgui_draw.cpp.o: CXX_COMPILER__imgui_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/imgui_draw.cpp || cmake_object_order_depends_target_imgui
   DEP_FILE = CMakeFiles/imgui.dir/include/imgui/imgui_draw.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include
   OBJECT_DIR = CMakeFiles/imgui.dir
   OBJECT_FILE_DIR = CMakeFiles/imgui.dir/include/imgui
 
 build CMakeFiles/imgui.dir/include/imgui/imgui_tables.cpp.o: CXX_COMPILER__imgui_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/imgui_tables.cpp || cmake_object_order_depends_target_imgui
   DEP_FILE = CMakeFiles/imgui.dir/include/imgui/imgui_tables.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include
   OBJECT_DIR = CMakeFiles/imgui.dir
   OBJECT_FILE_DIR = CMakeFiles/imgui.dir/include/imgui
 
 build CMakeFiles/imgui.dir/include/imgui/imgui_widgets.cpp.o: CXX_COMPILER__imgui_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_imgui
   DEP_FILE = CMakeFiles/imgui.dir/include/imgui/imgui_widgets.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include
   OBJECT_DIR = CMakeFiles/imgui.dir
   OBJECT_FILE_DIR = CMakeFiles/imgui.dir/include/imgui
 
 build CMakeFiles/imgui.dir/include/imgui/imgui_demo.cpp.o: CXX_COMPILER__imgui_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/imgui_demo.cpp || cmake_object_order_depends_target_imgui
   DEP_FILE = CMakeFiles/imgui.dir/include/imgui/imgui_demo.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include
   OBJECT_DIR = CMakeFiles/imgui.dir
   OBJECT_FILE_DIR = CMakeFiles/imgui.dir/include/imgui
 
 build CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_glfw.cpp.o: CXX_COMPILER__imgui_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends/imgui_impl_glfw.cpp || cmake_object_order_depends_target_imgui
   DEP_FILE = CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_glfw.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include
   OBJECT_DIR = CMakeFiles/imgui.dir
   OBJECT_FILE_DIR = CMakeFiles/imgui.dir/include/imgui/backends
 
 build CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_opengl3.cpp.o: CXX_COMPILER__imgui_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends/imgui_impl_opengl3.cpp || cmake_object_order_depends_target_imgui
   DEP_FILE = CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_opengl3.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include
   OBJECT_DIR = CMakeFiles/imgui.dir
   OBJECT_FILE_DIR = CMakeFiles/imgui.dir/include/imgui/backends
 
@@ -139,7 +106,7 @@ build CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_opengl3.cpp.o: CXX_
 #############################################
 # Link the static library libimgui.a
 
-build libimgui.a: CXX_STATIC_LIBRARY_LINKER__imgui_Debug CMakeFiles/imgui.dir/include/imgui/imgui.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_draw.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_tables.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_widgets.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_demo.cpp.o CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_opengl3.cpp.o
+build libimgui.a: CXX_STATIC_LIBRARY_LINKER__imgui_Debug CMakeFiles/imgui.dir/include/imgui/imgui.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_draw.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_tables.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_widgets.cpp.o CMakeFiles/imgui.dir/include/imgui/imgui_demo.cpp.o CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_glfw.cpp.o CMakeFiles/imgui.dir/include/imgui/backends/imgui_impl_opengl3.cpp.o || ZeusEngineCoreBuild/include/glfw/src/libglfw3.a ZeusEngineCoreBuild/libZeusEngineCore.a ZeusEngineCoreBuild/libglad.a
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = CMakeFiles/imgui.dir
@@ -160,42 +127,35 @@ build cmake_object_order_depends_target_ZeusEditor: phony || cmake_object_order_
 build CMakeFiles/ZeusEditor.dir/src/main.cpp.o: CXX_COMPILER__ZeusEditor_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/src/main.cpp || cmake_object_order_depends_target_ZeusEditor
   DEP_FILE = CMakeFiles/ZeusEditor.dir/src/main.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = CMakeFiles/ZeusEditor.dir
   OBJECT_FILE_DIR = CMakeFiles/ZeusEditor.dir/src
 
 build CMakeFiles/ZeusEditor.dir/src/core/Application.cpp.o: CXX_COMPILER__ZeusEditor_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/src/core/Application.cpp || cmake_object_order_depends_target_ZeusEditor
   DEP_FILE = CMakeFiles/ZeusEditor.dir/src/core/Application.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
-  OBJECT_DIR = CMakeFiles/ZeusEditor.dir
-  OBJECT_FILE_DIR = CMakeFiles/ZeusEditor.dir/src/core
-
-build CMakeFiles/ZeusEditor.dir/src/core/Window.cpp.o: CXX_COMPILER__ZeusEditor_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/src/core/Window.cpp || cmake_object_order_depends_target_ZeusEditor
-  DEP_FILE = CMakeFiles/ZeusEditor.dir/src/core/Window.cpp.o.d
-  FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = CMakeFiles/ZeusEditor.dir
   OBJECT_FILE_DIR = CMakeFiles/ZeusEditor.dir/src/core
 
 build CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayer.cpp.o: CXX_COMPILER__ZeusEditor_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/src/imgui/ImGUILayer.cpp || cmake_object_order_depends_target_ZeusEditor
   DEP_FILE = CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayer.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = CMakeFiles/ZeusEditor.dir
   OBJECT_FILE_DIR = CMakeFiles/ZeusEditor.dir/src/imgui
 
 build CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerOpenGL.cpp.o: CXX_COMPILER__ZeusEditor_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/src/imgui/ImGUILayerOpenGL.cpp || cmake_object_order_depends_target_ZeusEditor
   DEP_FILE = CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerOpenGL.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = CMakeFiles/ZeusEditor.dir
   OBJECT_FILE_DIR = CMakeFiles/ZeusEditor.dir/src/imgui
 
 build CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerVulkan.cpp.o: CXX_COMPILER__ZeusEditor_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/src/imgui/ImGUILayerVulkan.cpp || cmake_object_order_depends_target_ZeusEditor
   DEP_FILE = CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerVulkan.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/imgui/backends -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = CMakeFiles/ZeusEditor.dir
   OBJECT_FILE_DIR = CMakeFiles/ZeusEditor.dir/src/imgui
 
@@ -207,9 +167,9 @@ build CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerVulkan.cpp.o: CXX_COMPILER__
 #############################################
 # Link the executable ZeusEditor
 
-build ZeusEditor: CXX_EXECUTABLE_LINKER__ZeusEditor_Debug CMakeFiles/ZeusEditor.dir/src/main.cpp.o CMakeFiles/ZeusEditor.dir/src/core/Application.cpp.o CMakeFiles/ZeusEditor.dir/src/core/Window.cpp.o CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayer.cpp.o CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerOpenGL.cpp.o CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerVulkan.cpp.o | /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib include/glfw/src/libglfw3.a libglad.a libimgui.a ZeusEngineCoreBuild/libZeusEngineCore.a /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib || ZeusEngineCoreBuild/libZeusEngineCore.a include/glfw/src/libglfw3.a libglad.a libimgui.a
+build ZeusEditor: CXX_EXECUTABLE_LINKER__ZeusEditor_Debug CMakeFiles/ZeusEditor.dir/src/main.cpp.o CMakeFiles/ZeusEditor.dir/src/core/Application.cpp.o CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayer.cpp.o CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerOpenGL.cpp.o CMakeFiles/ZeusEditor.dir/src/imgui/ImGUILayerVulkan.cpp.o | libimgui.a ZeusEngineCoreBuild/libZeusEngineCore.a /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib ZeusEngineCoreBuild/libglad.a ZeusEngineCoreBuild/include/glfw/src/libglfw3.a || ZeusEngineCoreBuild/include/glfw/src/libglfw3.a ZeusEngineCoreBuild/libZeusEngineCore.a ZeusEngineCoreBuild/libglad.a libimgui.a
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk
-  LINK_LIBRARIES = -Wl,-rpath,/Users/metinis/VulkanSDK/1.3.296.0/macOS/lib  -framework Cocoa  -framework IOKit  -framework CoreVideo  /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib  include/glfw/src/libglfw3.a  libglad.a  libimgui.a  ZeusEngineCoreBuild/libZeusEngineCore.a  -framework Cocoa  -framework IOKit  -framework CoreFoundation  -framework QuartzCore  -framework Cocoa  -framework IOKit  -framework CoreVideo  /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib
+  LINK_LIBRARIES = -Wl,-rpath,/Users/metinis/VulkanSDK/1.3.296.0/macOS/lib  -framework Cocoa  -framework IOKit  -framework CoreVideo  libimgui.a  ZeusEngineCoreBuild/libZeusEngineCore.a  /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib  -framework Cocoa  -framework IOKit  -framework CoreVideo  /Users/metinis/VulkanSDK/1.3.296.0/macOS/lib/libvulkan.dylib  ZeusEngineCoreBuild/libglad.a  ZeusEngineCoreBuild/include/glfw/src/libglfw3.a  -framework Cocoa  -framework IOKit  -framework CoreFoundation  -framework QuartzCore
   OBJECT_DIR = CMakeFiles/ZeusEditor.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -286,436 +246,38 @@ build install/strip: phony CMakeFiles/install/strip.util
 # /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/CMakeLists.txt
 # =============================================================================
 
-
-#############################################
-# Utility command for uninstall
-
-build include/glfw/uninstall: phony include/glfw/CMakeFiles/uninstall
-
-
-#############################################
-# Utility command for edit_cache
-
-build include/glfw/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-  DESC = No interactive CMake dialog available...
-  restat = 1
-
-build include/glfw/edit_cache: phony include/glfw/CMakeFiles/edit_cache.util
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build include/glfw/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor -B/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build include/glfw/rebuild_cache: phony include/glfw/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for list_install_components
-
-build include/glfw/list_install_components: phony
-
-
-#############################################
-# Utility command for install
-
-build include/glfw/CMakeFiles/install.util: CUSTOM_COMMAND include/glfw/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P cmake_install.cmake
-  DESC = Install the project...
-  pool = console
-  restat = 1
-
-build include/glfw/install: phony include/glfw/CMakeFiles/install.util
-
-
-#############################################
-# Utility command for install/local
-
-build include/glfw/CMakeFiles/install/local.util: CUSTOM_COMMAND include/glfw/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-  DESC = Installing only the local directory...
-  pool = console
-  restat = 1
-
-build include/glfw/install/local: phony include/glfw/CMakeFiles/install/local.util
-
-
-#############################################
-# Utility command for install/strip
-
-build include/glfw/CMakeFiles/install/strip.util: CUSTOM_COMMAND include/glfw/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-  DESC = Installing the project stripped...
-  pool = console
-  restat = 1
-
-build include/glfw/install/strip: phony include/glfw/CMakeFiles/install/strip.util
-
-
-#############################################
-# Custom command for include/glfw/CMakeFiles/uninstall
-
-build include/glfw/CMakeFiles/uninstall | ${cmake_ninja_workdir}include/glfw/CMakeFiles/uninstall: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/cmake_uninstall.cmake
-
 # =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMakeLists.txt
-# =============================================================================
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target glfw
+# Object build statements for STATIC_LIBRARY target glad
 
 
 #############################################
-# Order-only phony target for glfw
+# Order-only phony target for glad
 
-build cmake_object_order_depends_target_glfw: phony || include/glfw/src/CMakeFiles/glfw.dir
+build cmake_object_order_depends_target_glad: phony || ZeusEngineCoreBuild/CMakeFiles/glad.dir
 
-build include/glfw/src/CMakeFiles/glfw.dir/context.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/context.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/context.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/init.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/init.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/init.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/input.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/input.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/input.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/monitor.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/monitor.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/monitor.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/platform.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/platform.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/platform.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/vulkan.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/window.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/window.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/window.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/egl_context.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/osmesa_context.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/null_init.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/null_init.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/null_init.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/null_monitor.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/null_window.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/null_window.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/null_window.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/null_joystick.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/cocoa_time.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/posix_module.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/posix_thread.c || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/cocoa_init.m || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/cocoa_joystick.m || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/cocoa_monitor.m || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/cocoa_window.m || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
-
-build include/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/nsgl_context.m || cmake_object_order_depends_target_glfw
-  DEFINES = -D_GLFW_COCOA
-  DEP_FILE = include/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o.d
-  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
-  OBJECT_FILE_DIR = include/glfw/src/CMakeFiles/glfw.dir
+build ZeusEngineCoreBuild/CMakeFiles/glad.dir/include/glad/src/glad.c.o: C_COMPILER__glad_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/src/glad.c || cmake_object_order_depends_target_glad
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/glad.dir/include/glad/src/glad.c.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include
+  OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/glad.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/glad.dir/include/glad/src
 
 
 # =============================================================================
-# Link build statements for STATIC_LIBRARY target glfw
+# Link build statements for STATIC_LIBRARY target glad
 
 
 #############################################
-# Link the static library include/glfw/src/libglfw3.a
+# Link the static library ZeusEngineCoreBuild/libglad.a
 
-build include/glfw/src/libglfw3.a: C_STATIC_LIBRARY_LINKER__glfw_Debug include/glfw/src/CMakeFiles/glfw.dir/context.c.o include/glfw/src/CMakeFiles/glfw.dir/init.c.o include/glfw/src/CMakeFiles/glfw.dir/input.c.o include/glfw/src/CMakeFiles/glfw.dir/monitor.c.o include/glfw/src/CMakeFiles/glfw.dir/platform.c.o include/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o include/glfw/src/CMakeFiles/glfw.dir/window.c.o include/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o include/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o include/glfw/src/CMakeFiles/glfw.dir/null_init.c.o include/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o include/glfw/src/CMakeFiles/glfw.dir/null_window.c.o include/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o include/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o include/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o include/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o include/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o include/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o include/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o include/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o include/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o
+build ZeusEngineCoreBuild/libglad.a: C_STATIC_LIBRARY_LINKER__glad_Debug ZeusEngineCoreBuild/CMakeFiles/glad.dir/include/glad/src/glad.c.o
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk
   LANGUAGE_COMPILE_FLAGS = -g
-  OBJECT_DIR = include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/glad.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = include/glfw/src/libglfw3.a
-  TARGET_PDB = glfw3.a.dbg
-
-
-#############################################
-# Utility command for update_mappings
-
-build include/glfw/src/update_mappings: phony include/glfw/src/CMakeFiles/update_mappings
-
-
-#############################################
-# Utility command for edit_cache
-
-build include/glfw/src/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-  DESC = No interactive CMake dialog available...
-  restat = 1
-
-build include/glfw/src/edit_cache: phony include/glfw/src/CMakeFiles/edit_cache.util
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build include/glfw/src/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor -B/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build include/glfw/src/rebuild_cache: phony include/glfw/src/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for list_install_components
-
-build include/glfw/src/list_install_components: phony
-
-
-#############################################
-# Utility command for install
-
-build include/glfw/src/CMakeFiles/install.util: CUSTOM_COMMAND include/glfw/src/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P cmake_install.cmake
-  DESC = Install the project...
-  pool = console
-  restat = 1
-
-build include/glfw/src/install: phony include/glfw/src/CMakeFiles/install.util
-
-
-#############################################
-# Utility command for install/local
-
-build include/glfw/src/CMakeFiles/install/local.util: CUSTOM_COMMAND include/glfw/src/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-  DESC = Installing only the local directory...
-  pool = console
-  restat = 1
-
-build include/glfw/src/install/local: phony include/glfw/src/CMakeFiles/install/local.util
-
-
-#############################################
-# Utility command for install/strip
-
-build include/glfw/src/CMakeFiles/install/strip.util: CUSTOM_COMMAND include/glfw/src/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-  DESC = Installing the project stripped...
-  pool = console
-  restat = 1
-
-build include/glfw/src/install/strip: phony include/glfw/src/CMakeFiles/install/strip.util
-
-
-#############################################
-# Custom command for include/glfw/src/CMakeFiles/update_mappings
-
-build include/glfw/src/CMakeFiles/update_mappings | ${cmake_ninja_workdir}include/glfw/src/CMakeFiles/update_mappings: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
-  DESC = Updating gamepad mappings from upstream repository
-
-# =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMakeLists.txt
-# =============================================================================
-
-
-#############################################
-# Utility command for edit_cache
-
-build include/glfw/docs/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-  DESC = No interactive CMake dialog available...
-  restat = 1
-
-build include/glfw/docs/edit_cache: phony include/glfw/docs/CMakeFiles/edit_cache.util
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build include/glfw/docs/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor -B/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build include/glfw/docs/rebuild_cache: phony include/glfw/docs/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for list_install_components
-
-build include/glfw/docs/list_install_components: phony
-
-
-#############################################
-# Utility command for install
-
-build include/glfw/docs/CMakeFiles/install.util: CUSTOM_COMMAND include/glfw/docs/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P cmake_install.cmake
-  DESC = Install the project...
-  pool = console
-  restat = 1
-
-build include/glfw/docs/install: phony include/glfw/docs/CMakeFiles/install.util
-
-
-#############################################
-# Utility command for install/local
-
-build include/glfw/docs/CMakeFiles/install/local.util: CUSTOM_COMMAND include/glfw/docs/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-  DESC = Installing only the local directory...
-  pool = console
-  restat = 1
-
-build include/glfw/docs/install/local: phony include/glfw/docs/CMakeFiles/install/local.util
-
-
-#############################################
-# Utility command for install/strip
-
-build include/glfw/docs/CMakeFiles/install/strip.util: CUSTOM_COMMAND include/glfw/docs/all
-  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-  DESC = Installing the project stripped...
-  pool = console
-  restat = 1
-
-build include/glfw/docs/install/strip: phony include/glfw/docs/CMakeFiles/install/strip.util
-
-# =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/CMakeLists.txt
-# =============================================================================
+  TARGET_FILE = ZeusEngineCoreBuild/libglad.a
+  TARGET_PDB = glad.a.dbg
 
 # =============================================================================
 # Object build statements for STATIC_LIBRARY target ZeusEngineCore
@@ -724,26 +286,61 @@ build include/glfw/docs/install/strip: phony include/glfw/docs/CMakeFiles/instal
 #############################################
 # Order-only phony target for ZeusEngineCore
 
-build cmake_object_order_depends_target_ZeusEngineCore: phony || ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
+build cmake_object_order_depends_target_ZeusEngineCore: phony || cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw
 
 build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/IRenderer.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/IRenderer.cpp || cmake_object_order_depends_target_ZeusEngineCore
   DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/IRenderer.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
   OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer
 
-build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGLRenderer.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/OpenGLRenderer.cpp || cmake_object_order_depends_target_ZeusEngineCore
-  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGLRenderer.cpp.o.d
+build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL/OpenGLRenderer.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/OpenGL/OpenGLRenderer.cpp || cmake_object_order_depends_target_ZeusEngineCore
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL/OpenGLRenderer.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL
+
+build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Vulkan/VulkanRenderer.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/Vulkan/VulkanRenderer.cpp || cmake_object_order_depends_target_ZeusEngineCore
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Vulkan/VulkanRenderer.cpp.o.d
+  FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Vulkan
+
+build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Shader.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/Shader.cpp || cmake_object_order_depends_target_ZeusEngineCore
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Shader.cpp.o.d
+  FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
   OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer
 
-build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/VulkanRenderer.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/VulkanRenderer.cpp || cmake_object_order_depends_target_ZeusEngineCore
-  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/VulkanRenderer.cpp.o.d
+build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Material.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/Material.cpp || cmake_object_order_depends_target_ZeusEngineCore
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Material.cpp.o.d
   FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer
+
+build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/IMesh.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/IMesh.cpp || cmake_object_order_depends_target_ZeusEngineCore
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/IMesh.cpp.o.d
+  FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer
+
+build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL/OpenGLMesh.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/OpenGL/OpenGLMesh.cpp || cmake_object_order_depends_target_ZeusEngineCore
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL/OpenGLMesh.cpp.o.d
+  FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
+  OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL
+
+build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Window.cpp.o: CXX_COMPILER__ZeusEngineCore_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/src/renderer/Window.cpp || cmake_object_order_depends_target_ZeusEngineCore
+  DEP_FILE = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Window.cpp.o.d
+  FLAGS = -g -std=c++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fcolor-diagnostics
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glm -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glad/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks -isystem /Users/metinis/VulkanSDK/1.3.296.0/macOS/include
   OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
   OBJECT_FILE_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer
 
@@ -755,7 +352,7 @@ build ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/VulkanRende
 #############################################
 # Link the static library ZeusEngineCoreBuild/libZeusEngineCore.a
 
-build ZeusEngineCoreBuild/libZeusEngineCore.a: CXX_STATIC_LIBRARY_LINKER__ZeusEngineCore_Debug ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/IRenderer.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGLRenderer.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/VulkanRenderer.cpp.o
+build ZeusEngineCoreBuild/libZeusEngineCore.a: CXX_STATIC_LIBRARY_LINKER__ZeusEngineCore_Debug ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/IRenderer.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL/OpenGLRenderer.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Vulkan/VulkanRenderer.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Shader.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Material.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/IMesh.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/OpenGL/OpenGLMesh.cpp.o ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir/src/renderer/Window.cpp.o || ZeusEngineCoreBuild/include/glfw/src/libglfw3.a ZeusEngineCoreBuild/libglad.a
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = ZeusEngineCoreBuild/CMakeFiles/ZeusEngineCore.dir
@@ -830,23 +427,456 @@ build ZeusEngineCoreBuild/CMakeFiles/install/strip.util: CUSTOM_COMMAND ZeusEngi
 build ZeusEngineCoreBuild/install/strip: phony ZeusEngineCoreBuild/CMakeFiles/install/strip.util
 
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for uninstall
+
+build ZeusEngineCoreBuild/include/glfw/uninstall: phony ZeusEngineCoreBuild/include/glfw/CMakeFiles/uninstall
+
+
+#############################################
+# Utility command for edit_cache
+
+build ZeusEngineCoreBuild/include/glfw/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/edit_cache: phony ZeusEngineCoreBuild/include/glfw/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build ZeusEngineCoreBuild/include/glfw/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor -B/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/rebuild_cache: phony ZeusEngineCoreBuild/include/glfw/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build ZeusEngineCoreBuild/include/glfw/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build ZeusEngineCoreBuild/include/glfw/CMakeFiles/install.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/install: phony ZeusEngineCoreBuild/include/glfw/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build ZeusEngineCoreBuild/include/glfw/CMakeFiles/install/local.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/install/local: phony ZeusEngineCoreBuild/include/glfw/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build ZeusEngineCoreBuild/include/glfw/CMakeFiles/install/strip.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/install/strip: phony ZeusEngineCoreBuild/include/glfw/CMakeFiles/install/strip.util
+
+
+#############################################
+# Custom command for ZeusEngineCoreBuild/include/glfw/CMakeFiles/uninstall
+
+build ZeusEngineCoreBuild/include/glfw/CMakeFiles/uninstall | ${cmake_ninja_workdir}ZeusEngineCoreBuild/include/glfw/CMakeFiles/uninstall: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/cmake_uninstall.cmake
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target glfw
+
+
+#############################################
+# Order-only phony target for glfw
+
+build cmake_object_order_depends_target_glfw: phony || ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/context.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/context.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/context.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/init.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/init.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/init.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/input.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/input.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/input.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/monitor.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/monitor.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/monitor.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/platform.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/platform.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/platform.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/vulkan.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/window.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/window.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/window.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/egl_context.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/osmesa_context.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_init.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/null_init.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_init.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/null_monitor.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_window.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/null_window.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_window.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/null_joystick.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/cocoa_time.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/posix_module.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o: C_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/posix_thread.c || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/cocoa_init.m || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/cocoa_joystick.m || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/cocoa_monitor.m || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/cocoa_window.m || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o: OBJC_COMPILER__glfw_unscanned_Debug /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/nsgl_context.m || cmake_object_order_depends_target_glfw
+  DEFINES = -D_GLFW_COCOA
+  DEP_FILE = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o.d
+  FLAGS = -g -std=c99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk -fPIC -fcolor-diagnostics -Wall
+  INCLUDES = -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/include -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src -I/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  OBJECT_FILE_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target glfw
+
+
+#############################################
+# Link the static library ZeusEngineCoreBuild/include/glfw/src/libglfw3.a
+
+build ZeusEngineCoreBuild/include/glfw/src/libglfw3.a: C_STATIC_LIBRARY_LINKER__glfw_Debug ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/context.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/init.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/input.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/monitor.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/platform.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/window.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_init.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_window.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o
+  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/glfw.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = ZeusEngineCoreBuild/include/glfw/src/libglfw3.a
+  TARGET_PDB = glfw3.a.dbg
+
+
+#############################################
+# Utility command for update_mappings
+
+build ZeusEngineCoreBuild/include/glfw/src/update_mappings: phony ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/update_mappings
+
+
+#############################################
+# Utility command for edit_cache
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/src/edit_cache: phony ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor -B/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/src/rebuild_cache: phony ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build ZeusEngineCoreBuild/include/glfw/src/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/install.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/src/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/src/install: phony ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/install/local.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/src/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/src/install/local: phony ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/install/strip.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/src/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/src/install/strip: phony ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/install/strip.util
+
+
+#############################################
+# Custom command for ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/update_mappings
+
+build ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/update_mappings | ${cmake_ninja_workdir}ZeusEngineCoreBuild/include/glfw/src/CMakeFiles/update_mappings: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
+  DESC = Updating gamepad mappings from upstream repository
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for edit_cache
+
+build ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/docs/edit_cache: phony ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor -B/Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/docs/rebuild_cache: phony ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build ZeusEngineCoreBuild/include/glfw/docs/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/install.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/docs/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/docs/install: phony ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/install/local.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/docs/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/docs/install/local: phony ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/install/strip.util: CUSTOM_COMMAND ZeusEngineCoreBuild/include/glfw/docs/all
+  COMMAND = cd /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/docs && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build ZeusEngineCoreBuild/include/glfw/docs/install/strip: phony ZeusEngineCoreBuild/include/glfw/docs/CMakeFiles/install/strip.util
+
+# =============================================================================
 # Target aliases.
 
 build ZeusEngineCore: phony ZeusEngineCoreBuild/libZeusEngineCore.a
 
-build glad: phony libglad.a
+build glad: phony ZeusEngineCoreBuild/libglad.a
 
-build glfw: phony include/glfw/src/libglfw3.a
+build glfw: phony ZeusEngineCoreBuild/include/glfw/src/libglfw3.a
 
 build imgui: phony libimgui.a
 
 build libZeusEngineCore.a: phony ZeusEngineCoreBuild/libZeusEngineCore.a
 
-build libglfw3.a: phony include/glfw/src/libglfw3.a
+build libglad.a: phony ZeusEngineCoreBuild/libglad.a
 
-build uninstall: phony include/glfw/uninstall
+build libglfw3.a: phony ZeusEngineCoreBuild/include/glfw/src/libglfw3.a
 
-build update_mappings: phony include/glfw/src/update_mappings
+build uninstall: phony ZeusEngineCoreBuild/include/glfw/uninstall
+
+build update_mappings: phony ZeusEngineCoreBuild/include/glfw/src/update_mappings
 
 # =============================================================================
 # Folder targets.
@@ -856,35 +886,35 @@ build update_mappings: phony include/glfw/src/update_mappings
 #############################################
 # Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug
 
-build all: phony libglad.a libimgui.a ZeusEditor include/glfw/all ZeusEngineCoreBuild/all
+build all: phony libimgui.a ZeusEditor ZeusEngineCoreBuild/all
 
 # =============================================================================
 
 #############################################
 # Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild
 
-build ZeusEngineCoreBuild/all: phony ZeusEngineCoreBuild/libZeusEngineCore.a
+build ZeusEngineCoreBuild/all: phony ZeusEngineCoreBuild/libglad.a ZeusEngineCoreBuild/libZeusEngineCore.a ZeusEngineCoreBuild/include/glfw/all
 
 # =============================================================================
 
 #############################################
-# Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw
+# Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw
 
-build include/glfw/all: phony include/glfw/src/all include/glfw/docs/all
-
-# =============================================================================
-
-#############################################
-# Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/docs
-
-build include/glfw/docs/all: phony
+build ZeusEngineCoreBuild/include/glfw/all: phony ZeusEngineCoreBuild/include/glfw/src/all ZeusEngineCoreBuild/include/glfw/docs/all
 
 # =============================================================================
 
 #############################################
-# Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/include/glfw/src
+# Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/docs
 
-build include/glfw/src/all: phony include/glfw/src/libglfw3.a
+build ZeusEngineCoreBuild/include/glfw/docs/all: phony
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/cmake-build-debug/ZeusEngineCoreBuild/include/glfw/src
+
+build ZeusEngineCoreBuild/include/glfw/src/all: phony ZeusEngineCoreBuild/include/glfw/src/libglfw3.a
 
 # =============================================================================
 # Built-in targets
@@ -893,14 +923,14 @@ build include/glfw/src/all: phony include/glfw/src/libglfw3.a
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeDependentOption.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeOBJCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindDoxygen.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindThreads.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindVulkan.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMake/cmake_uninstall.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMake/glfw3.pc.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMake/glfw3Config.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/docs/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/CMakeLists.txt CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeOBJCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeDependentOption.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeOBJCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindDoxygen.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindThreads.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindVulkan.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/cmake_uninstall.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/glfw3.pc.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/glfw3Config.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/docs/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeOBJCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeDependentOption.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeOBJCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindDoxygen.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindThreads.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindVulkan.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMake/cmake_uninstall.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMake/glfw3.pc.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMake/glfw3Config.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/docs/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/include/glfw/src/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/CMakeLists.txt CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeOBJCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake: phony
+build /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeDependentOption.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeOBJCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindDoxygen.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindThreads.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindVulkan.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-AppleClang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang-OBJC.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /Users/metinis/CLionProjects/ZeusEngine/ZeusEditor/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/cmake_uninstall.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/glfw3.pc.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMake/glfw3Config.cmake.in /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/docs/CMakeLists.txt /Users/metinis/CLionProjects/ZeusEngine/ZeusEngineCore/include/glfw/src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeOBJCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake: phony
 
 
 #############################################

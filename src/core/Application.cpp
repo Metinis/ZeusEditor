@@ -8,9 +8,8 @@ Application::~Application() {
     Shutdown();
 }
 void Application::Init() {
-    //initialize the renderer and imguilayer and window
     const bool useVulkan = (m_API == RendererAPI::Vulkan);
-    m_Window = new Window(1280, 720, "Zeus Engine", useVulkan);
+    m_Window = std::make_unique<Window>(1280, 720, "Zeus Engine", useVulkan);
 
     m_Renderer = IRenderer::Create(m_API);
     m_Renderer->Init();
@@ -23,13 +22,10 @@ void Application::Init() {
 void Application::Shutdown() {
     if(m_ImGuiLayer) {
         m_ImGuiLayer->Shutdown();
-        delete m_ImGuiLayer;
     }
-
-    //can delete nullptrs
-    delete m_Renderer;
-
-    delete m_Window;
+    if(m_Renderer) {
+        m_Renderer->Cleanup();
+    }
 }
 void Application::Run() {
     while(m_Running && !m_Window->ShouldClose()) {
@@ -51,7 +47,14 @@ void Application::Update(float deltaTime) {
     //Update Scene here
 }
 void Application::Render() {
+    m_Renderer->BeginFrame();
+
+    m_Renderer->DrawMesh(m_TriangleColor);
+    m_ImGuiLayer->BeginFrame();
+    ImGui::ColorEdit4("Triangle Color", &m_TriangleColor[0]);
     m_ImGuiLayer->Render();
+
+    m_Renderer->EndFrame();
 }
 
 

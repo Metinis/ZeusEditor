@@ -5,17 +5,12 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+# Include directories
+include_directories(
+        ${CMAKE_SOURCE_DIR}/include
+)
 
-include_directories(${CMAKE_SOURCE_DIR}/include/glfw/include)
-
-include_directories(${CMAKE_SOURCE_DIR}/include/glad/include)
-
-add_library(glad STATIC include/glad/src/glad.c)
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/include/glfw)
 add_subdirectory(../ZeusEngineCore ZeusEngineCoreBuild)
-
 
 set(IMGUI_SRC
         include/imgui/imgui.cpp
@@ -28,25 +23,26 @@ set(IMGUI_SRC
 add_library(imgui STATIC ${IMGUI_SRC})
 target_include_directories(imgui PUBLIC include/imgui)
 
-
 set(SOURCES
         src/main.cpp
         src/core/Application.cpp
-        src/core/Application.h
-        src/core/Window.cpp
-        src/core/Window.h
         src/imgui/ImGUILayer.cpp
-        src/imgui/ImGUILayer.h
         src/imgui/ImGUILayerOpenGL.cpp
-        src/imgui/ImGUILayerOpenGL.h
         src/imgui/ImGUILayerVulkan.cpp
-        src/imgui/ImGUILayerVulkan.h
-        src/imgui/ImGUILayer.cpp
-        src/imgui/ImGUILayerOpenGL.cpp
 )
 
 add_executable(ZeusEditor ${SOURCES})
 
+set(IMGUI_BACKEND_SRC
+        include/imgui/backends/imgui_impl_glfw.cpp
+        include/imgui/backends/imgui_impl_opengl3.cpp
+        #include/imgui/backends/imgui_impl_vulkan.cpp
+)
+
+target_sources(imgui PRIVATE ${IMGUI_BACKEND_SRC})
+target_include_directories(imgui PUBLIC include/imgui/backends)
+
+# Platform-specific dependencies
 if (APPLE)
     find_library(COCOA_LIBRARY Cocoa REQUIRED)
     find_library(IOKIT_LIBRARY IOKit REQUIRED)
@@ -57,24 +53,14 @@ if (APPLE)
             ${IOKIT_LIBRARY}
             ${COREVIDEO_LIBRARY}
     )
-
-    find_package(Vulkan REQUIRED)
-    target_link_libraries(ZeusEditor PRIVATE Vulkan::Vulkan)
-
-elseif(WIN32)
-    find_package(Vulkan REQUIRED)
-    target_link_libraries(ZeusEditor PRIVATE Vulkan::Vulkan)
 endif()
 
-target_link_libraries(ZeusEditor PRIVATE glfw glad imgui)
-set(IMGUI_BACKEND_SRC
-        include/imgui/backends/imgui_impl_glfw.cpp
-        include/imgui/backends/imgui_impl_opengl3.cpp
-        #include/imgui/backends/imgui_impl_vulkan.cpp
+find_package(Vulkan REQUIRED)
+
+target_link_libraries(imgui PUBLIC ZeusEngineCore)
+
+target_link_libraries(ZeusEditor PRIVATE
+        imgui
+        ZeusEngineCore
+        Vulkan::Vulkan
 )
-
-target_sources(imgui PRIVATE ${IMGUI_BACKEND_SRC})
-target_include_directories(imgui PUBLIC include/imgui/backends)
-target_link_libraries(ZeusEditor PRIVATE ZeusEngineCore)
-
-
