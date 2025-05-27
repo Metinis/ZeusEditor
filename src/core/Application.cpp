@@ -85,7 +85,7 @@ void Application::Run() {
     while(m_Running && !m_Window->ShouldClose()) {
         m_Window->PollEvents();
 
-        float dt = m_Window->GetDeltaTime();
+        const float dt = m_Window->GetDeltaTime();
         Update(dt);
         Render();
 
@@ -103,14 +103,18 @@ void Application::Update(float deltaTime) {
 void Application::Render() {
     m_Renderer->BeginFrame();
 
-    m_Renderer->DrawMesh(*m_Mesh, *m_Material);
+    //m_Renderer->DrawMesh(*m_Mesh, *m_Material);
+    glm::mat4 tranform;
+    m_Renderer->Submit(tranform, m_Material, m_Mesh);
     m_ImGuiLayer->BeginFrame();
 
     ImGui::ColorEdit4("Material Color", glm::value_ptr(m_Material->ColorRef("u_Color")));
 
+    m_Renderer->EndFrame();
+
     m_ImGuiLayer->Render();
 
-    m_Renderer->EndFrame();
+
 }
 
 
