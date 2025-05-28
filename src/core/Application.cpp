@@ -4,6 +4,8 @@
 
 #include "../imgui/ImGUILayer.h"
 #include "ZeusEngineCore/IShader.h"
+#include "ZeusEngineCore/MaterialManager.h"
+#include "ZeusEngineCore/MeshManager.h"
 #include "ZeusEngineCore/ShaderManager.h"
 
 Application::Application(RendererAPI api) : m_API(api) {
@@ -56,8 +58,9 @@ void Application::Init() {
 
     )";
     std::shared_ptr<IShader> shader = ShaderManager::Load("Basic", vertexSrc, fragmentSrc, m_API);
-    m_Material = std::make_shared<Material>(shader);
-    m_Mesh = IMesh::Create(m_API);
+
+    m_Material = MaterialManager::Load("Basic", shader);
+
 
     std::vector<Vertex> vertices = {
         // Triangle
@@ -68,7 +71,7 @@ void Application::Init() {
 
     std::vector<uint32_t> indices = {0, 1, 2};
 
-    m_Mesh->Init(vertices, indices);
+    m_Mesh = MeshManager::Load("Triangle", vertices, indices, m_API);
 }
 void Application::Shutdown() {
     //smart pointers clear automatically
