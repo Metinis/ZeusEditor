@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.inl>
 
 #include "../imgui/ImGUILayer.h"
-#include "ZeusEngineCore/Shader.h"
+#include "ZeusEngineCore/IShader.h"
 #include "ZeusEngineCore/ShaderManager.h"
 
 Application::Application(RendererAPI api) : m_API(api) {
@@ -55,7 +55,7 @@ void Application::Init() {
         }
 
     )";
-    std::shared_ptr<Shader> shader = ShaderManager::Load("Basic", vertexSrc, fragmentSrc);
+    std::shared_ptr<IShader> shader = ShaderManager::Load("Basic", vertexSrc, fragmentSrc, m_API);
     m_Material = std::make_shared<Material>(shader);
     m_Mesh = IMesh::Create(m_API);
 
@@ -71,15 +71,7 @@ void Application::Init() {
     m_Mesh->Init(vertices, indices);
 }
 void Application::Shutdown() {
-    if(m_ImGuiLayer) {
-        m_ImGuiLayer->Shutdown();
-    }
-    if(m_Renderer) {
-        m_Renderer->Cleanup();
-    }
-    if(m_Mesh) {
-        m_Mesh->Cleanup();
-    }
+    //smart pointers clear automatically
 }
 void Application::Run() {
     while(m_Running && !m_Window->ShouldClose()) {

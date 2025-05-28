@@ -8,7 +8,6 @@ class ImGUILayer {
 public:
     virtual ~ImGUILayer() = default;
     virtual void Init(GLFWwindow* window) = 0;
-    virtual void Shutdown() = 0;
     virtual void BeginFrame() = 0;
     virtual void Render() = 0;
 

@@ -11,7 +11,7 @@
 
 class Application {
 public:
-    Application(RendererAPI api);
+    explicit Application(RendererAPI api);
     ~Application();
     void Run(); //Entry point (main.cpp) calls this
 private:

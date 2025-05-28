@@ -13,7 +13,7 @@ void ImGUILayerVulkan::Init(GLFWwindow* window) {
     ImGui_ImplGlfw_InitForVulkan(window, true);
     //TODO finish vulkan init
 }
-void ImGUILayerVulkan::Shutdown() {
+ImGUILayerVulkan::~ImGUILayerVulkan(){
     //ImGui_ImplVulkan_Shutdown(); //TODO fix this
 
     ImGui_ImplGlfw_Shutdown();

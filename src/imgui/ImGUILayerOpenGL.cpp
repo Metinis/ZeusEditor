@@ -17,7 +17,7 @@ void ImGUILayerOpenGL::Init(GLFWwindow* window) {
     ImGui_ImplOpenGL3_Init("#version 450");
 #endif
 }
-void ImGUILayerOpenGL::Shutdown() {
+ImGUILayerOpenGL::~ImGUILayerOpenGL() {
     ImGui_ImplOpenGL3_Shutdown();
 
     ImGui_ImplGlfw_Shutdown();

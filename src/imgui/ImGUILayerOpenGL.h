@@ -5,7 +5,7 @@
 class ImGUILayerOpenGL : public ImGUILayer{
 public:
     void Init(GLFWwindow* window) override;
-    void Shutdown() override;
+    ~ImGUILayerOpenGL() override;
     void BeginFrame() override;
     void Render() override;
 };
