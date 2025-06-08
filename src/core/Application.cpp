@@ -27,37 +27,7 @@ void Application::Init() {
     m_Running = true;
 
     //todo move this into a scene class
-    const std::string vertexSrc = R"(
-        #version 410 core
-
-        layout(location = 0) in vec3 aPos;
-        layout(location = 1) in vec3 aNormal;
-        layout(location = 2) in vec2 aTexCoords;
-        layout(location = 3) in vec4 aColor;
-
-        out vec4 vColor;  // output to fragment shader
-
-        void main() {
-            gl_Position = vec4(aPos, 1.0);
-            vColor = aColor;  // pass per-vertex color to fragment shader
-        }
-
-    )";
-
-    const std::string fragmentSrc = R"(
-        #version 410 core
-
-        uniform vec4 u_Color;
-        in vec4 vColor;    // interpolated color from vertex shader
-        out vec4 FragColor;
-
-        void main() {
-            //FragColor = vColor;
-            FragColor = u_Color;
-        }
-
-    )";
-    std::shared_ptr<IShader> shader = ShaderManager::Load("Basic", vertexSrc, fragmentSrc, m_API);
+    std::shared_ptr<IShader> shader = ShaderManager::Load("Basic", "../resources/shaders/basic.vert", "../resources/shaders/basic.frag", m_API);
 
     m_Material = MaterialManager::Load("Basic", shader);
 
