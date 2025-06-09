@@ -8,8 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # ---- IMGUI ----
 add_library(imgui STATIC)
 
-find_package(Vulkan REQUIRED)
-add_subdirectory(../ZeusEngineCore ZeusEngineCore_build)
+
 
 target_include_directories(imgui PUBLIC
         include/imgui
