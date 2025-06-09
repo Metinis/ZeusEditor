@@ -27,7 +27,7 @@ void Application::Init() {
     m_Running = true;
 
     //todo move this into a scene class
-    std::shared_ptr<IShader> shader = ShaderManager::Load("Basic", "resources/shaders/basic.vert", "resources/shaders/basic.frag", m_API);
+    std::shared_ptr<IShader> shader = ShaderManager::Load("Basic", "shaders/basic.vert", "shaders/basic.frag", m_API);
 
     m_Material = MaterialManager::Load("Basic", shader);
 

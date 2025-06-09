@@ -8,8 +8,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # ---- IMGUI ----
 add_library(imgui STATIC)
 
-
-
 target_include_directories(imgui PUBLIC
         include/imgui
         include/imgui/backends
@@ -17,7 +15,6 @@ target_include_directories(imgui PUBLIC
 
 target_link_libraries(imgui PUBLIC
         ZeusEngineCore
-        glfw
         Vulkan::Vulkan
 )
 
