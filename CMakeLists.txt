@@ -66,3 +66,15 @@ add_custom_command(TARGET ZeusEditor POST_BUILD
         "$<TARGET_FILE_DIR:ZeusEditor>/resources"
         COMMENT "Copying resources to build directory"
 )
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/config.h"
+    @ONLY
+)
+
+target_include_directories(ZeusEditor PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+
+target_compile_definitions(ZeusEditor PRIVATE
+    $<$<CONFIG:Debug>:DEBUG>
+)
+

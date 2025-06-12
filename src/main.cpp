@@ -3,7 +3,7 @@
 #include "core/Application.h"
 
 int main() {
-    RendererAPI api = RendererAPI::OpenGL;
+    RendererAPI api = RendererAPI::Vulkan;
     Application app(api);
     app.Run();
 }
