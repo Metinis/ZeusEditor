@@ -20,14 +20,15 @@ void Application::Init() {
     const bool useVulkan = (m_API == RendererAPI::Vulkan);
     m_Window = std::make_unique<Window>(1280, 720, "Zeus Engine", useVulkan);
 
-    m_Renderer = IRenderer::Create(m_API);
     RendererInitInfo initInfo{};
     if (useVulkan) {
         WindowHandle handle{};
         handle.nativeWindowHandle = m_Window->GetNativeWindow();
         initInfo.windowHandle = handle;
     }
+    m_Renderer = IRenderer::Create(m_API);
     m_Renderer->Init(initInfo);
+    m_Running = true;
 
     /*m_ImGuiLayer = ImGUILayer::Create(m_API);
     m_ImGuiLayer->Init(m_Window->GetNativeWindow());
