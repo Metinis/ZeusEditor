@@ -21,18 +21,22 @@ void Application::Init() {
     m_Window = std::make_unique<Window>(1280, 720, "Zeus Engine", useVulkan);
 
     RendererInitInfo initInfo{};
-    if (useVulkan) {
-        WindowHandle handle{};
-        handle.nativeWindowHandle = static_cast<void*>(m_Window->GetNativeWindow());
-        initInfo.windowHandle = handle;
-    }
+    WindowHandle handle{};
+    handle.nativeWindowHandle = static_cast<void*>(m_Window->GetNativeWindow());
+    initInfo.windowHandle = handle;
+
     m_Renderer = IRenderer::Create(m_API);
     m_Renderer->Init(initInfo);
     m_Running = true;
 
-    /*m_ImGuiLayer = ImGUILayer::Create(m_API);
-    m_ImGuiLayer->Init(m_Window->GetNativeWindow());
-
+    m_ImGuiLayer = ImGUILayer::Create(m_API);
+    ImGuiCreateInfo imguiCreateInfo{};
+    imguiCreateInfo.window = m_Window->GetNativeWindow();
+    imguiCreateInfo.api = m_API;
+    imguiCreateInfo.backendData = m_Renderer->GetContext();
+    m_ImGuiLayer->Init(imguiCreateInfo);
+    //m_ImGuiLayer->Init(m_Window->GetNativeWindow());
+    /*
     m_Running = true;
 
     //todo move this into a scene class
@@ -78,16 +82,22 @@ void Application::Update(float deltaTime) {
 void Application::Render() {
     bool validFrame = m_Renderer->BeginFrame();
     if(validFrame){
-        //m_Renderer->DrawMesh(*m_Mesh, *m_Material);
-        glm::mat4 transform = glm::mat4(1.0);
-        m_Renderer->Submit(transform, m_Material, m_Mesh);
-        //m_ImGuiLayer->BeginFrame();
 
-        //ImGui::ColorEdit4("Material Color", glm::value_ptr(m_Material->ColorRef("u_Color")));
+        m_ImGuiLayer->BeginFrame();
+
+        ImGui::ShowDemoWindow();
+        m_ImGuiLayer->Render();
+
+        glm::mat4 transform = glm::mat4(1.0);
+        m_Renderer->Submit(transform, m_Material, m_Mesh,
+                           [this](vk::CommandBuffer cmd) {
+                               m_ImGuiLayer->EndFrame(cmd);
+                           }
+        );
 
         m_Renderer->EndFrame();
 
-        //m_ImGuiLayer->Render();
+
     }
 }
 

@@ -3,14 +3,14 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-void ImGUILayerOpenGL::Init(GLFWwindow* window) {
+void ImGUILayerOpenGL::Init(const ImGuiCreateInfo& createInfo) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplGlfw_InitForOpenGL(createInfo.window, true);
 #ifdef __APPLE__
     ImGui_ImplOpenGL3_Init("#version 410");
 #else
@@ -29,9 +29,10 @@ void ImGUILayerOpenGL::BeginFrame() {
     ImGui::NewFrame();
 }
 void ImGUILayerOpenGL::Render() {
-    //ImGui::ShowDemoWindow();
-
     ImGui::Render();
-
+}
+// commandBuffer ignored here
+void ImGUILayerOpenGL::EndFrame(void* commandBuffer)
+{
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
