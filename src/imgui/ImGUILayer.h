@@ -20,6 +20,8 @@ struct ImGuiCreateInfo {
 
 class ImGUILayer {
 public:
+    std::function<void(vk::CommandBuffer)> callback = nullptr;
+
     virtual ~ImGUILayer() = default;
     virtual void Init(const ImGuiCreateInfo& createInfo) = 0;
     virtual void BeginFrame() = 0;

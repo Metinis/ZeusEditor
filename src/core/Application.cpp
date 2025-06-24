@@ -18,7 +18,7 @@ Application::~Application() {
 }
 void Application::Init() {
     const bool useVulkan = (m_API == RendererAPI::Vulkan);
-    m_Window = std::make_unique<Window>(1280, 720, "Zeus Engine", useVulkan);
+    m_Window = std::make_unique<Window>(1280, 720, "Zeus Editor", useVulkan);
 
     RendererInitInfo initInfo{};
     WindowHandle handle{};
@@ -80,25 +80,20 @@ void Application::Update(float deltaTime) {
     //Update Scene here
 }
 void Application::Render() {
-    bool validFrame = m_Renderer->BeginFrame();
-    if(validFrame){
+    //check if valid frame
+    if (!m_Renderer->BeginFrame()) return;
 
-        m_ImGuiLayer->BeginFrame();
+    m_ImGuiLayer->BeginFrame();
 
-        ImGui::ShowDemoWindow();
-        m_ImGuiLayer->Render();
+    ImGui::ShowDemoWindow();
+    m_ImGuiLayer->Render();
 
-        glm::mat4 transform = glm::mat4(1.0);
-        m_Renderer->Submit(transform, m_Material, m_Mesh,
-                           [this](vk::CommandBuffer cmd) {
-                               m_ImGuiLayer->EndFrame(cmd);
-                           }
-        );
+    glm::mat4 transform = glm::mat4(1.0);
+    m_Renderer->Submit(transform, m_Material, m_Mesh);
 
-        m_Renderer->EndFrame();
+    //inject IMGUI render
+    m_Renderer->EndFrame(m_ImGuiLayer->callback);
 
-
-    }
 }
 
 

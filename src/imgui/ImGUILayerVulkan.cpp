@@ -61,6 +61,10 @@ void ImGUILayerVulkan::Init(const ImGuiCreateInfo& createInfo) {
     else {
         throw std::runtime_error{ "Invalid Create Info Data For Vulkan!" };
     }
+    //used to submit to renderer
+    callback = [this](vk::CommandBuffer cmd) {
+        this->EndFrame(cmd);
+        };
 }
 ImGUILayerVulkan::~ImGUILayerVulkan(){
     m_Device.waitIdle();
