@@ -4,7 +4,7 @@
 #include <variant>
 #include <vulkan/vulkan.hpp>
 #include <ZeusEngineCore/IRenderer.h>
-#include <ZeusEngineCore/ContextInfo.h>
+#include <ZeusEngineCore/InfoVariants.h>
 
 enum class RendererAPI;
 

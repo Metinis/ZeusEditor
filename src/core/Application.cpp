@@ -6,7 +6,6 @@
 #include "ZeusEngineCore/IShader.h"
 #include "ZeusEngineCore/MaterialManager.h"
 #include "ZeusEngineCore/MeshManager.h"
-#include "ZeusEngineCore/ShaderManager.h"
 #include "src/config.h"
 #include <iostream>
 
@@ -19,15 +18,23 @@ Application::~Application() {
 void Application::Init() {
     const bool useVulkan = (m_API == RendererAPI::Vulkan);
     m_Window = std::make_unique<Window>(1280, 720, "Zeus Editor", useVulkan);
+    m_MaterialManager = std::make_unique<MaterialManager>();
 
-    RendererInitInfo initInfo{};
+    
     WindowHandle handle{};
     handle.nativeWindowHandle = static_cast<void*>(m_Window->GetNativeWindow());
+
+    RendererInitInfo initInfo{};
     initInfo.windowHandle = handle;
 
     m_Renderer = IRenderer::Create(m_API);
     m_Renderer->Init(initInfo);
     m_Running = true;
+
+    ShaderInfo shaderInfo{};
+    shaderInfo.api = m_API;
+    shaderInfo.backendData = m_Renderer->GetShaderInfo();
+    m_ShaderManager = std::make_unique<ShaderManager>(shaderInfo);
 
     m_ImGuiLayer = ImGUILayer::Create(m_API);
     ImGuiCreateInfo imguiCreateInfo{};
@@ -35,6 +42,18 @@ void Application::Init() {
     imguiCreateInfo.api = m_API;
     imguiCreateInfo.backendData = m_Renderer->GetContext();
     m_ImGuiLayer->Init(imguiCreateInfo);
+
+
+
+    std::string resourceRoot = RESOURCE_ROOT;
+    std::string vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
+    std::string fragPath = resourceRoot + "/shaders/vkbasic.frag.spv";
+
+    std::cout << "[Shader Load] vert: " << vertPath << "\n";
+    std::cout << "[Shader Load] frag: " << fragPath << "\n";
+    auto shader = m_ShaderManager->Load("Basic", resourceRoot + "/shaders/vkbasic.vert.spv", resourceRoot + "/shaders/vkbasic.frag.spv");
+    m_Material = m_MaterialManager->Load("Basic", shader);
+
     //m_ImGuiLayer->Init(m_Window->GetNativeWindow());
     /*
     m_Running = true;
@@ -88,7 +107,7 @@ void Application::Render() {
     ImGui::ShowDemoWindow();
     m_ImGuiLayer->Render();
 
-    glm::mat4 transform = glm::mat4(1.0);
+    auto transform = glm::mat4(1.0);
     m_Renderer->Submit(transform, m_Material, m_Mesh);
 
     //inject IMGUI render
