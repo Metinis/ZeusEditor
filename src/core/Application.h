@@ -32,6 +32,8 @@ private:
     std::unique_ptr<MaterialManager> m_MaterialManager;
     std::unique_ptr<MeshManager> m_MeshManager;
     std::shared_ptr<Material> m_Material;
+
     std::shared_ptr<IMesh> m_Mesh;
+
     bool m_Running = false;
 };
