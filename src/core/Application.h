@@ -9,6 +9,7 @@
 #include <ZeusEngineCore/RendererAPI.h>
 
 #include "ZeusEngineCore/Material.h"
+#include "ZeusEngineCore/MeshManager.h"
 
 class Application {
 public:
@@ -29,6 +30,7 @@ private:
     std::unique_ptr<Window> m_Window;
     std::unique_ptr<ShaderManager> m_ShaderManager;
     std::unique_ptr<MaterialManager> m_MaterialManager;
+    std::unique_ptr<MeshManager> m_MeshManager;
     std::shared_ptr<Material> m_Material;
     std::shared_ptr<IMesh> m_Mesh;
     bool m_Running = false;

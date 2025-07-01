@@ -20,6 +20,7 @@ void Application::Init() {
     m_Window = std::make_unique<Window>(1280, 720, "Zeus Editor", useVulkan);
     m_MaterialManager = std::make_unique<MaterialManager>();
 
+
     
     WindowHandle handle{};
     handle.nativeWindowHandle = static_cast<void*>(m_Window->GetNativeWindow());
@@ -34,6 +35,7 @@ void Application::Init() {
     ShaderInfo shaderInfo{};
     shaderInfo.api = m_API;
     shaderInfo.backendData = m_Renderer->GetShaderInfo();
+    //todo use std::moves
     m_ShaderManager = std::make_unique<ShaderManager>(shaderInfo);
 
     m_ImGuiLayer = ImGUILayer::Create(m_API);
@@ -43,7 +45,7 @@ void Application::Init() {
     imguiCreateInfo.backendData = m_Renderer->GetContext();
     m_ImGuiLayer->Init(imguiCreateInfo);
 
-
+    m_MeshManager = std::make_unique<MeshManager>(m_Renderer->GetContext());
 
     std::string resourceRoot = RESOURCE_ROOT;
     std::string vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
@@ -51,19 +53,8 @@ void Application::Init() {
 
     std::cout << "[Shader Load] vert: " << vertPath << "\n";
     std::cout << "[Shader Load] frag: " << fragPath << "\n";
-    auto shader = m_ShaderManager->Load("Basic", resourceRoot + "/shaders/vkbasic.vert.spv", resourceRoot + "/shaders/vkbasic.frag.spv");
+    auto shader = m_ShaderManager->Load("Basic", vertPath, fragPath);
     m_Material = m_MaterialManager->Load("Basic", shader);
-
-    //m_ImGuiLayer->Init(m_Window->GetNativeWindow());
-    /*
-    m_Running = true;
-
-    //todo move this into a scene class
-    std::string resourceRoot = RESOURCE_ROOT;
-    auto shader = ShaderManager::Load("Basic", resourceRoot + "/shaders/basic.vert", resourceRoot + "/shaders/basic.frag", m_API);
-
-    m_Material = MaterialManager::Load("Basic", shader);
-
 
     std::vector<Vertex> vertices = {
         // Triangle
@@ -74,7 +65,7 @@ void Application::Init() {
 
     std::vector<uint32_t> indices = {0, 1, 2};
 
-    m_Mesh = MeshManager::Load("Triangle", vertices, indices, m_API);*/
+    m_Mesh = m_MeshManager->Load("Triangle", vertices, indices, m_API);
 }
 void Application::Shutdown() {
     //smart pointers clear automatically
@@ -105,6 +96,21 @@ void Application::Render() {
     m_ImGuiLayer->BeginFrame();
 
     ImGui::ShowDemoWindow();
+    ImGui::SetNextWindowSize({200.0f, 100.0f}, ImGuiCond_Once);
+    auto shader = m_Material->GetShader();
+    if (ImGui::Begin("Inspect")) {
+        if (ImGui::Checkbox("wireframe", shader->GetWireframeFlag())) {
+            shader->SetWireframe(!shader->GetWireframeFlag());
+        }
+        if (shader->GetWireframeFlag()) {
+            auto const& line_width_range = std::array<float, 2>{0.0f, 100.0f};
+            ImGui::SetNextItemWidth(100.0f);
+            ImGui::DragFloat("line width", shader->GetLineWidth(), 0.25f,
+                             line_width_range[0], line_width_range[1]);
+        }
+
+    }
+    ImGui::End();
     m_ImGuiLayer->Render();
 
     auto transform = glm::mat4(1.0);

@@ -15,7 +15,7 @@ struct ImGuiCreateInfo {
     RendererAPI api;
 
     //Vulkan data if specified
-    std::variant<std::monostate, VulkanContextInfo, OpenGLContextInfo> backendData;
+    BackendContextVariant backendData;
 };
 
 class ImGUILayer {
