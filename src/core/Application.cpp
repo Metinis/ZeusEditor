@@ -57,13 +57,17 @@ void Application::Init() {
     m_Material = m_MaterialManager->Load("Basic", shader);
 
     std::vector<Vertex> vertices = {
-        // Triangle
-        Vertex({-0.5f, -0.5f, 0.0f}, {0,0,1}, {0,0}, {1,0,0,1}),
-        Vertex({ 0.5f, -0.5f, 0.0f}, {0,0,1}, {1,0}, {0,1,0,1}),
-        Vertex({ 0.0f,  0.5f, 0.0f}, {0,0,1}, {0.5f,1}, {0,0,1,1}),
+            Vertex({-0.5f, -0.5f, 0.0f}, {0,0,1}, {0.0f, 0.0f}, {1,0,0,1}),  // 0
+            Vertex({ 0.5f, -0.5f, 0.0f}, {0,0,1}, {1.0f, 0.0f}, {0,1,0,1}),  // 1
+            Vertex({ 0.5f,  0.5f, 0.0f}, {0,0,1}, {1.0f, 1.0f}, {0,0,1,1}),  // 2
+            Vertex({-0.5f,  0.5f, 0.0f}, {0,0,1}, {0.0f, 1.0f}, {1,1,0,1}),  // 3
     };
 
-    std::vector<uint32_t> indices = {0, 1, 2};
+    std::vector<uint32_t> indices = {
+            0, 1, 2,  // First triangle
+            2, 3, 0   // Second triangle
+    };
+
 
     m_Mesh = m_MeshManager->Load("Triangle", vertices, indices, m_API);
 }
@@ -97,10 +101,10 @@ void Application::Render() {
 
     ImGui::ShowDemoWindow();
     ImGui::SetNextWindowSize({200.0f, 100.0f}, ImGuiCond_Once);
-    auto shader = m_Material->GetShader();
+    auto& shader = m_Material->GetShader();
     if (ImGui::Begin("Inspect")) {
         if (ImGui::Checkbox("wireframe", shader->GetWireframeFlag())) {
-            shader->SetWireframe(!shader->GetWireframeFlag());
+            shader->ToggleWireframe();
         }
         if (shader->GetWireframeFlag()) {
             auto const& line_width_range = std::array<float, 2>{0.0f, 100.0f};
