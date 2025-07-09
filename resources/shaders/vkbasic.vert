@@ -10,10 +10,12 @@ layout (location = 2) in vec2 a_texcoord;
 layout (location = 3) in vec4 a_color;
 
 layout (location = 0) out vec4 out_color;
+layout (location = 1) out vec2 out_uv;
 
 void main() {
   const vec4 world_pos = vec4(a_pos, 1.0);
   out_color = a_color;
   gl_Position = mat_vp * world_pos;
+  out_uv = a_texcoord;
   
 }
