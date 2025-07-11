@@ -106,13 +106,14 @@ void Application::Render() {
         if (ImGui::Checkbox("wireframe", shader->GetWireframeFlag())) {
             shader->ToggleWireframe();
         }
-        if (shader->GetWireframeFlag()) {
+#ifndef __APPLE__
+        if (*shader->GetWireframeFlag() == 1) {
             auto const& line_width_range = std::array<float, 2>{0.0f, 100.0f};
             ImGui::SetNextItemWidth(100.0f);
             ImGui::DragFloat("line width", shader->GetLineWidth(), 0.25f,
                              line_width_range[0], line_width_range[1]);
         }
-
+#endif
     }
     ImGui::End();
     m_ImGuiLayer->Render();
