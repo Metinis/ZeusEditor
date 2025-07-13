@@ -13,7 +13,7 @@
 
 class Application {
 public:
-    explicit Application(RendererAPI api);
+    explicit Application(ZEN::RendererAPI api);
     ~Application();
     void Run(); //Entry point (main.cpp) calls this
 private:
@@ -24,16 +24,16 @@ private:
     void Update(float deltaTime);
     void Render();
 
-    RendererAPI m_API;
-    std::unique_ptr<IRenderer> m_Renderer;
+    ZEN::RendererAPI m_API;
+    std::unique_ptr<ZEN::IRenderer> m_Renderer;
     std::unique_ptr<ImGUILayer> m_ImGuiLayer;
-    std::unique_ptr<Window> m_Window;
-    std::unique_ptr<ShaderManager> m_ShaderManager;
-    std::unique_ptr<MaterialManager> m_MaterialManager;
-    std::unique_ptr<MeshManager> m_MeshManager;
-    std::shared_ptr<Material> m_Material;
+    std::unique_ptr<ZEN::Window> m_Window;
+    std::unique_ptr<ZEN::ShaderManager> m_ShaderManager;
+    std::unique_ptr<ZEN::MaterialManager> m_MaterialManager;
+    std::unique_ptr<ZEN::MeshManager> m_MeshManager;
+    std::shared_ptr<ZEN::Material> m_Material;
 
-    std::shared_ptr<IMesh> m_Mesh;
+    std::shared_ptr<ZEN::IMesh> m_Mesh;
 
     bool m_Running = false;
 };

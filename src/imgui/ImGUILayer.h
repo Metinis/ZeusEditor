@@ -6,16 +6,12 @@
 #include <ZeusEngineCore/IRenderer.h>
 #include <ZeusEngineCore/InfoVariants.h>
 
-enum class RendererAPI;
-
-
-
 struct ImGuiCreateInfo {
     GLFWwindow* window{};
-    RendererAPI api;
+    ZEN::RendererAPI api;
 
     //Vulkan data if specified
-    BackendContextVariant backendData;
+    ZEN::BackendContextVariant backendData;
 };
 
 class ImGUILayer {
@@ -28,5 +24,5 @@ public:
     virtual void Render() = 0;
     virtual void EndFrame(void* commandBuffer) = 0;
 
-    static std::unique_ptr<ImGUILayer> Create(RendererAPI api);
+    static std::unique_ptr<ImGUILayer> Create(ZEN::RendererAPI api);
 };

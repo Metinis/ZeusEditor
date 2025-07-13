@@ -3,7 +3,7 @@
 #include "core/Application.h"
 
 int main() {
-    RendererAPI api = RendererAPI::Vulkan;
+    ZEN::RendererAPI api = ZEN::RendererAPI::Vulkan;
     Application app(api);
     app.Run();
 }

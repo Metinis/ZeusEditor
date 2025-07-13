@@ -9,34 +9,34 @@
 #include "src/config.h"
 #include <iostream>
 
-Application::Application(RendererAPI api) : m_API(api) {
+Application::Application(ZEN::RendererAPI api) : m_API(api) {
     Init();
 }
 Application::~Application() {
     Shutdown(); 
 }
 void Application::Init() {
-    const bool useVulkan = (m_API == RendererAPI::Vulkan);
-    m_Window = std::make_unique<Window>(1280, 720, "Zeus Editor", useVulkan);
-    m_MaterialManager = std::make_unique<MaterialManager>();
+    const bool useVulkan = (m_API == ZEN::RendererAPI::Vulkan);
+    m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", useVulkan);
+    m_MaterialManager = std::make_unique<ZEN::MaterialManager>();
 
 
-    
-    WindowHandle handle{};
-    handle.nativeWindowHandle = static_cast<void*>(m_Window->GetNativeWindow());
 
-    RendererInitInfo initInfo{};
+    ZEN::WindowHandle handle{};
+    handle.nativeWindowHandle = m_Window->GetNativeWindow();
+
+    ZEN::RendererInitInfo initInfo{};
     initInfo.windowHandle = handle;
 
-    m_Renderer = IRenderer::Create(m_API);
+    m_Renderer = ZEN::IRenderer::Create(m_API);
     m_Renderer->Init(initInfo);
     m_Running = true;
 
-    ShaderInfo shaderInfo{};
+    ZEN::ShaderInfo shaderInfo{};
     shaderInfo.api = m_API;
     shaderInfo.backendData = m_Renderer->GetShaderInfo();
     //todo use std::moves
-    m_ShaderManager = std::make_unique<ShaderManager>(shaderInfo);
+    m_ShaderManager = std::make_unique<ZEN::ShaderManager>(shaderInfo);
 
     m_ImGuiLayer = ImGUILayer::Create(m_API);
     ImGuiCreateInfo imguiCreateInfo{};
@@ -45,7 +45,7 @@ void Application::Init() {
     imguiCreateInfo.backendData = m_Renderer->GetContext();
     m_ImGuiLayer->Init(imguiCreateInfo);
 
-    m_MeshManager = std::make_unique<MeshManager>(m_Renderer->GetContext());
+    m_MeshManager = std::make_unique<ZEN::MeshManager>(m_Renderer->GetContext());
 
     std::string resourceRoot = RESOURCE_ROOT;
     std::string vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
@@ -56,11 +56,11 @@ void Application::Init() {
     auto shader = m_ShaderManager->Load("Basic", vertPath, fragPath);
     m_Material = m_MaterialManager->Load("Basic", shader);
 
-    std::vector<Vertex> vertices = {
-            Vertex({-200.0f, -200.0f, 0.0f}, {0,0,1}, {0.0f, 0.0f}, {1,0,0,1}),  // 0
-            Vertex({ 200.0f, -200.0f, 0.0f}, {0,0,1}, {1.0f, 0.0f}, {0,1,0,1}),  // 1
-            Vertex({ 200.0f,  200.0f, 0.0f}, {0,0,1}, {1.0f, 1.0f}, {0,0,1,1}),  // 2
-            Vertex({-200.0f,  200.0f, 0.0f}, {0,0,1}, {0.0f, 1.0f}, {1,1,0,1}),  // 3
+    std::vector<ZEN::Vertex> vertices = {
+            ZEN::Vertex({-200.0f, -200.0f, 0.0f}, {0,0,1}, {0.0f, 0.0f}, {1,0,0,1}),  // 0
+            ZEN::Vertex({ 200.0f, -200.0f, 0.0f}, {0,0,1}, {1.0f, 0.0f}, {0,1,0,1}),  // 1
+            ZEN::Vertex({ 200.0f,  200.0f, 0.0f}, {0,0,1}, {1.0f, 1.0f}, {0,0,1,1}),  // 2
+            ZEN::Vertex({-200.0f,  200.0f, 0.0f}, {0,0,1}, {0.0f, 1.0f}, {1,1,0,1}),  // 3
     };
 
     std::vector<uint32_t> indices = {
@@ -82,7 +82,7 @@ void Application::Run() {
         Update(dt);
         Render();
 
-        if(m_API == RendererAPI::OpenGL) {
+        if(m_API == ZEN::RendererAPI::OpenGL) {
             m_Window->SwapBuffers();
         }
     }

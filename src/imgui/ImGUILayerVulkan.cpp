@@ -15,10 +15,10 @@ void ImGUILayerVulkan::Init(const ImGuiCreateInfo& createInfo) {
 			*static_cast<vk::Instance*>(userData), name);
 		};
 
-	if (!std::holds_alternative<VulkanContextInfo>(createInfo.backendData)) {
+	if (!std::holds_alternative<ZEN::VKAPI::ContextInfo>(createInfo.backendData)) {
 		throw std::runtime_error{ "Invalid Create Info Data For Vulkan!" };
 	}
-	const auto& context = std::get<VulkanContextInfo>(createInfo.backendData);
+	const auto& context = std::get<ZEN::VKAPI::ContextInfo>(createInfo.backendData);
 	auto instance = context.instance;
 	ImGui_ImplVulkan_LoadFunctions(context.apiVersion, loadVkFunc, &instance);
 
@@ -34,7 +34,7 @@ void ImGUILayerVulkan::Init(const ImGuiCreateInfo& createInfo) {
 	initInfo.QueueFamily = context.queueFamily;
 	initInfo.Queue = context.queue;
 	initInfo.MinImageCount = 2;
-	initInfo.ImageCount = static_cast<std::uint32_t>(buffering_v);
+	initInfo.ImageCount = static_cast<std::uint32_t>(ZEN::buffering_v);
 	initInfo.MSAASamples =
 		static_cast<VkSampleCountFlagBits>(context.samples);
 	initInfo.DescriptorPoolSize = 32;
