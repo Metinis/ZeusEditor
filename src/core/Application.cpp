@@ -9,6 +9,7 @@
 #include "src/config.h"
 #include <iostream>
 
+using namespace ZED;
 Application::Application(ZEN::RendererAPI api) : m_API(api) {
     Init();
 }

@@ -3,6 +3,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+using namespace ZED;
+
 void ImGUILayerOpenGL::Init(const ImGuiCreateInfo& createInfo) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

@@ -4,6 +4,6 @@
 
 int main() {
     ZEN::RendererAPI api = ZEN::RendererAPI::Vulkan;
-    Application app(api);
+    ZED::Application app(api);
     app.Run();
 }

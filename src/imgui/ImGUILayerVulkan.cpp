@@ -6,6 +6,8 @@
 #include <glm/vec4.hpp>
 #include <glm/gtc/color_space.hpp>
 
+using namespace ZED;
+
 void ImGUILayerVulkan::Init(const ImGuiCreateInfo& createInfo) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
