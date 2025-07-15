@@ -35,7 +35,7 @@ void Application::Init() {
     shaderInfo.api = m_API;
     shaderInfo.backendData = m_Renderer->GetShaderInfo();
     //todo use std::moves
-    m_ShaderManager = std::make_unique<ZEN::ShaderManager>(shaderInfo);
+    m_ShaderManager = std::make_unique<ZEN::ShaderManager>(shaderInfo, m_Renderer->GetAPIRenderer());
 
     m_ImGuiLayer = ImGUILayer::Create(m_API);
     ImGuiCreateInfo imguiCreateInfo{};
@@ -44,7 +44,7 @@ void Application::Init() {
     imguiCreateInfo.backendData = m_Renderer->GetContext();
     m_ImGuiLayer->Init(imguiCreateInfo);
 
-    m_MeshManager = std::make_unique<ZEN::MeshManager>(m_Renderer->GetContext());
+    m_MeshManager = std::make_unique<ZEN::MeshManager>(m_Renderer->GetContext(), m_Renderer->GetAPIRenderer());
 
     std::string resourceRoot = RESOURCE_ROOT;
     std::string vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
