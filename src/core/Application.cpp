@@ -31,11 +31,8 @@ void Application::Init() {
     m_Renderer->Init(initInfo);
     m_Running = true;
 
-    ZEN::ShaderInfo shaderInfo{};
-    shaderInfo.api = m_API;
-    shaderInfo.backendData = m_Renderer->GetShaderInfo();
     //todo use std::moves
-    m_ShaderManager = std::make_unique<ZEN::ShaderManager>(shaderInfo, m_Renderer->GetAPIRenderer());
+    m_ShaderManager = std::make_unique<ZEN::ShaderManager>(m_Renderer->GetAPIBackend(), m_Renderer->GetAPIRenderer());
 
     m_ImGuiLayer = ImGUILayer::Create(m_API);
     ImGuiCreateInfo imguiCreateInfo{};
@@ -103,7 +100,7 @@ void Application::Render() {
     auto& shader = m_Material->GetShader();
     if (ImGui::Begin("Inspect")) {
         if (ImGui::Checkbox("wireframe", shader->GetWireframeFlag())) {
-            shader->ToggleWireframe();
+            //shader->ToggleWireframe();
         }
 #ifndef __APPLE__
         if (*shader->GetWireframeFlag() == 1) {
