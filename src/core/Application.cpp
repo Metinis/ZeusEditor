@@ -21,8 +21,6 @@ void Application::Init() {
     m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", useVulkan);
     m_MaterialManager = std::make_unique<ZEN::MaterialManager>();
 
-
-
     ZEN::WindowHandle handle{};
     handle.nativeWindowHandle = m_Window->GetNativeWindow();
 
