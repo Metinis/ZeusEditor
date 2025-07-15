@@ -61,7 +61,7 @@ void ImGUILayerVulkan::Init(const ImGuiCreateInfo& createInfo) {
 	}
 	ImGui::GetStyle().Colors[ImGuiCol_WindowBg].w = 0.99f;
 	//used to submit to renderer
-	callback = [this](vk::CommandBuffer cmd) {
+	callback = [this](void* cmd) {
 		this->EndFrame(cmd);
 		};
 }

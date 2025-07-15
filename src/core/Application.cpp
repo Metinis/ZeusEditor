@@ -27,7 +27,7 @@ void Application::Init() {
     ZEN::RendererInitInfo initInfo{};
     initInfo.windowHandle = handle;
 
-    m_Renderer = ZEN::IRenderer::Create(m_API);
+    m_Renderer = std::make_unique<ZEN::Renderer>();//ZEN::IRenderer::Create(m_API);
     m_Renderer->Init(initInfo);
     m_Running = true;
 

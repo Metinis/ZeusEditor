@@ -5,7 +5,7 @@
 #include "ZeusEngineCore/MaterialManager.h"
 #include <ZeusEngineCore/Window.h>
 #include "../imgui/ImGUILayer.h"
-#include <ZeusEngineCore/IRenderer.h>
+#include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/RendererAPI.h>
 #include "ZeusEngineCore/Material.h"
 #include "ZeusEngineCore/MeshManager.h"
@@ -30,7 +30,7 @@ namespace ZED {
         void Render();
 
         ZEN::RendererAPI m_API;
-        std::unique_ptr<ZEN::IRenderer> m_Renderer;
+        std::unique_ptr<ZEN::Renderer> m_Renderer;
         std::unique_ptr<ImGUILayer> m_ImGuiLayer;
         std::unique_ptr<ZEN::Window> m_Window;
         std::unique_ptr<ZEN::ShaderManager> m_ShaderManager;

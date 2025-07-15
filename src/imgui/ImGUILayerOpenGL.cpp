@@ -18,7 +18,7 @@ void ImGUILayerOpenGL::Init(const ImGuiCreateInfo& createInfo) {
 #else
     ImGui_ImplOpenGL3_Init("#version 450");
 #endif
-    callback = [this](vk::CommandBuffer cmd) {
+    callback = [this](void* cmd) {
         this->EndFrame(cmd);
     };
 }

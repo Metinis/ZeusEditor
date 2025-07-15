@@ -3,7 +3,7 @@
 #include <memory>
 #include <variant>
 #include <vulkan/vulkan.hpp>
-#include <ZeusEngineCore/IRenderer.h>
+#include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/InfoVariants.h>
 
 namespace ZED {
@@ -17,7 +17,7 @@ namespace ZED {
 
     class ImGUILayer {
     public:
-        std::function<void(vk::CommandBuffer)> callback = nullptr;
+        std::function<void(void*)> callback = nullptr;
 
         virtual ~ImGUILayer() = default;
 
