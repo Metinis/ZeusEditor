@@ -40,6 +40,9 @@ void Application::Init() {
     m_MeshManager = std::make_unique<ZEN::MeshManager>(m_Renderer->GetAPIBackend(),
                                                        m_Renderer->GetAPIRenderer());
 
+    m_TextureManager = std::make_unique<ZEN::TextureManager>(m_Renderer->GetAPIBackend(),
+                                                             m_Renderer->GetAPIRenderer());
+
     std::string resourceRoot = RESOURCE_ROOT;
     std::string vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
     std::string fragPath = resourceRoot + "/shaders/vkbasic.frag.spv";
@@ -47,7 +50,9 @@ void Application::Init() {
     std::cout << "[Shader Load] vert: " << vertPath << "\n";
     std::cout << "[Shader Load] frag: " << fragPath << "\n";
     auto shader = m_ShaderManager->Load("Basic", vertPath, fragPath);
+    auto texture = m_TextureManager->Load("Basic", "");
     m_Material = m_MaterialManager->Load("Basic", shader);
+    m_Material->SetTexture(texture);
 
     std::vector<ZEN::Vertex> vertices = {
             ZEN::Vertex({-200.0f, -200.0f, 0.0f}, {0,0,1}, {0.0f, 0.0f}, {1,0,0,1}),  // 0

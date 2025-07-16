@@ -9,6 +9,7 @@
 #include <ZeusEngineCore/IRendererAPI.h>
 #include "ZeusEngineCore/Material.h"
 #include "ZeusEngineCore/MeshManager.h"
+#include "ZeusEngineCore/TextureManager.h"
 
 namespace ZED {
     class Application {
@@ -31,13 +32,13 @@ namespace ZED {
 
         ZEN::eRendererAPI m_API;
         std::unique_ptr<ZEN::Renderer> m_Renderer;
+        std::unique_ptr<ZEN::TextureManager> m_TextureManager;
         std::unique_ptr<ImGUILayer> m_ImGuiLayer;
         std::unique_ptr<ZEN::Window> m_Window;
         std::unique_ptr<ZEN::ShaderManager> m_ShaderManager;
         std::unique_ptr<ZEN::MaterialManager> m_MaterialManager;
         std::unique_ptr<ZEN::MeshManager> m_MeshManager;
         std::shared_ptr<ZEN::Material> m_Material;
-
         std::shared_ptr<ZEN::IMesh> m_Mesh;
 
         bool m_Running = false;
