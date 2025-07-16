@@ -1,17 +1,21 @@
 #pragma once
 #include <memory>
 #include <glm/vec4.hpp>
-#include "ZeusEngineCore/ShaderManager.h"
-#include "ZeusEngineCore/MaterialManager.h"
-#include <ZeusEngineCore/Window.h>
-#include "../imgui/ImGUILayer.h"
-#include <ZeusEngineCore/Renderer.h>
-#include <ZeusEngineCore/IRendererAPI.h>
-#include "ZeusEngineCore/Material.h"
-#include "ZeusEngineCore/MeshManager.h"
-#include "ZeusEngineCore/TextureManager.h"
+
+namespace ZEN {
+    enum class eRendererAPI;
+    class Renderer;
+    class TextureManager;
+    class ShaderManager;
+    class MaterialManager;
+    class Window;
+    class MeshManager;
+    class Material;
+    class IMesh;
+}
 
 namespace ZED {
+    class ImGUILayer;
     class Application {
     public:
         explicit Application(ZEN::eRendererAPI api);

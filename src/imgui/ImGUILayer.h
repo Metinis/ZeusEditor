@@ -1,10 +1,7 @@
 #pragma once
 #include <imgui_impl_glfw.h>
 #include <memory>
-#include <variant>
-#include <vulkan/vulkan.hpp>
-#include <ZeusEngineCore/Renderer.h>
-#include <ZeusEngineCore/InfoVariants.h>
+#include <functional>
 
 namespace ZEN {
     class IRendererBackend;

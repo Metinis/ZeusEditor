@@ -4,7 +4,10 @@
 #include <imgui_impl_vulkan.h>
 #include <ZeusEngineCore/EngineConstants.h>
 #include <glm/vec4.hpp>
+#include <glm/glm.hpp>
+#include <glm/common.hpp>
 #include <glm/gtc/color_space.hpp>
+#include <ZeusEngineCore/InfoVariants.h>
 
 using namespace ZED;
 
@@ -44,8 +47,6 @@ ImGUILayerVulkan::ImGUILayerVulkan(GLFWwindow *window, const ZEN::VKAPI::Backend
     initInfo.PipelineRenderingCreateInfo = pipelineRenderingCreateInfo;
     initInfo.UseDynamicRendering = true;
 
-    m_Device = backendInfo.device;
-
     if (!ImGui_ImplVulkan_Init(&initInfo)) {
         throw std::runtime_error{ "Failed to initialize Dear ImGui" };
     }
@@ -64,7 +65,6 @@ ImGUILayerVulkan::ImGUILayerVulkan(GLFWwindow *window, const ZEN::VKAPI::Backend
 }
 
 ImGUILayerVulkan::~ImGUILayerVulkan() {
-	m_Device.waitIdle();
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
