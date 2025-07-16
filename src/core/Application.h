@@ -6,14 +6,14 @@
 #include <ZeusEngineCore/Window.h>
 #include "../imgui/ImGUILayer.h"
 #include <ZeusEngineCore/Renderer.h>
-#include <ZeusEngineCore/RendererAPI.h>
+#include <ZeusEngineCore/IRendererAPI.h>
 #include "ZeusEngineCore/Material.h"
 #include "ZeusEngineCore/MeshManager.h"
 
 namespace ZED {
     class Application {
     public:
-        explicit Application(ZEN::RendererAPI api);
+        explicit Application(ZEN::eRendererAPI api);
 
         ~Application();
 
@@ -29,7 +29,7 @@ namespace ZED {
 
         void Render();
 
-        ZEN::RendererAPI m_API;
+        ZEN::eRendererAPI m_API;
         std::unique_ptr<ZEN::Renderer> m_Renderer;
         std::unique_ptr<ImGUILayer> m_ImGuiLayer;
         std::unique_ptr<ZEN::Window> m_Window;

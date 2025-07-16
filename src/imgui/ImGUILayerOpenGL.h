@@ -5,7 +5,7 @@
 namespace ZED {
     class ImGUILayerOpenGL : public ImGUILayer {
     public:
-        void Init(const ImGuiCreateInfo &createInfo) override;
+        ImGUILayerOpenGL(GLFWwindow* window, const ZEN::OGLAPI::BackendInfo& backendInfo);
 
         ~ImGUILayerOpenGL() override;
 

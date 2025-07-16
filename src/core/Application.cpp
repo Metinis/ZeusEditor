@@ -10,14 +10,14 @@
 #include <iostream>
 
 using namespace ZED;
-Application::Application(ZEN::RendererAPI api) : m_API(api) {
+Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     Init();
 }
 Application::~Application() {
     Shutdown(); 
 }
 void Application::Init() {
-    const bool useVulkan = (m_API == ZEN::RendererAPI::Vulkan);
+    const bool useVulkan = (m_API == ZEN::eRendererAPI::Vulkan);
     m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", useVulkan);
     m_MaterialManager = std::make_unique<ZEN::MaterialManager>();
 
@@ -26,22 +26,19 @@ void Application::Init() {
 
     ZEN::RendererInitInfo initInfo{};
     initInfo.windowHandle = handle;
+    initInfo.api = m_API;
 
-    m_Renderer = std::make_unique<ZEN::Renderer>();//ZEN::IRenderer::Create(m_API);
-    m_Renderer->Init(initInfo);
+    m_Renderer = std::make_unique<ZEN::Renderer>(initInfo);//ZEN::IRenderer::Create(m_API);
     m_Running = true;
 
     //todo use std::moves
-    m_ShaderManager = std::make_unique<ZEN::ShaderManager>(m_Renderer->GetAPIBackend(), m_Renderer->GetAPIRenderer());
+    m_ShaderManager = std::make_unique<ZEN::ShaderManager>(m_Renderer->GetAPIBackend(),
+                                                           m_Renderer->GetAPIRenderer());
 
-    m_ImGuiLayer = ImGUILayer::Create(m_API);
-    ImGuiCreateInfo imguiCreateInfo{};
-    imguiCreateInfo.window = m_Window->GetNativeWindow();
-    imguiCreateInfo.api = m_API;
-    imguiCreateInfo.backendData = m_Renderer->GetContext();
-    m_ImGuiLayer->Init(imguiCreateInfo);
-
-    m_MeshManager = std::make_unique<ZEN::MeshManager>(m_Renderer->GetContext(), m_Renderer->GetAPIRenderer());
+    m_ImGuiLayer = ImGUILayer::Create(m_Window->GetNativeWindow(),
+                                      m_Renderer->GetAPIBackend());
+    m_MeshManager = std::make_unique<ZEN::MeshManager>(m_Renderer->GetAPIBackend(),
+                                                       m_Renderer->GetAPIRenderer());
 
     std::string resourceRoot = RESOURCE_ROOT;
     std::string vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
@@ -65,7 +62,7 @@ void Application::Init() {
     };
 
 
-    m_Mesh = m_MeshManager->Load("Triangle", vertices, indices, m_API);
+    m_Mesh = m_MeshManager->Load("Triangle", vertices, indices);
 }
 void Application::Shutdown() {
     //smart pointers clear automatically
@@ -78,7 +75,7 @@ void Application::Run() {
         Update(dt);
         Render();
 
-        if(m_API == ZEN::RendererAPI::OpenGL) {
+        if(m_API == ZEN::eRendererAPI::OpenGL) {
             m_Window->SwapBuffers();
         }
     }

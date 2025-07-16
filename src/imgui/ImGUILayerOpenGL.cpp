@@ -4,15 +4,14 @@
 #include <imgui_impl_opengl3.h>
 
 using namespace ZED;
-
-void ImGUILayerOpenGL::Init(const ImGuiCreateInfo& createInfo) {
+ImGUILayerOpenGL::ImGUILayerOpenGL(GLFWwindow *window, const ZEN::OGLAPI::BackendInfo& backendInfo) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(createInfo.window, true);
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
 #ifdef __APPLE__
     ImGui_ImplOpenGL3_Init("#version 410");
 #else
@@ -22,6 +21,7 @@ void ImGUILayerOpenGL::Init(const ImGuiCreateInfo& createInfo) {
         this->EndFrame(cmd);
     };
 }
+
 ImGUILayerOpenGL::~ImGUILayerOpenGL() {
     ImGui_ImplOpenGL3_Shutdown();
 
@@ -41,3 +41,4 @@ void ImGUILayerOpenGL::EndFrame(void* commandBuffer)
 {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+

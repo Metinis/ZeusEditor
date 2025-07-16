@@ -6,22 +6,15 @@
 #include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/InfoVariants.h>
 
+namespace ZEN {
+    class IRendererBackend;
+}
 namespace ZED {
-    struct ImGuiCreateInfo {
-        GLFWwindow *window{};
-        ZEN::RendererAPI api;
-
-        //Vulkan data if specified
-        ZEN::BackendContextVariant backendData;
-    };
-
     class ImGUILayer {
     public:
         std::function<void(void*)> callback = nullptr;
 
         virtual ~ImGUILayer() = default;
-
-        virtual void Init(const ImGuiCreateInfo &createInfo) = 0;
 
         virtual void BeginFrame() = 0;
 
@@ -29,6 +22,6 @@ namespace ZED {
 
         virtual void EndFrame(void *commandBuffer) = 0;
 
-        static std::unique_ptr<ImGUILayer> Create(ZEN::RendererAPI api);
+        static std::unique_ptr<ImGUILayer> Create(GLFWwindow* window, ZEN::IRendererBackend* apiBackend);
     };
 }

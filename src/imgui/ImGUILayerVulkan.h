@@ -5,7 +5,7 @@
 namespace ZED {
     class ImGUILayerVulkan : public ImGUILayer {
     public:
-        void Init(const ImGuiCreateInfo &createInfo) override;
+        ImGUILayerVulkan(GLFWwindow* window, const ZEN::VKAPI::BackendInfo& backendInfo);
 
         ~ImGUILayerVulkan() override;
 
