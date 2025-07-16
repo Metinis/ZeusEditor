@@ -118,6 +118,13 @@ void Application::Render() {
         }
 #endif
     }
+    ImGui::Separator();
+    if (ImGui::TreeNode("View")) {
+        ImGui::DragFloat2("position", &m_Renderer->ViewMatrix().position.x);
+        ImGui::DragFloat("rotation", &m_Renderer->ViewMatrix().rotation);
+        ImGui::DragFloat2("scale", &m_Renderer->ViewMatrix().scale.x);
+        ImGui::TreePop();
+    }
     ImGui::End();
     m_ImGuiLayer->Render();
 
