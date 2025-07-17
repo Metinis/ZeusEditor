@@ -1,6 +1,9 @@
 #pragma once
 #include <memory>
 #include <glm/vec4.hpp>
+#include <vector>
+#include "ZeusEngineCore/Transform.h"
+#include "ZeusEngineCore/Renderer.h"
 
 namespace ZEN {
     enum class eRendererAPI;
@@ -44,6 +47,7 @@ namespace ZED {
         std::unique_ptr<ZEN::MeshManager> m_MeshManager;
         std::shared_ptr<ZEN::Material> m_Material;
         std::shared_ptr<ZEN::IMesh> m_Mesh;
+        std::vector<ZEN::RenderCommand> m_Commands;
 
         bool m_Running = false;
     };

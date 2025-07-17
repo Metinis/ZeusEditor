@@ -60,10 +60,10 @@ void Application::Init() {
     m_Material->SetTexture(texture);
 
     std::vector<ZEN::Vertex> vertices = {
-            ZEN::Vertex({-200.0f, -200.0f, 0.0f}, {0,0,1}, {0.0f, 0.0f}, {1,0,0,1}),  // 0
-            ZEN::Vertex({ 200.0f, -200.0f, 0.0f}, {0,0,1}, {1.0f, 0.0f}, {0,1,0,1}),  // 1
-            ZEN::Vertex({ 200.0f,  200.0f, 0.0f}, {0,0,1}, {1.0f, 1.0f}, {0,0,1,1}),  // 2
-            ZEN::Vertex({-200.0f,  200.0f, 0.0f}, {0,0,1}, {0.0f, 1.0f}, {1,1,0,1}),  // 3
+            ZEN::Vertex({-0.5, -0.5f, -1.0f}, {0, 0, 1}, {0.0f, 0.0f}, {1, 0, 0, 1}),
+            ZEN::Vertex({ 0.5f, -0.5f, -1.0f}, {0, 0, 1}, {1.0f, 0.0f}, {0, 1, 0, 1}),
+            ZEN::Vertex({ 0.5f,  0.5f, -1.0f}, {0, 0, 1}, {1.0f, 1.0f}, {0, 0, 1, 1}),
+            ZEN::Vertex({-0.5f,  0.5f, -1.0f}, {0, 0, 1}, {0.0f, 1.0f}, {1, 1, 0, 1}),
     };
 
     std::vector<uint32_t> indices = {
@@ -73,6 +73,16 @@ void Application::Init() {
 
 
     m_Mesh = m_MeshManager->Load("Triangle", vertices, indices);
+    m_Commands.push_back(ZEN::RenderCommand{
+        .mesh = m_Mesh,
+        .material = m_Material
+    });
+
+    //m_MeshGroups.push_back(ZEN::MeshGroup{m_Mesh.get()});
+    //m_MeshGroups.at(0).instances.push_back(ZEN::MeshInstance{});
+    //m_MeshGroups.at(0).instances.push_back(ZEN::MeshInstance{});
+    //m_MeshGroups.push_back(ZEN::MeshGroup{m_Mesh.get(), ZEN::MeshInstance{ZEN::Transform{}}});
+
 }
 void Application::Shutdown() {
     //smart pointers clear automatically
@@ -96,14 +106,20 @@ void Application::ProcessEvents() {
 void Application::Update(float deltaTime) {
     //Update Scene here
 }
+static auto const inspectTransform = [](ZEN::Transform& out) {
+    ImGui::DragFloat2("position", &out.position.x, 0.1f);
+    ImGui::DragFloat("rotation", &out.rotation);
+    ImGui::DragFloat2("scale", &out.scale.x, 0.1f, 0.0f, 100.0f);
+};
 void Application::Render() {
     //check if valid frame
     if (!m_Renderer->BeginFrame()) return;
+    m_Renderer->UpdateInstances(m_Commands.at(0).transforms);
 
     m_ImGuiLayer->BeginFrame();
 
     ImGui::ShowDemoWindow();
-    ImGui::SetNextWindowSize({200.0f, 100.0f}, ImGuiCond_Once);
+    ImGui::SetNextWindowSize({300.0f, 700.0f}, ImGuiCond_Once);
     auto& shader = m_Material->GetShader();
     if (ImGui::Begin("Inspect")) {
         if (ImGui::Checkbox("wireframe", shader->GetWireframeFlag())) {
@@ -111,25 +127,36 @@ void Application::Render() {
         }
 #ifndef __APPLE__
         if (*shader->GetWireframeFlag() == 1) {
-            auto const& line_width_range = std::array<float, 2>{0.0f, 100.0f};
+            auto const& lineWidthRange = std::array<float, 2>{0.0f, 100.0f};
             ImGui::SetNextItemWidth(100.0f);
             ImGui::DragFloat("line width", shader->GetLineWidth(), 0.25f,
-                             line_width_range[0], line_width_range[1]);
+                             lineWidthRange[0], lineWidthRange[1]);
         }
 #endif
     }
     ImGui::Separator();
     if (ImGui::TreeNode("View")) {
-        ImGui::DragFloat2("position", &m_Renderer->ViewMatrix().position.x);
-        ImGui::DragFloat("rotation", &m_Renderer->ViewMatrix().rotation);
-        ImGui::DragFloat2("scale", &m_Renderer->ViewMatrix().scale.x);
+        inspectTransform(m_Renderer->ViewMatrix());
+        ImGui::TreePop();
+    }
+    if (ImGui::TreeNode("Instances")) {
+        if (ImGui::Button("Add Instance")) {
+            m_Commands.at(0).transforms.push_back(ZEN::Transform{});
+        }
+        for (std::size_t i = 0; i < m_Commands.at(0).transforms.size(); ++i) {
+            auto const label = "Instance: " + std::to_string(i);
+            if (ImGui::TreeNode(label.c_str())) {
+                inspectTransform(m_Commands.at(0).transforms.at(i));
+                ImGui::TreePop();
+            }
+        }
         ImGui::TreePop();
     }
     ImGui::End();
     m_ImGuiLayer->Render();
 
     auto transform = glm::mat4(1.0);
-    m_Renderer->Submit(transform, m_Material, m_Mesh);
+    m_Renderer->Submit(m_Commands.at(0).transforms, m_Commands.at(0).mesh, m_Commands.at(0).material);
 
     //inject IMGUI render
     m_Renderer->EndFrame(m_ImGuiLayer->callback);
