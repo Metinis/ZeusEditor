@@ -55,7 +55,9 @@ void Application::Init() {
     std::cout << "[Shader Load] vert: " << vertPath << "\n";
     std::cout << "[Shader Load] frag: " << fragPath << "\n";
     auto shader = m_ShaderManager->Load("Basic", vertPath, fragPath);
-    auto texture = m_TextureManager->Load("Basic", "");
+
+    std::string texturePath = resourceRoot + "/textures/texture.jpg";
+    auto texture = m_TextureManager->Load("Basic", texturePath);
     m_Material = m_MaterialManager->Load("Basic", shader);
     m_Material->SetTexture(texture);
 
@@ -107,9 +109,9 @@ void Application::Update(float deltaTime) {
     //Update Scene here
 }
 static auto const inspectTransform = [](ZEN::Transform& out) {
-    ImGui::DragFloat2("position", &out.position.x, 0.1f);
+    ImGui::DragFloat2("position", &out.position.x, 0.01f);
     ImGui::DragFloat("rotation", &out.rotation);
-    ImGui::DragFloat2("scale", &out.scale.x, 0.1f, 0.0f, 100.0f);
+    ImGui::DragFloat2("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
 };
 void Application::Render() {
     //check if valid frame
