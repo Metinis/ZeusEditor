@@ -62,16 +62,64 @@ void Application::Init() {
     m_Material->SetTexture(texture);
 
     std::vector<ZEN::Vertex> vertices = {
-            ZEN::Vertex({-0.5, -0.5f, -1.0f}, {0, 0, 1}, {0.0f, 0.0f}, {1, 0, 0, 1}),
-            ZEN::Vertex({ 0.5f, -0.5f, -1.0f}, {0, 0, 1}, {1.0f, 0.0f}, {0, 1, 0, 1}),
-            ZEN::Vertex({ 0.5f,  0.5f, -1.0f}, {0, 0, 1}, {1.0f, 1.0f}, {0, 0, 1, 1}),
-            ZEN::Vertex({-0.5f,  0.5f, -1.0f}, {0, 0, 1}, {0.0f, 1.0f}, {1, 1, 0, 1}),
+            // Front face (z = +0.5)
+            ZEN::Vertex({-0.5f, -0.5f,  0.5f}, {0, 0, 1}, {0.0f, 0.0f}, {1, 0, 0, 1}),
+            ZEN::Vertex({ 0.5f, -0.5f,  0.5f}, {0, 0, 1}, {1.0f, 0.0f}, {1, 0, 0, 1}),
+            ZEN::Vertex({ 0.5f,  0.5f,  0.5f}, {0, 0, 1}, {1.0f, 1.0f}, {1, 0, 0, 1}),
+            ZEN::Vertex({-0.5f,  0.5f,  0.5f}, {0, 0, 1}, {0.0f, 1.0f}, {1, 0, 0, 1}),
+
+            // Back face (z = -0.5)
+            ZEN::Vertex({-0.5f, -0.5f, -0.5f}, {0, 0, -1}, {1.0f, 0.0f}, {0, 1, 0, 1}),
+            ZEN::Vertex({ 0.5f, -0.5f, -0.5f}, {0, 0, -1}, {0.0f, 0.0f}, {0, 1, 0, 1}),
+            ZEN::Vertex({ 0.5f,  0.5f, -0.5f}, {0, 0, -1}, {0.0f, 1.0f}, {0, 1, 0, 1}),
+            ZEN::Vertex({-0.5f,  0.5f, -0.5f}, {0, 0, -1}, {1.0f, 1.0f}, {0, 1, 0, 1}),
+
+            // Left face (x = -0.5)
+            ZEN::Vertex({-0.5f, -0.5f, -0.5f}, {-1, 0, 0}, {0.0f, 0.0f}, {0, 0, 1, 1}),
+            ZEN::Vertex({-0.5f, -0.5f,  0.5f}, {-1, 0, 0}, {1.0f, 0.0f}, {0, 0, 1, 1}),
+            ZEN::Vertex({-0.5f,  0.5f,  0.5f}, {-1, 0, 0}, {1.0f, 1.0f}, {0, 0, 1, 1}),
+            ZEN::Vertex({-0.5f,  0.5f, -0.5f}, {-1, 0, 0}, {0.0f, 1.0f}, {0, 0, 1, 1}),
+
+            // Right face (x = +0.5)
+            ZEN::Vertex({0.5f, -0.5f, -0.5f}, {1, 0, 0}, {1.0f, 0.0f}, {1, 1, 0, 1}),
+            ZEN::Vertex({0.5f, -0.5f,  0.5f}, {1, 0, 0}, {0.0f, 0.0f}, {1, 1, 0, 1}),
+            ZEN::Vertex({0.5f,  0.5f,  0.5f}, {1, 0, 0}, {0.0f, 1.0f}, {1, 1, 0, 1}),
+            ZEN::Vertex({0.5f,  0.5f, -0.5f}, {1, 0, 0}, {1.0f, 1.0f}, {1, 1, 0, 1}),
+
+            // Top face (y = +0.5)
+            ZEN::Vertex({-0.5f, 0.5f,  0.5f}, {0, 1, 0}, {0.0f, 0.0f}, {1, 0, 1, 1}),
+            ZEN::Vertex({ 0.5f, 0.5f,  0.5f}, {0, 1, 0}, {1.0f, 0.0f}, {1, 0, 1, 1}),
+            ZEN::Vertex({ 0.5f, 0.5f, -0.5f}, {0, 1, 0}, {1.0f, 1.0f}, {1, 0, 1, 1}),
+            ZEN::Vertex({-0.5f, 0.5f, -0.5f}, {0, 1, 0}, {0.0f, 1.0f}, {1, 0, 1, 1}),
+
+            // Bottom face (y = -0.5)
+            ZEN::Vertex({-0.5f, -0.5f,  0.5f}, {0, -1, 0}, {1.0f, 1.0f}, {0, 1, 1, 1}),
+            ZEN::Vertex({ 0.5f, -0.5f,  0.5f}, {0, -1, 0}, {0.0f, 1.0f}, {0, 1, 1, 1}),
+            ZEN::Vertex({ 0.5f, -0.5f, -0.5f}, {0, -1, 0}, {0.0f, 0.0f}, {0, 1, 1, 1}),
+            ZEN::Vertex({-0.5f, -0.5f, -0.5f}, {0, -1, 0}, {1.0f, 0.0f}, {0, 1, 1, 1}),
     };
 
+
     std::vector<uint32_t> indices = {
-            0, 1, 2,  // First triangle
-            2, 3, 0   // Second triangle
+            // Front
+            0, 1, 2,  2, 3, 0,
+
+            // Back
+            4, 5, 6,  6, 7, 4,
+
+            // Left
+            8, 9,10, 10,11, 8,
+
+            // Right
+            12,13,14, 14,15,12,
+
+            // Top
+            16,17,18, 18,19,16,
+
+            // Bottom
+            20,21,22, 22,23,20,
     };
+
 
 
     m_Mesh = m_MeshManager->Load("Triangle", vertices, indices);
@@ -79,11 +127,10 @@ void Application::Init() {
         .mesh = m_Mesh,
         .material = m_Material
     });
-
-    //m_MeshGroups.push_back(ZEN::MeshGroup{m_Mesh.get()});
-    //m_MeshGroups.at(0).instances.push_back(ZEN::MeshInstance{});
-    //m_MeshGroups.at(0).instances.push_back(ZEN::MeshInstance{});
-    //m_MeshGroups.push_back(ZEN::MeshGroup{m_Mesh.get(), ZEN::MeshInstance{ZEN::Transform{}}});
+    ZEN::Transform transform{};
+    transform.position = {0.0f, 0.0f, -5.0f};
+    transform.rotation = {0.0f, 50.0f, 0.0f};
+    m_Commands.at(0).transforms.push_back(transform);
 
 }
 void Application::Shutdown() {
@@ -109,9 +156,9 @@ void Application::Update(float deltaTime) {
     //Update Scene here
 }
 static auto const inspectTransform = [](ZEN::Transform& out) {
-    ImGui::DragFloat2("position", &out.position.x, 0.01f);
-    ImGui::DragFloat("rotation", &out.rotation);
-    ImGui::DragFloat2("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
+    ImGui::DragFloat3("position", &out.position.x, 0.01f);
+    ImGui::DragFloat3("rotation", &out.rotation.x);
+    ImGui::DragFloat3("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
 };
 void Application::Render() {
     //check if valid frame
@@ -162,7 +209,6 @@ void Application::Render() {
 
     //inject IMGUI render
     m_Renderer->EndFrame(m_ImGuiLayer->callback);
-
 }
 
 
