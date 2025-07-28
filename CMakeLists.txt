@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+
 # ---- IMGUI ----
 add_library(imgui STATIC)
 
@@ -12,6 +13,8 @@ target_include_directories(imgui PUBLIC
         include/imgui
         include/imgui/backends
 )
+
+target_compile_definitions(imgui PUBLIC VK_NO_PROTOTYPES)
 
 target_link_libraries(imgui PUBLIC
         ZeusEngineCore
@@ -26,7 +29,7 @@ target_sources(imgui PRIVATE
         include/imgui/imgui_demo.cpp
         include/imgui/backends/imgui_impl_glfw.cpp
         include/imgui/backends/imgui_impl_opengl3.cpp
-        include/imgui/backends/imgui_impl_vulkan.cpp  # Optional
+        include/imgui/backends/imgui_impl_vulkan.cpp
 )
 # ---- MAIN EXECUTABLE ----
 add_executable(ZeusEditor)
@@ -66,3 +69,15 @@ add_custom_command(TARGET ZeusEditor POST_BUILD
         "$<TARGET_FILE_DIR:ZeusEditor>/resources"
         COMMENT "Copying resources to build directory"
 )
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/config.h"
+    @ONLY
+)
+
+target_include_directories(ZeusEditor PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+
+target_compile_definitions(ZeusEditor PRIVATE
+    $<$<CONFIG:Debug>:DEBUG>
+)
+
