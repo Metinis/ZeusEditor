@@ -49,8 +49,17 @@ void Application::Init() {
                                                              m_Renderer->GetAPIRenderer());
 
     std::string resourceRoot = RESOURCE_ROOT;
-    std::string vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
-    std::string fragPath = resourceRoot + "/shaders/vkbasic.frag.spv";
+    std::string vertPath{};
+    std::string fragPath{};
+    if (m_API == ZEN::eRendererAPI::OpenGL) {
+        vertPath = resourceRoot + "/shaders/glbasic4.1.vert";
+        fragPath = resourceRoot + "/shaders/glbasic4.1.frag";
+    }
+    else {
+        vertPath = resourceRoot + "/shaders/vkbasic.vert.spv";
+        fragPath = resourceRoot + "/shaders/vkbasic.frag.spv";
+    }
+    
 
     std::cout << "[Shader Load] vert: " << vertPath << "\n";
     std::cout << "[Shader Load] frag: " << fragPath << "\n";
@@ -143,10 +152,6 @@ void Application::Run() {
         const float dt = m_Window->GetDeltaTime();
         Update(dt);
         Render();
-
-        if(m_API == ZEN::eRendererAPI::OpenGL) {
-            m_Window->SwapBuffers();
-        }
     }
 }
 void Application::ProcessEvents() {
@@ -208,6 +213,7 @@ void Application::Render() {
     m_Renderer->Submit(m_Commands.at(0).transforms, m_Commands.at(0).mesh, m_Commands.at(0).material);
 
     //inject IMGUI render
+
     m_Renderer->EndFrame(m_ImGuiLayer->callback);
 }
 
