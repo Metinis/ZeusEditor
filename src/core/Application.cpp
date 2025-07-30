@@ -166,12 +166,14 @@ static auto const inspectTransform = [](ZEN::Transform& out) {
     ImGui::DragFloat3("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
 };
 void Application::Render() {
+    //Render main stuff
     //check if valid frame
     if (!m_Renderer->BeginFrame()) return;
     m_Renderer->UpdateInstances(m_Commands.at(0).transforms);
-
+    m_Renderer->Submit(m_Commands.at(0).transforms, m_Commands.at(0).mesh, m_Commands.at(0).material);
+    //m_Renderer->EndFrame(m_ImGuiLayer->callback);
+    //Render IMGUI
     m_ImGuiLayer->BeginFrame();
-
     ImGui::ShowDemoWindow();
     ImGui::SetNextWindowSize({300.0f, 700.0f}, ImGuiCond_Once);
     auto& shader = m_Material->GetShader();
@@ -212,12 +214,6 @@ void Application::Render() {
     }
     ImGui::End();
     m_ImGuiLayer->Render();
-
-    auto transform = glm::mat4(1.0);
-    m_Renderer->Submit(m_Commands.at(0).transforms, m_Commands.at(0).mesh, m_Commands.at(0).material);
-
-    //inject IMGUI render
-
     m_Renderer->EndFrame(m_ImGuiLayer->callback);
 }
 
