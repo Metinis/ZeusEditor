@@ -189,9 +189,8 @@ void Application::Render() {
                              lineWidthRange[0], lineWidthRange[1]);
         }
 #endif
-        int MSAA = m_Renderer->GetAPIRenderer()->GetMSAA();
-        if (ImGui::SliderInt("MSAA", &MSAA, 0, m_Renderer->GetAPIRenderer()->GetMaxMSAA())) {
-            m_Renderer->GetAPIRenderer()->SetMSAA(MSAA);
+        if (ImGui::SliderInt("MSAA", m_Renderer->GetMSAAFlag(), 0, m_Renderer->GetAPIRenderer()->GetMaxMSAA())) {
+            //m_Renderer->GetAPIRenderer()->SetMSAA(MSAA);
         }
     }
     ImGui::Separator();
