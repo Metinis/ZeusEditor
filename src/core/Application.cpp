@@ -165,6 +165,18 @@ static auto const inspectTransform = [](ZEN::Transform& out) {
     ImGui::DragFloat3("rotation", &out.rotation.x);
     ImGui::DragFloat3("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
 };
+constexpr std::uint32_t intToMSAAClamp(int sampleCount) {
+    switch (sampleCount) {
+    case 1:  return 1;
+    case 2:  return 2;
+    case 3:  return 4;
+    case 4:  return 8;
+    case 5: return 16;
+    case 6: return 32;
+    case 7: return 64;
+    default: return 1;
+    }
+}
 void Application::Render() {
     //Render main stuff
     //check if valid frame
@@ -189,9 +201,13 @@ void Application::Render() {
                              lineWidthRange[0], lineWidthRange[1]);
         }
 #endif
-        if (ImGui::SliderInt("MSAA", m_Renderer->GetMSAAFlag(), 0, m_Renderer->GetAPIRenderer()->GetMaxMSAA())) {
-            //m_Renderer->GetAPIRenderer()->SetMSAA(MSAA);
+        int msaa = m_Renderer->GetMSAA();
+        if (ImGui::SliderInt("###msaa_slider", &msaa, 1, 
+            m_Renderer->GetAPIRenderer()->GetMaxMSAA(), "")) {
+            m_Renderer->SetMSAA(msaa);
         }
+        ImGui::SameLine();
+        ImGui::Text("MSAA: %d", intToMSAAClamp(msaa));
     }
     ImGui::Separator();
     if (ImGui::TreeNode("View")) {
