@@ -1,9 +1,9 @@
 #include <iostream>
 #include "core/Application.h"
-#include "ZeusEngineCore/IRendererAPI.h"
+#include "ZeusEngineCore/API.h"
 
 int main() {
-    ZEN::eRendererAPI api = ZEN::eRendererAPI::Vulkan;
+    ZEN::eRendererAPI api = ZEN::eRendererAPI::OpenGL;
     ZED::Application app(api);
-    app.Run();
+    app.run();
 }

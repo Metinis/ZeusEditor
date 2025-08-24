@@ -1,24 +1,15 @@
 #include "ImGUILayer.h"
 #include "ImGUILayerOpenGL.h"
 #include "ImGUILayerVulkan.h"
-#include "../../../ZeusEngineCore/src/renderer/Vulkan/Backend/APIBackend.h"
-#include "ZeusEngineCore/InfoVariants.h"
-#include <../../../ZeusEngineCore/src/renderer/OpenGL/APIBackend.h>
-#include <ZeusEngineCore/IRendererBackend.h>
-#include <ZeusEngineCore/IRendererAPI.h>
 
 using namespace ZED;
-std::unique_ptr<ImGUILayer> ImGUILayer::Create(GLFWwindow* window, ZEN::IRendererBackend* apiBackend) {
-    switch (apiBackend->GetAPI()) {
+std::unique_ptr<ImGUILayer> ImGUILayer::create(GLFWwindow* window, ZEN::eRendererAPI api) {
+    switch (api) {
         case ZEN::eRendererAPI::OpenGL: {
-            auto* backendAPI = dynamic_cast<ZEN::OGLAPI::APIBackend*>(apiBackend);
-            ZEN::OGLAPI::BackendInfo backendInfo = backendAPI->GetInfo();
-            return std::make_unique<ImGUILayerOpenGL>(window, backendInfo);
+            return std::make_unique<ImGUILayerOpenGL>(window);
         }
         case ZEN::eRendererAPI::Vulkan:{
-            auto* backendAPI = dynamic_cast<ZEN::VKAPI::APIBackend*>(apiBackend);
-            ZEN::VKAPI::BackendInfo backendInfo = backendAPI->GetInfo();
-            return std::make_unique<ImGUILayerVulkan>(window, backendInfo);
+            return std::make_unique<ImGUILayerVulkan>(window);
         }
         default: return nullptr;
     }

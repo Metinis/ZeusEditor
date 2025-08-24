@@ -1,22 +1,19 @@
 #pragma once
 #include "ImGUILayer.h"
 #include "GLFW/glfw3.h"
-namespace ZEN::OGLAPI{
-    struct BackendInfo;
-}
 
 namespace ZED {
     class ImGUILayerOpenGL : public ImGUILayer {
     public:
-        ImGUILayerOpenGL(GLFWwindow* window, const ZEN::OGLAPI::BackendInfo& backendInfo);
+        ImGUILayerOpenGL(GLFWwindow* window);
 
         ~ImGUILayerOpenGL() override;
 
-        void BeginFrame() override;
+        void beginFrame() override;
 
-        void Render() override;
+        void render() override;
 
         //command buffer ignored
-        void EndFrame(void *commandBuffer) override;
+        void endFrame(void *commandBuffer) override;
     };
 }
