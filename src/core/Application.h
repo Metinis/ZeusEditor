@@ -6,6 +6,15 @@
 #include <ZeusEngineCore/API.h>
 #include <ZeusEngineCore/Window.h>
 
+namespace ZEN {
+    class Scene;
+}
+
+namespace ZEN {
+    class Renderer;
+    class RenderSystem;
+}
+
 namespace ZED {
     class Application {
     public:
@@ -18,12 +27,17 @@ namespace ZED {
 
         void processEvents();
 
-        void update(float deltaTime);
+        void onUpdate(float deltaTime);
 
-        void render();
+        void onRender();
+
+        void onUIRender();
 
         std::unique_ptr<ImGUILayer> m_ImGuiLayer{};
         std::unique_ptr<ZEN::Window> m_Window{};
+        std::unique_ptr<ZEN::Scene> m_Scene{};
+        std::unique_ptr<ZEN::Renderer> m_Renderer{};
+        std::unique_ptr<ZEN::RenderSystem> m_RenderSystem{};
 
         bool m_Running { false };
 
