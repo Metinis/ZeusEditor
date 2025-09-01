@@ -13,10 +13,10 @@ using namespace ZED;
 Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", m_API);
     m_Scene = std::make_unique<ZEN::Scene>();
-    m_Renderer = std::make_unique<ZEN::Renderer>(m_Window->getNativeWindow());
+    m_Renderer = std::make_unique<ZEN::Renderer>(m_API, m_Window->getNativeWindow());
 
     std::string resourceRoot = RESOURCE_ROOT;
-    uint32_t defaultShader = m_Renderer->getContext().getResourceManager().createShader(
+    uint32_t defaultShader = m_Renderer->getContext()->getResourceManager().createShader(
         resourceRoot + "/shaders/glbasic4.1.vert", resourceRoot + "/shaders/glbasic4.1.frag");
 
     m_RenderSystem = std::make_unique<ZEN::RenderSystem>(m_Renderer.get(),
