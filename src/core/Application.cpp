@@ -6,8 +6,7 @@
 #include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/RenderSystem.h>
 #include <ZeusEngineCore/Scene.h>
-
-#include "../../../ZeusEngineCore/src/Systems/Scene/CameraSystem.h"
+#include <ZeusEngineCore/CameraSystem.h>
 
 using namespace ZED;
 Application::Application(ZEN::eRendererAPI api) : m_API(api) {
@@ -20,7 +19,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
         resourceRoot + "/shaders/glbasic4.1.vert", resourceRoot + "/shaders/glbasic4.1.frag");
 
     m_RenderSystem = std::make_unique<ZEN::RenderSystem>(m_Renderer.get(),
-        ZEN::ShaderComp{.shaderID = defaultShader});
+        ZEN::MaterialComp{.shaderID = defaultShader});
 
     m_ImGuiLayer = ImGUILayer::create(m_Window->getNativeWindow(), api);
 
@@ -29,39 +28,71 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     ZEN::MeshComp mesh;
 
     mesh.vertices = {
-        // Front face (z = 0.5)
-        {{-0.5f,  0.5f,  0.5f}, {0,0,1}, {0,1}, {1,0,0,1}}, // 0 top-left-front
-        {{ 0.5f,  0.5f,  0.5f}, {0,0,1}, {1,1}, {0,1,0,1}}, // 1 top-right-front
-        {{ 0.5f, -0.5f,  0.5f}, {0,0,1}, {1,0}, {0,0,1,1}}, // 2 bottom-right-front
-        {{-0.5f, -0.5f,  0.5f}, {0,0,1}, {0,0}, {1,1,0,1}}, // 3 bottom-left-front
+        // Front face (z = +0.5)
+        {{-0.5f,  0.5f,  0.5f}, {0,0,1}, {0.0f, 1.0f}}, // Top-left
+        {{ 0.5f,  0.5f,  0.5f}, {0,0,1}, {1.0f, 1.0f}}, // Top-right
+        {{ 0.5f, -0.5f,  0.5f}, {0,0,1}, {1.0f, 0.0f}}, // Bottom-right
+        {{-0.5f, -0.5f,  0.5f}, {0,0,1}, {0.0f, 0.0f}}, // Bottom-left
 
         // Back face (z = -0.5)
-        {{-0.5f,  0.5f, -0.5f}, {0,0,-1}, {1,1}, {1,0,1,1}}, // 4 top-left-back
-        {{ 0.5f,  0.5f, -0.5f}, {0,0,-1}, {0,1}, {0,1,1,1}}, // 5 top-right-back
-        {{ 0.5f, -0.5f, -0.5f}, {0,0,-1}, {0,0}, {1,1,1,1}}, // 6 bottom-right-back
-        {{-0.5f, -0.5f, -0.5f}, {0,0,-1}, {1,0}, {0,0,0,1}}  // 7 bottom-left-back
+        {{ 0.5f,  0.5f, -0.5f}, {0,0,-1}, {0.0f, 1.0f}}, // Top-left
+        {{-0.5f,  0.5f, -0.5f}, {0,0,-1}, {1.0f, 1.0f}}, // Top-right
+        {{-0.5f, -0.5f, -0.5f}, {0,0,-1}, {1.0f, 0.0f}}, // Bottom-right
+        {{ 0.5f, -0.5f, -0.5f}, {0,0,-1}, {0.0f, 0.0f}}, // Bottom-left
+
+        // Left face (x = -0.5)
+        {{-0.5f,  0.5f, -0.5f}, {-1,0,0}, {0.0f, 1.0f}},
+        {{-0.5f,  0.5f,  0.5f}, {-1,0,0}, {1.0f, 1.0f}},
+        {{-0.5f, -0.5f,  0.5f}, {-1,0,0}, {1.0f, 0.0f}},
+        {{-0.5f, -0.5f, -0.5f}, {-1,0,0}, {0.0f, 0.0f}},
+
+        // Right face (x = +0.5)
+        {{ 0.5f,  0.5f,  0.5f}, {1,0,0}, {0.0f, 1.0f}},
+        {{ 0.5f,  0.5f, -0.5f}, {1,0,0}, {1.0f, 1.0f}},
+        {{ 0.5f, -0.5f, -0.5f}, {1,0,0}, {1.0f, 0.0f}},
+        {{ 0.5f, -0.5f,  0.5f}, {1,0,0}, {0.0f, 0.0f}},
+
+        // Top face (y = +0.5)
+        {{-0.5f,  0.5f, -0.5f}, {0,1,0}, {0.0f, 1.0f}},
+        {{ 0.5f,  0.5f, -0.5f}, {0,1,0}, {1.0f, 1.0f}},
+        {{ 0.5f,  0.5f,  0.5f}, {0,1,0}, {1.0f, 0.0f}},
+        {{-0.5f,  0.5f,  0.5f}, {0,1,0}, {0.0f, 0.0f}},
+
+        // Bottom face (y = -0.5)
+        {{-0.5f, -0.5f,  0.5f}, {0,-1,0}, {0.0f, 1.0f}},
+        {{ 0.5f, -0.5f,  0.5f}, {0,-1,0}, {1.0f, 1.0f}},
+        {{ 0.5f, -0.5f, -0.5f}, {0,-1,0}, {1.0f, 0.0f}},
+        {{-0.5f, -0.5f, -0.5f}, {0,-1,0}, {0.0f, 0.0f}}
     };
 
     mesh.indices = {
         // Front
-        0,1,2,  2,3,0,
-        // Right
-        1,5,6,  6,2,1,
+        0, 1, 2, 2, 3, 0,
         // Back
-        5,4,7,  7,6,5,
+        4, 5, 6, 6, 7, 4,
         // Left
-        4,0,3,  3,7,4,
+        8, 9,10,10,11, 8,
+        // Right
+       12,13,14,14,15,12,
         // Top
-        4,5,1,  1,0,4,
+       16,17,18,18,19,16,
         // Bottom
-        3,2,6,  6,7,3
+       20,21,22,22,23,20
     };
+
+    uint32_t textureID = m_Renderer->getContext()->getResourceManager().createTexture(
+        resourceRoot + "/textures/texture.jpg");
+    ZEN::MaterialComp comp{.shaderID = defaultShader, .textureID = textureID};
 
     entt::entity entity = m_Scene->createEntity();
     m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, mesh);
+    m_Scene->getRegistry().emplace<ZEN::TransformComp>(entity,
+        ZEN::TransformComp{.position = {0.0f, 0.0f, -3.0f}});
+    m_Scene->getRegistry().emplace<ZEN::MaterialComp>(entity, comp);
 
     entt::entity cameraEntity = m_Scene->createEntity();
     m_Scene->getRegistry().emplace<ZEN::CameraComp>(cameraEntity);
+    m_Scene->getRegistry().emplace<ZEN::TransformComp>(cameraEntity);
 }
 Application::~Application() {
      
@@ -93,24 +124,27 @@ void Application::onUIRender() {
     // Start a new window for camera controls
     ImGui::Begin("Camera Controls");
 
-    auto view = m_Scene->getRegistry().view<ZEN::CameraComp>();
-    for (auto entity : view) {
+    auto cameraView = m_Scene->getRegistry().view<ZEN::CameraComp, ZEN::TransformComp>();
+    for (auto entity : cameraView) {
         auto &camera = m_Scene->getRegistry().get<ZEN::CameraComp>(entity);
+        auto &transform = m_Scene->getRegistry().get<ZEN::TransformComp>(entity);
         if (camera.isPrimary) {
-            // Create sliders for position
-            ImGui::SliderFloat("Position X", &camera.position.x, -10.0f, 10.0f);
-            ImGui::SliderFloat("Position Y", &camera.position.y, -10.0f, 10.0f);
-            ImGui::SliderFloat("Position Z", &camera.position.z, -10.0f, 10.0f);
-
-            // Optionally sliders for front direction
-            ImGui::SliderFloat("Front X", &camera.front.x, -1.0f, 1.0f);
-            ImGui::SliderFloat("Front Y", &camera.front.y, -1.0f, 1.0f);
-            ImGui::SliderFloat("Front Z", &camera.front.z, -1.0f, 1.0f);
-
-            // Normalize front to avoid stretching
-            camera.front = glm::normalize(camera.front);
-            break; // Only control the first primary camera
+            ImGui::DragFloat3("position", &transform.position.x, 0.01f);
+            ImGui::DragFloat3("rotation", &transform.rotation.x);
+            ImGui::DragFloat3("scale", &transform.scale.x, 0.01f, 0.0f, 100.0f);
         }
+    }
+
+    ImGui::End();
+
+    ImGui::Begin("Transform Controls");
+
+    auto transformView = m_Scene->getRegistry().view<ZEN::TransformComp, ZEN::MeshComp>();
+    for (auto entity : transformView) {
+        auto &transform = m_Scene->getRegistry().get<ZEN::TransformComp>(entity);
+        ImGui::DragFloat3("position", &transform.position.x, 0.01f);
+        ImGui::DragFloat3("rotation", &transform.rotation.x);
+        ImGui::DragFloat3("scale", &transform.scale.x, 0.01f, 0.0f, 100.0f);
     }
 
     ImGui::End();
