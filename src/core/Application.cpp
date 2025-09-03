@@ -15,11 +15,12 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_Renderer = std::make_unique<ZEN::Renderer>(m_API, m_Window->getNativeWindow());
 
     std::string resourceRoot = RESOURCE_ROOT;
-    uint32_t defaultShader = m_Renderer->getContext()->getResourceManager().createShader(
+    uint32_t defaultShaderID = m_Renderer->getContext()->getResourceManager().createShader(
         resourceRoot + "/shaders/glbasic4.1.vert", resourceRoot + "/shaders/glbasic4.1.frag");
+    ZEN::MaterialComp defaultShader {.shaderID = defaultShaderID};
+    m_Renderer->setDefaultShader(defaultShader);
 
-    m_RenderSystem = std::make_unique<ZEN::RenderSystem>(m_Renderer.get(),
-        ZEN::MaterialComp{.shaderID = defaultShader});
+    m_RenderSystem = std::make_unique<ZEN::RenderSystem>(m_Renderer.get(), m_Scene.get());
 
     m_ImGuiLayer = ImGUILayer::create(m_Window->getNativeWindow(), api);
 
@@ -82,7 +83,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
 
     uint32_t textureID = m_Renderer->getContext()->getResourceManager().createTexture(
         resourceRoot + "/textures/texture.jpg");
-    ZEN::MaterialComp comp{.shaderID = defaultShader, .textureID = textureID};
+    ZEN::MaterialComp comp{.shaderID = defaultShaderID, .textureID = textureID};
 
     entt::entity entity = m_Scene->createEntity();
     m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, mesh);

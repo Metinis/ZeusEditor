@@ -15,10 +15,14 @@ layout (location = 3) in vec4 a_color;
 
 out vec4 v_color;
 out vec2 v_uv;
+out vec3 v_frag_pos;
+out vec3 v_normal;
 
 void main() {
   mat4 mat_m = mat_ms[gl_InstanceID];
   gl_Position = mat_vp * mat_m * vec4(a_pos, 1.0);
   v_color = a_color;
   v_uv = a_texcoord;
+  v_frag_pos = vec3(mat_m * vec4(a_pos, 1.0));
+  v_normal = mat3(transpose(inverse(mat_m))) * a_normal; //convert normals to world space
 }
