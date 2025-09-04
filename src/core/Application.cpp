@@ -82,8 +82,12 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     };
 
     uint32_t textureID = m_Renderer->getContext()->getResourceManager().createTexture(
-        resourceRoot + "/textures/texture.jpg");
-    ZEN::MaterialComp comp{.shaderID = defaultShaderID, .textureID = textureID};
+        resourceRoot + "/textures/wall.jpg");
+    ZEN::MaterialComp comp {
+        .shaderID = defaultShaderID,
+        .textureID = textureID,
+        .specular = 0.5f,
+    };
 
     entt::entity entity = m_Scene->createEntity();
     m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, mesh);
