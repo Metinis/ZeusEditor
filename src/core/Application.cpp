@@ -82,10 +82,13 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     };
 
     uint32_t textureID = m_Renderer->getContext()->getResourceManager().createTexture(
-        resourceRoot + "/textures/wall.jpg");
+        resourceRoot + "/textures/container2.png");
+    uint32_t specularID = m_Renderer->getContext()->getResourceManager().createTexture(
+        resourceRoot + "/textures/container2_specular.png");
     ZEN::MaterialComp comp {
         .shaderID = defaultShaderID,
         .textureID = textureID,
+        .specularTexID = specularID,
         .specular = 0.5f,
     };
 
