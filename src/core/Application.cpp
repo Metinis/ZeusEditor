@@ -3,6 +3,7 @@
 #include "ZeusEngineCore/Vertex.h"
 #include <iostream>
 #include <memory>
+#include <string>
 #include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/RenderSystem.h>
 #include <ZeusEngineCore/Scene.h>
@@ -90,6 +91,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
         .textureID = textureID,
         .specularTexID = specularID,
         .specular = 0.5f,
+        .shininess = 32,
     };
 
     entt::entity entity = m_Scene->createEntity();
@@ -98,9 +100,45 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
         ZEN::TransformComp{.position = {0.0f, 0.0f, -3.0f}});
     m_Scene->getRegistry().emplace<ZEN::MaterialComp>(entity, comp);
 
+    entt::entity entity2 = m_Scene->createEntity();
+    m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity2, mesh);
+    m_Scene->getRegistry().emplace<ZEN::TransformComp>(entity2,
+        ZEN::TransformComp{.position = {2.0f, 0.0f, -3.0f}});
+    m_Scene->getRegistry().emplace<ZEN::MaterialComp>(entity2, comp);
+
     entt::entity cameraEntity = m_Scene->createEntity();
     m_Scene->getRegistry().emplace<ZEN::CameraComp>(cameraEntity);
     m_Scene->getRegistry().emplace<ZEN::TransformComp>(cameraEntity);
+
+    entt::entity skyboxEntity = m_Scene->createEntity();
+    ZEN::MeshComp skyboxMesh{};
+    skyboxMesh.vertices = {
+        {{-1.0f,  1.0f, -1.0f}}, {{-1.0f, -1.0f, -1.0f}}, {{ 1.0f, -1.0f, -1.0f}}, {{ 1.0f,  1.0f, -1.0f}}, // Back
+        {{-1.0f, -1.0f,  1.0f}}, {{-1.0f,  1.0f,  1.0f}}, {{ 1.0f,  1.0f,  1.0f}}, {{ 1.0f, -1.0f,  1.0f}}, // Front
+        {{-1.0f,  1.0f,  1.0f}}, {{-1.0f, -1.0f,  1.0f}}, {{-1.0f, -1.0f, -1.0f}}, {{-1.0f,  1.0f, -1.0f}}, // Left
+        {{ 1.0f,  1.0f, -1.0f}}, {{ 1.0f, -1.0f, -1.0f}}, {{ 1.0f, -1.0f,  1.0f}}, {{ 1.0f,  1.0f,  1.0f}}, // Right
+        {{-1.0f,  1.0f,  1.0f}}, {{-1.0f,  1.0f, -1.0f}}, {{ 1.0f,  1.0f, -1.0f}}, {{ 1.0f,  1.0f,  1.0f}}, // Top
+        {{-1.0f, -1.0f, -1.0f}}, {{-1.0f, -1.0f,  1.0f}}, {{ 1.0f, -1.0f,  1.0f}}, {{ 1.0f, -1.0f, -1.0f}}  // Bottom
+    };
+
+    // Cube indices
+    skyboxMesh.indices = {
+        0,1,2, 2,3,0,       // Back
+        4,5,6, 6,7,4,       // Front
+        8,9,10, 10,11,8,    // Left
+        12,13,14, 14,15,12, // Right
+        16,17,18, 18,19,16, // Top
+        20,21,22, 22,23,20  // Bottom
+    };
+
+    ZEN::SkyboxComp skyboxComp{};
+    skyboxComp.shaderID = m_Renderer->getContext()->getResourceManager().createShader(
+        resourceRoot + "/shaders/glskybox.vert", resourceRoot + "/shaders/glskybox.frag");
+    skyboxComp.textureID = m_Renderer->getContext()->getResourceManager().createCubeMapTexture(resourceRoot + "/textures/skybox/");
+    m_Scene->getRegistry().emplace<ZEN::SkyboxComp>(skyboxEntity, skyboxComp);
+    m_Scene->getRegistry().emplace<ZEN::MeshComp>(skyboxEntity, skyboxMesh);
+
+
 }
 Application::~Application() {
      
@@ -123,6 +161,12 @@ void Application::onUpdate(float deltaTime) {
         m_Window->getHeight());
     m_RenderSystem->onUpdate(m_Scene->getRegistry());
 }
+
+static auto const inspectTransform = [](ZEN::TransformComp& out) {
+    ImGui::DragFloat3("position", &out.position.x, 0.01f);
+    ImGui::DragFloat3("rotation", &out.rotation.x);
+    ImGui::DragFloat3("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
+};
 void Application::onUIRender() {
     m_ImGuiLayer->beginFrame();
 
@@ -137,9 +181,11 @@ void Application::onUIRender() {
         auto &camera = m_Scene->getRegistry().get<ZEN::CameraComp>(entity);
         auto &transform = m_Scene->getRegistry().get<ZEN::TransformComp>(entity);
         if (camera.isPrimary) {
-            ImGui::DragFloat3("position", &transform.position.x, 0.01f);
-            ImGui::DragFloat3("rotation", &transform.rotation.x);
-            ImGui::DragFloat3("scale", &transform.scale.x, 0.01f, 0.0f, 100.0f);
+           const char* label = "Primary Camera";
+            if (ImGui::TreeNode(label)) {
+                inspectTransform(transform);
+                ImGui::TreePop();
+            }
         }
     }
 
@@ -150,9 +196,11 @@ void Application::onUIRender() {
     auto transformView = m_Scene->getRegistry().view<ZEN::TransformComp, ZEN::MeshComp>();
     for (auto entity : transformView) {
         auto &transform = m_Scene->getRegistry().get<ZEN::TransformComp>(entity);
-        ImGui::DragFloat3("position", &transform.position.x, 0.01f);
-        ImGui::DragFloat3("rotation", &transform.rotation.x);
-        ImGui::DragFloat3("scale", &transform.scale.x, 0.01f, 0.0f, 100.0f);
+        auto const label = "Entity: " + std::to_string((int)entity);
+        if (ImGui::TreeNode(label.c_str())) {
+            inspectTransform(transform);
+            ImGui::TreePop();
+        }
     }
 
     ImGui::End();

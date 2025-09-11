@@ -1,50 +1,50 @@
 #version 410 core
 
-uniform sampler2D diffuse_tex;
+uniform sampler2D u_DiffuseMap;
+uniform sampler2D u_SpecularMap;
 
-uniform sampler2D specular_map;
 
 layout(std140) uniform Globals {
-  vec3 lightPos;
-  float _pad1;
-  vec3 cameraPos;
-  float _pad2;
-  float time;
-  vec3 ambientColor;
+  vec3 u_LightDir;
+  vec3 u_CameraPos;
+  //float u_Time;
+  vec3 u_AmbientColor;
 };
 
 layout(std140) uniform Material {
-  float specularStrength;
+  vec2 u_SpecularAndShininess;
 };
 
-in vec4 v_color;
-in vec2 v_uv;
-
-in vec3 v_frag_pos;
-in vec3 v_normal;
+in vec4 v_Color;
+in vec2 v_UV;
+in vec3 v_FragPos;
+in vec3 v_Normal;
 
 out vec4 fragColor;
 
 void main() {
-  //calculate light values
-  vec3 norm = normalize(v_normal);
-  vec3 lightDir = normalize(lightPos - v_frag_pos);
-  vec3 albedo = texture(diffuse_tex, v_uv).rgb;
+  //Normalize vectors
+  vec3 normal = normalize(v_Normal);
+  vec3 lightDir = normalize(-u_LightDir);
+  vec3 viewDir  = normalize(u_CameraPos - v_FragPos);
 
-  //calculate ambient
-  vec3 ambient = ambientColor * albedo;
+  //Sample textures
+  vec3 albedo = texture(u_DiffuseMap, v_UV).rgb;
+  vec3 specMap = texture(u_SpecularMap, v_UV).rgb;
 
-  //calculate specular
-  vec3 viewDir = normalize(cameraPos - v_frag_pos);
-  vec3 reflectDir = reflect(-lightDir, norm);
-  float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-  vec3 specular = specularStrength * spec * texture(specular_map, v_uv).rgb;
+  //Ambient component
+  vec3 ambient = u_AmbientColor * albedo;
 
-  //calculate diffuse
-  float diff = max(dot(norm, lightDir), 0.0);
+  //Diffuse component
+  float diff = max(dot(normal, lightDir), 0.0);
   vec3 diffuse = diff * albedo;
 
-  //calculate and submit result
-  vec3 result = diffuse + ambient + specular;
-  fragColor = vec4(result, 1.0);
+  //Specular component
+  vec3 reflectDir = reflect(-lightDir, normal);
+  float specFactor = pow(max(dot(viewDir, reflectDir), 0.0), u_SpecularAndShininess.y);
+  vec3 specular = u_SpecularAndShininess.x * specFactor * specMap;
+
+  //Final color
+  vec3 finalColor = ambient + diffuse + specular;
+  fragColor = vec4(finalColor, 1.0);
 }
