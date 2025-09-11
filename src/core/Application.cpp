@@ -16,7 +16,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_Renderer = std::make_unique<ZEN::Renderer>(m_API, m_Window->getNativeWindow());
 
     std::string resourceRoot = RESOURCE_ROOT;
-    uint32_t defaultShaderID = m_Renderer->getContext()->getResourceManager().createShader(
+    uint32_t defaultShaderID = m_Renderer->getResourceManager()->createShader(
         resourceRoot + "/shaders/glbasic4.1.vert", resourceRoot + "/shaders/glbasic4.1.frag");
     ZEN::MaterialComp defaultShader {.shaderID = defaultShaderID};
     m_Renderer->setDefaultShader(defaultShader);
@@ -82,9 +82,9 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
        20,21,22,22,23,20
     };
 
-    uint32_t textureID = m_Renderer->getContext()->getResourceManager().createTexture(
+    uint32_t textureID = m_Renderer->getResourceManager()->createTexture(
         resourceRoot + "/textures/container2.png");
-    uint32_t specularID = m_Renderer->getContext()->getResourceManager().createTexture(
+    uint32_t specularID = m_Renderer->getResourceManager()->createTexture(
         resourceRoot + "/textures/container2_specular.png");
     ZEN::MaterialComp comp {
         .shaderID = defaultShaderID,
@@ -132,9 +132,9 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     };
 
     ZEN::SkyboxComp skyboxComp{};
-    skyboxComp.shaderID = m_Renderer->getContext()->getResourceManager().createShader(
+    skyboxComp.shaderID = m_Renderer->getResourceManager()->createShader(
         resourceRoot + "/shaders/glskybox.vert", resourceRoot + "/shaders/glskybox.frag");
-    skyboxComp.textureID = m_Renderer->getContext()->getResourceManager().createCubeMapTexture(resourceRoot + "/textures/skybox/");
+    skyboxComp.textureID = m_Renderer->getResourceManager()->createCubeMapTexture(resourceRoot + "/textures/skybox/");
     m_Scene->getRegistry().emplace<ZEN::SkyboxComp>(skyboxEntity, skyboxComp);
     m_Scene->getRegistry().emplace<ZEN::MeshComp>(skyboxEntity, skyboxMesh);
 
