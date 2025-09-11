@@ -6,8 +6,9 @@
 #include <string>
 #include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/RenderSystem.h>
-#include <ZeusEngineCore/Scene.h>
+
 #include <ZeusEngineCore/CameraSystem.h>
+#include <ZeusEngineCore/MeshLibrary.h>
 
 using namespace ZED;
 Application::Application(ZEN::eRendererAPI api) : m_API(api) {
@@ -27,60 +28,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
 
     m_Running = true;
 
-    ZEN::MeshComp mesh;
-
-    mesh.vertices = {
-        // Front face (z = +0.5)
-        {{-0.5f,  0.5f,  0.5f}, {0,0,1}, {0.0f, 1.0f}}, // Top-left
-        {{ 0.5f,  0.5f,  0.5f}, {0,0,1}, {1.0f, 1.0f}}, // Top-right
-        {{ 0.5f, -0.5f,  0.5f}, {0,0,1}, {1.0f, 0.0f}}, // Bottom-right
-        {{-0.5f, -0.5f,  0.5f}, {0,0,1}, {0.0f, 0.0f}}, // Bottom-left
-
-        // Back face (z = -0.5)
-        {{ 0.5f,  0.5f, -0.5f}, {0,0,-1}, {0.0f, 1.0f}}, // Top-left
-        {{-0.5f,  0.5f, -0.5f}, {0,0,-1}, {1.0f, 1.0f}}, // Top-right
-        {{-0.5f, -0.5f, -0.5f}, {0,0,-1}, {1.0f, 0.0f}}, // Bottom-right
-        {{ 0.5f, -0.5f, -0.5f}, {0,0,-1}, {0.0f, 0.0f}}, // Bottom-left
-
-        // Left face (x = -0.5)
-        {{-0.5f,  0.5f, -0.5f}, {-1,0,0}, {0.0f, 1.0f}},
-        {{-0.5f,  0.5f,  0.5f}, {-1,0,0}, {1.0f, 1.0f}},
-        {{-0.5f, -0.5f,  0.5f}, {-1,0,0}, {1.0f, 0.0f}},
-        {{-0.5f, -0.5f, -0.5f}, {-1,0,0}, {0.0f, 0.0f}},
-
-        // Right face (x = +0.5)
-        {{ 0.5f,  0.5f,  0.5f}, {1,0,0}, {0.0f, 1.0f}},
-        {{ 0.5f,  0.5f, -0.5f}, {1,0,0}, {1.0f, 1.0f}},
-        {{ 0.5f, -0.5f, -0.5f}, {1,0,0}, {1.0f, 0.0f}},
-        {{ 0.5f, -0.5f,  0.5f}, {1,0,0}, {0.0f, 0.0f}},
-
-        // Top face (y = +0.5)
-        {{-0.5f,  0.5f, -0.5f}, {0,1,0}, {0.0f, 1.0f}},
-        {{ 0.5f,  0.5f, -0.5f}, {0,1,0}, {1.0f, 1.0f}},
-        {{ 0.5f,  0.5f,  0.5f}, {0,1,0}, {1.0f, 0.0f}},
-        {{-0.5f,  0.5f,  0.5f}, {0,1,0}, {0.0f, 0.0f}},
-
-        // Bottom face (y = -0.5)
-        {{-0.5f, -0.5f,  0.5f}, {0,-1,0}, {0.0f, 1.0f}},
-        {{ 0.5f, -0.5f,  0.5f}, {0,-1,0}, {1.0f, 1.0f}},
-        {{ 0.5f, -0.5f, -0.5f}, {0,-1,0}, {1.0f, 0.0f}},
-        {{-0.5f, -0.5f, -0.5f}, {0,-1,0}, {0.0f, 0.0f}}
-    };
-
-    mesh.indices = {
-        // Front
-        0, 1, 2, 2, 3, 0,
-        // Back
-        4, 5, 6, 6, 7, 4,
-        // Left
-        8, 9,10,10,11, 8,
-        // Right
-       12,13,14,14,15,12,
-        // Top
-       16,17,18,18,19,16,
-        // Bottom
-       20,21,22,22,23,20
-    };
+    ZEN::MeshLibrary::init();
 
     uint32_t textureID = m_Renderer->getResourceManager()->createTexture(
         resourceRoot + "/textures/container2.png");
@@ -95,20 +43,23 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     };
 
     entt::entity entity = m_Scene->createEntity();
-    m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, mesh);
+    m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, *ZEN::MeshLibrary::get("Cube"));
     m_Scene->getRegistry().emplace<ZEN::TransformComp>(entity,
         ZEN::TransformComp{.position = {0.0f, 0.0f, -3.0f}});
     m_Scene->getRegistry().emplace<ZEN::MaterialComp>(entity, comp);
+    m_Scene->getRegistry().emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Cube 1"});
 
     entt::entity entity2 = m_Scene->createEntity();
-    m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity2, mesh);
+    m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity2, *ZEN::MeshLibrary::get("Cube"));
     m_Scene->getRegistry().emplace<ZEN::TransformComp>(entity2,
         ZEN::TransformComp{.position = {2.0f, 0.0f, -3.0f}});
     m_Scene->getRegistry().emplace<ZEN::MaterialComp>(entity2, comp);
+    m_Scene->getRegistry().emplace<ZEN::TagComp>(entity2, ZEN::TagComp{.tag = "Cube 2"});
 
     entt::entity cameraEntity = m_Scene->createEntity();
     m_Scene->getRegistry().emplace<ZEN::CameraComp>(cameraEntity);
     m_Scene->getRegistry().emplace<ZEN::TransformComp>(cameraEntity);
+    m_Scene->getRegistry().emplace<ZEN::TagComp>(cameraEntity, ZEN::TagComp{.tag = "Scene Camera"});
 
     entt::entity skyboxEntity = m_Scene->createEntity();
     ZEN::MeshComp skyboxMesh{};
@@ -170,43 +121,80 @@ static auto const inspectTransform = [](ZEN::TransformComp& out) {
 void Application::onUIRender() {
     m_ImGuiLayer->beginFrame();
 
-    // Show demo window (optional)
-    ImGui::ShowDemoWindow();
+    drawInspectorPanel();
 
-    // Start a new window for camera controls
-    ImGui::Begin("Camera Controls");
-
-    auto cameraView = m_Scene->getRegistry().view<ZEN::CameraComp, ZEN::TransformComp>();
-    for (auto entity : cameraView) {
-        auto &camera = m_Scene->getRegistry().get<ZEN::CameraComp>(entity);
-        auto &transform = m_Scene->getRegistry().get<ZEN::TransformComp>(entity);
-        if (camera.isPrimary) {
-           const char* label = "Primary Camera";
-            if (ImGui::TreeNode(label)) {
-                inspectTransform(transform);
-                ImGui::TreePop();
-            }
-        }
-    }
-
-    ImGui::End();
-
-    ImGui::Begin("Transform Controls");
-
-    auto transformView = m_Scene->getRegistry().view<ZEN::TransformComp, ZEN::MeshComp>();
-    for (auto entity : transformView) {
-        auto &transform = m_Scene->getRegistry().get<ZEN::TransformComp>(entity);
-        auto const label = "Entity: " + std::to_string((int)entity);
-        if (ImGui::TreeNode(label.c_str())) {
-            inspectTransform(transform);
-            ImGui::TreePop();
-        }
-    }
-
-    ImGui::End();
+    drawScenePanel();
 
     m_ImGuiLayer->render();
     m_ImGuiLayer->endFrame(nullptr);
+}
+void Application::drawInspectorPanel() {
+    ImGui::Begin("Inspector");
+
+    if (m_SelectedEntity != entt::null && m_Scene->getRegistry().valid(m_SelectedEntity)) {
+        if (auto* name = m_Scene->getRegistry().try_get<ZEN::TagComp>(m_SelectedEntity)) {
+            char buffer[128];
+            strncpy(buffer, name->tag.c_str(), sizeof(buffer));
+            if (ImGui::InputText("Name", buffer, sizeof(buffer))) {
+                name->tag = buffer;
+            }
+        }
+
+        if (auto* transform = m_Scene->getRegistry().try_get<ZEN::TransformComp>(m_SelectedEntity)) {
+            inspectTransform(*transform);
+        }
+
+        if (auto* material = m_Scene->getRegistry().try_get<ZEN::MaterialComp>(m_SelectedEntity)) {
+            ImGui::DragFloat("Specular", &material->specular, 0.01f, 0.0f, 1.0f);
+            ImGui::DragInt("Shininess", &material->shininess, 1, 1, 256);
+        }
+    }
+
+    ImGui::End();
+}
+void Application::drawScenePanel() {
+    ImGui::Begin("Scene");
+
+    auto view = m_Scene->getRegistry().view<ZEN::TagComp>();
+
+    if (ImGui::BeginPopupContextWindow("SceneContextMenu", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight)) {
+        if (ImGui::MenuItem("Add Empty Entity")) {
+            entt::entity entity = m_Scene->createEntity();
+            m_Scene->getRegistry().emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Empty Entity"});
+            m_SelectedEntity = entity;
+        }
+        if (ImGui::MenuItem("Add Cube")) {
+            entt::entity entity = m_Scene->createEntity();
+            m_Scene->getRegistry().emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Cube"});
+            m_SelectedEntity = entity;
+
+            m_Scene->getRegistry().emplace<ZEN::TransformComp>(entity);
+            m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, *ZEN::MeshLibrary::get("Cube"));
+            m_Scene->getRegistry().emplace<ZEN::MaterialComp>(entity, ZEN::MaterialComp{.shaderID = 1, .textureID = 1, .specularTexID = 2});
+
+        }
+        ImGui::EndPopup();
+    }
+
+    for (auto entity : view) {
+        auto &name = view.get<ZEN::TagComp>(entity);
+
+        ImGuiTreeNodeFlags flags =
+            (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) |
+            ImGuiTreeNodeFlags_OpenOnArrow |
+            ImGuiTreeNodeFlags_SpanAvailWidth |
+            ImGuiTreeNodeFlags_Leaf;
+
+        bool opened = ImGui::TreeNodeEx((void *)(intptr_t)entity, flags, "%s", name.tag.c_str());
+
+        if (ImGui::IsItemClicked())
+            m_SelectedEntity = entity;
+
+        if (opened)
+            ImGui::TreePop();
+    }
+
+    ImGui::End();
 }
 
 void Application::onRender() {
