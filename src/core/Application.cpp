@@ -6,7 +6,6 @@
 #include <string>
 #include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/RenderSystem.h>
-
 #include <ZeusEngineCore/CameraSystem.h>
 #include <ZeusEngineCore/MeshLibrary.h>
 
@@ -121,15 +120,43 @@ static auto const inspectTransform = [](ZEN::TransformComp& out) {
 void Application::onUIRender() {
     m_ImGuiLayer->beginFrame();
 
+    drawSceneViewPanel();
     drawInspectorPanel();
-
+    drawProjectPanel();
     drawScenePanel();
 
     m_ImGuiLayer->render();
     m_ImGuiLayer->endFrame(nullptr);
 }
+
+void Application::drawSceneViewPanel() {
+    ImGuiIO& io = ImGui::GetIO();
+    ImVec2 displaySize = io.DisplaySize;
+
+    ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.2f, 0));
+    ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.6f, displaySize.y * 0.7f));
+
+    ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+
+    ImVec2 panelSize = ImGui::GetContentRegionAvail();
+    ZEN::Texture texture = m_Renderer->getColorTexture();
+
+    ImGui::Image(
+        (void*)(intptr_t)m_Renderer->getResourceManager()->getTexture(texture.textureID),
+        panelSize,
+        ImVec2(0, 1), // uv0 (top-left)
+        ImVec2(1, 0)  // uv1 (bottom-right)
+    );
+
+    ImGui::End();
+}
+
 void Application::drawInspectorPanel() {
-    ImGui::Begin("Inspector");
+    ImGuiIO& io = ImGui::GetIO();
+    ImVec2 displaySize = io.DisplaySize;
+    ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.8f, 0));
+    ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
+    ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
     if (m_SelectedEntity != entt::null && m_Scene->getRegistry().valid(m_SelectedEntity)) {
         if (auto* name = m_Scene->getRegistry().try_get<ZEN::TagComp>(m_SelectedEntity)) {
@@ -152,8 +179,45 @@ void Application::drawInspectorPanel() {
 
     ImGui::End();
 }
+void Application::drawProjectPanel() {
+    ImGuiIO& io = ImGui::GetIO();
+    ImVec2 displaySize = io.DisplaySize;
+
+    ImGui::SetNextWindowPos(ImVec2(0, displaySize.y * 0.7f)); // bottom-left
+    ImGui::SetNextWindowSize(ImVec2(displaySize.x, displaySize.y * 0.3f));
+
+    ImGui::Begin("Project Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+
+    // Example: iterate over loaded assets
+    /*auto& textures = m_Renderer->getResourceManager()->getAllTextures();
+    if (ImGui::TreeNode("Textures")) {
+        for (auto& [id, tex] : textures) {
+            if (ImGui::Selectable(tex.name.c_str())) {
+                // Optionally assign selected texture to the currently selected entity
+            }
+        }
+        ImGui::TreePop();
+    }*/
+
+    auto& meshes = ZEN::MeshLibrary::getAll();
+    if (ImGui::TreeNode("Meshes")) {
+        for (auto& [name, mesh] : meshes) {
+            if (ImGui::Selectable(name.c_str())) {
+                // Optionally assign selected mesh to the selected entity
+            }
+        }
+        ImGui::TreePop();
+    }
+
+    ImGui::End();
+}
 void Application::drawScenePanel() {
-    ImGui::Begin("Scene");
+    ImGuiIO& io = ImGui::GetIO();
+    ImVec2 displaySize = io.DisplaySize;
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
+
+    ImGui::Begin("Scene Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
     auto view = m_Scene->getRegistry().view<ZEN::TagComp>();
 
@@ -200,6 +264,7 @@ void Application::drawScenePanel() {
 void Application::onRender() {
     m_Renderer->beginFrame();
     m_RenderSystem->onRender(m_Scene->getRegistry());
+    m_Renderer->bindDefaultFBO();
     onUIRender();
     m_Renderer->endFrame();
 }

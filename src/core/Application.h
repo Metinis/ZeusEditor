@@ -34,8 +34,9 @@ namespace ZED {
 
         void onUIRender();
 
+        void drawSceneViewPanel();
         void drawScenePanel();
-
+        void drawProjectPanel();
         void drawInspectorPanel();
 
         std::unique_ptr<ImGUILayer> m_ImGuiLayer{};
