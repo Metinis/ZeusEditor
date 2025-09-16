@@ -2,53 +2,53 @@
 #include <memory>
 #include <glm/vec4.hpp>
 #include <vector>
-#include "ZeusEngineCore/Transform.h"
-#include "ZeusEngineCore/Renderer.h"
+#include "../imgui/ImGUILayer.h"
+#include <ZeusEngineCore/API.h>
+#include <ZeusEngineCore/Window.h>
+#include <ZeusEngineCore/Scene.h>
 
 namespace ZEN {
-    enum class eRendererAPI;
+    class Scene;
+}
+
+namespace ZEN {
     class Renderer;
-    class TextureManager;
-    class ShaderManager;
-    class MaterialManager;
-    class Window;
-    class MeshManager;
-    class Material;
-    class IMesh;
+    class RenderSystem;
 }
 
 namespace ZED {
-    class ImGUILayer;
     class Application {
     public:
         explicit Application(ZEN::eRendererAPI api);
 
         ~Application();
 
-        void Run(); //Entry point (main.cpp) calls this
+        void run(); //Entry point (main.cpp) calls this
     private:
-        void Init();
 
-        void Shutdown();
+        void processEvents();
 
-        void ProcessEvents();
+        void onUpdate(float deltaTime);
 
-        void Update(float deltaTime);
+        void onRender();
 
-        void Render();
+        void onUIRender();
 
-        ZEN::eRendererAPI m_API;
-        std::unique_ptr<ZEN::Renderer> m_Renderer;
-        std::unique_ptr<ZEN::TextureManager> m_TextureManager;
-        std::unique_ptr<ImGUILayer> m_ImGuiLayer;
-        std::unique_ptr<ZEN::Window> m_Window;
-        std::unique_ptr<ZEN::ShaderManager> m_ShaderManager;
-        std::unique_ptr<ZEN::MaterialManager> m_MaterialManager;
-        std::unique_ptr<ZEN::MeshManager> m_MeshManager;
-        std::shared_ptr<ZEN::Material> m_Material;
-        std::shared_ptr<ZEN::IMesh> m_Mesh;
-        std::vector<ZEN::RenderCommand> m_Commands;
+        void drawSceneViewPanel();
+        void drawScenePanel();
+        void drawProjectPanel();
+        void drawInspectorPanel();
 
-        bool m_Running = false;
+        std::unique_ptr<ImGUILayer> m_ImGuiLayer{};
+        std::unique_ptr<ZEN::Window> m_Window{};
+        std::unique_ptr<ZEN::Scene> m_Scene{};
+        std::unique_ptr<ZEN::Renderer> m_Renderer{};
+        std::unique_ptr<ZEN::RenderSystem> m_RenderSystem{};
+
+        bool m_Running { false };
+
+        entt::entity m_SelectedEntity = entt::null;
+
+        ZEN::eRendererAPI m_API{};
     };
 }

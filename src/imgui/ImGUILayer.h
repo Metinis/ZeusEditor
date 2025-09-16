@@ -2,10 +2,8 @@
 #include <imgui_impl_glfw.h>
 #include <memory>
 #include <functional>
+#include <ZeusEngineCore/API.h>
 
-namespace ZEN {
-    class IRendererBackend;
-}
 namespace ZED {
     class ImGUILayer {
     public:
@@ -13,12 +11,12 @@ namespace ZED {
 
         virtual ~ImGUILayer() = default;
 
-        virtual void BeginFrame() = 0;
+        virtual void beginFrame() = 0;
 
-        virtual void Render() = 0;
+        virtual void render() = 0;
 
-        virtual void EndFrame(void *commandBuffer) = 0;
+        virtual void endFrame(void *commandBuffer) = 0;
 
-        static std::unique_ptr<ImGUILayer> Create(GLFWwindow* window, ZEN::IRendererBackend* apiBackend);
+        static std::unique_ptr<ImGUILayer> create(GLFWwindow* window, ZEN::eRendererAPI api);
     };
 }

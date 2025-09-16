@@ -5,8 +5,6 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-
-# ---- IMGUI ----
 add_library(imgui STATIC)
 
 target_include_directories(imgui PUBLIC
@@ -31,16 +29,13 @@ target_sources(imgui PRIVATE
         include/imgui/backends/imgui_impl_opengl3.cpp
         include/imgui/backends/imgui_impl_vulkan.cpp
 )
-# ---- MAIN EXECUTABLE ----
 add_executable(ZeusEditor)
 
 file(GLOB_RECURSE ZEUSEDITOR_SOURCES
         src/*.cpp
 )
-
 target_sources(ZeusEditor PRIVATE ${ZEUSEDITOR_SOURCES})
 
-# ---- LINK LIBRARIES ----
 find_package(Vulkan REQUIRED)
 
 target_link_libraries(ZeusEditor PRIVATE
@@ -49,7 +44,6 @@ target_link_libraries(ZeusEditor PRIVATE
         Vulkan::Vulkan
 )
 
-# ---- macOS platform-specific ----
 if (APPLE)
     find_library(COCOA_LIBRARY Cocoa REQUIRED)
     find_library(IOKIT_LIBRARY IOKit REQUIRED)
@@ -62,7 +56,6 @@ if (APPLE)
     )
 endif()
 
-# ---- Post build ----
 add_custom_command(TARGET ZeusEditor POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/resources"

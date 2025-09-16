@@ -4,10 +4,12 @@
 #include <imgui_impl_opengl3.h>
 
 using namespace ZED;
-ImGUILayerOpenGL::ImGUILayerOpenGL(GLFWwindow *window, const ZEN::OGLAPI::BackendInfo& backendInfo) {
+ImGUILayerOpenGL::ImGUILayerOpenGL(GLFWwindow *window) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     ImGui::StyleColorsDark();
 
@@ -18,7 +20,7 @@ ImGUILayerOpenGL::ImGUILayerOpenGL(GLFWwindow *window, const ZEN::OGLAPI::Backen
     ImGui_ImplOpenGL3_Init("#version 450");
 #endif
     callback = [this](void* cmd) {
-        this->EndFrame(cmd);
+        this->endFrame(cmd);
     };
 }
 
@@ -28,17 +30,16 @@ ImGUILayerOpenGL::~ImGUILayerOpenGL() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
-void ImGUILayerOpenGL::BeginFrame() {
+void ImGUILayerOpenGL::beginFrame() {
     ImGui_ImplGlfw_NewFrame();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui::NewFrame();
 }
-void ImGUILayerOpenGL::Render() {
+void ImGUILayerOpenGL::render() {
     ImGui::Render();
 }
 // commandBuffer ignored here
-void ImGUILayerOpenGL::EndFrame(void* commandBuffer)
-{
+void ImGUILayerOpenGL::endFrame(void* commandBuffer) {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 

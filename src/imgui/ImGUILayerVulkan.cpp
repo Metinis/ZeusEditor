@@ -2,17 +2,15 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_vulkan.h>
-#include <ZeusEngineCore/EngineConstants.h>
 #include <glm/vec4.hpp>
 #include <glm/glm.hpp>
 #include <glm/common.hpp>
 #include <glm/gtc/color_space.hpp>
-#include <ZeusEngineCore/InfoVariants.h>
 
 using namespace ZED;
 
-ImGUILayerVulkan::ImGUILayerVulkan(GLFWwindow *window, const ZEN::VKAPI::BackendInfo &backendInfo) {
-    IMGUI_CHECKVERSION();
+ImGUILayerVulkan::ImGUILayerVulkan(GLFWwindow *window) {
+    /*IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
     static auto const loadVkFunc = +[](char const* name, void* userData) {
@@ -61,7 +59,7 @@ ImGUILayerVulkan::ImGUILayerVulkan(GLFWwindow *window, const ZEN::VKAPI::Backend
     //used to submit to renderer
     callback = [this](void* cmd) {
         this->EndFrame(cmd);
-    };
+    };*/
 }
 
 ImGUILayerVulkan::~ImGUILayerVulkan() {
@@ -69,18 +67,17 @@ ImGUILayerVulkan::~ImGUILayerVulkan() {
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
-void ImGUILayerVulkan::BeginFrame() {
+void ImGUILayerVulkan::beginFrame() {
 	ImGui_ImplGlfw_NewFrame();
 	ImGui_ImplVulkan_NewFrame();
 
 	ImGui::NewFrame();
 }
-void ImGUILayerVulkan::Render() {
+void ImGUILayerVulkan::render() {
 	ImGui::Render();
 }
 
-void ImGUILayerVulkan::EndFrame(void* commandBuffer)
-{
+void ImGUILayerVulkan::endFrame(void* commandBuffer) {
 	ImDrawData* data = ImGui::GetDrawData();
 	if (data == nullptr) { return; }
 	VkCommandBuffer vkCommandBuffer = reinterpret_cast<VkCommandBuffer>(commandBuffer);
