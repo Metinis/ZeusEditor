@@ -14,6 +14,7 @@ namespace ZEN {
 namespace ZEN {
     class Renderer;
     class RenderSystem;
+    class CameraSystem;
 }
 
 namespace ZED {
@@ -44,6 +45,9 @@ namespace ZED {
         std::unique_ptr<ZEN::Scene> m_Scene{};
         std::unique_ptr<ZEN::Renderer> m_Renderer{};
         std::unique_ptr<ZEN::RenderSystem> m_RenderSystem{};
+        std::unique_ptr<ZEN::CameraSystem> m_CameraSystem{};
+
+        ImVec2 m_SceneViewPanelSize{};
 
         bool m_Running { false };
 

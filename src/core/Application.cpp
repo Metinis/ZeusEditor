@@ -8,12 +8,14 @@
 #include <ZeusEngineCore/RenderSystem.h>
 #include <ZeusEngineCore/CameraSystem.h>
 #include <ZeusEngineCore/MeshLibrary.h>
+#include <ZeusEngineCore/InputEvents.h>
 
 using namespace ZED;
 Application::Application(ZEN::eRendererAPI api) : m_API(api) {
-    m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", m_API);
     m_Scene = std::make_unique<ZEN::Scene>();
-    m_Renderer = std::make_unique<ZEN::Renderer>(m_API, m_Window->getNativeWindow());
+    m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", m_API,
+        m_Scene->getDispatcher());
+    m_Renderer = std::make_unique<ZEN::Renderer>(m_API, m_Window->getNativeWindow(), m_Scene->getDispatcher());
 
     std::string resourceRoot = RESOURCE_ROOT;
     uint32_t defaultShaderID = m_Renderer->getResourceManager()->createShader(
@@ -22,10 +24,13 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_Renderer->setDefaultShader(defaultShader);
 
     m_RenderSystem = std::make_unique<ZEN::RenderSystem>(m_Renderer.get(), m_Scene.get());
+    m_CameraSystem = std::make_unique<ZEN::CameraSystem>(m_Scene->getDispatcher());
 
     m_ImGuiLayer = ImGUILayer::create(m_Window->getNativeWindow(), api);
 
     m_Running = true;
+
+    m_SceneViewPanelSize = {800, 600};
 
     ZEN::MeshLibrary::init();
 
@@ -61,25 +66,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_Scene->getRegistry().emplace<ZEN::TagComp>(cameraEntity, ZEN::TagComp{.tag = "Scene Camera"});
 
     entt::entity skyboxEntity = m_Scene->createEntity();
-    ZEN::MeshComp skyboxMesh{};
-    skyboxMesh.vertices = {
-        {{-1.0f,  1.0f, -1.0f}}, {{-1.0f, -1.0f, -1.0f}}, {{ 1.0f, -1.0f, -1.0f}}, {{ 1.0f,  1.0f, -1.0f}}, // Back
-        {{-1.0f, -1.0f,  1.0f}}, {{-1.0f,  1.0f,  1.0f}}, {{ 1.0f,  1.0f,  1.0f}}, {{ 1.0f, -1.0f,  1.0f}}, // Front
-        {{-1.0f,  1.0f,  1.0f}}, {{-1.0f, -1.0f,  1.0f}}, {{-1.0f, -1.0f, -1.0f}}, {{-1.0f,  1.0f, -1.0f}}, // Left
-        {{ 1.0f,  1.0f, -1.0f}}, {{ 1.0f, -1.0f, -1.0f}}, {{ 1.0f, -1.0f,  1.0f}}, {{ 1.0f,  1.0f,  1.0f}}, // Right
-        {{-1.0f,  1.0f,  1.0f}}, {{-1.0f,  1.0f, -1.0f}}, {{ 1.0f,  1.0f, -1.0f}}, {{ 1.0f,  1.0f,  1.0f}}, // Top
-        {{-1.0f, -1.0f, -1.0f}}, {{-1.0f, -1.0f,  1.0f}}, {{ 1.0f, -1.0f,  1.0f}}, {{ 1.0f, -1.0f, -1.0f}}  // Bottom
-    };
-
-    // Cube indices
-    skyboxMesh.indices = {
-        0,1,2, 2,3,0,       // Back
-        4,5,6, 6,7,4,       // Front
-        8,9,10, 10,11,8,    // Left
-        12,13,14, 14,15,12, // Right
-        16,17,18, 18,19,16, // Top
-        20,21,22, 22,23,20  // Bottom
-    };
+    ZEN::MeshComp skyboxMesh = *ZEN::MeshLibrary::get("Skybox");
 
     ZEN::SkyboxComp skyboxComp{};
     skyboxComp.shaderID = m_Renderer->getResourceManager()->createShader(
@@ -107,8 +94,7 @@ void Application::processEvents() {
     
 }
 void Application::onUpdate(float deltaTime) {
-    ZEN::CameraSystem::onUpdate(m_Scene->getRegistry(), m_Window->getWidth(),
-        m_Window->getHeight());
+    m_CameraSystem->onUpdate(m_Scene->getRegistry());
     m_RenderSystem->onUpdate(m_Scene->getRegistry());
 }
 
@@ -136,14 +122,21 @@ void Application::drawSceneViewPanel() {
     ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.2f, 0));
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.6f, displaySize.y * 0.7f));
 
-    ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-    ImVec2 panelSize = ImGui::GetContentRegionAvail();
+    ImVec2 newSize = ImGui::GetContentRegionAvail();
+    if (m_SceneViewPanelSize.x != newSize.x || m_SceneViewPanelSize.y != newSize.y) {
+        m_SceneViewPanelSize = newSize;
+        m_Scene->getDispatcher().trigger<ZEN::SceneViewResizeEvent>(
+            ZEN::SceneViewResizeEvent{ newSize.x, newSize.y }
+        );
+    }
+
     ZEN::Texture texture = m_Renderer->getColorTexture();
 
     ImGui::Image(
         (void*)(intptr_t)m_Renderer->getResourceManager()->getTexture(texture.textureID),
-        panelSize,
+        m_SceneViewPanelSize,
         ImVec2(0, 1), // uv0 (top-left)
         ImVec2(1, 0)  // uv1 (bottom-right)
     );
@@ -156,7 +149,7 @@ void Application::drawInspectorPanel() {
     ImVec2 displaySize = io.DisplaySize;
     ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.8f, 0));
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
-    ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
     if (m_SelectedEntity != entt::null && m_Scene->getRegistry().valid(m_SelectedEntity)) {
         if (auto* name = m_Scene->getRegistry().try_get<ZEN::TagComp>(m_SelectedEntity)) {
@@ -186,7 +179,7 @@ void Application::drawProjectPanel() {
     ImGui::SetNextWindowPos(ImVec2(0, displaySize.y * 0.7f)); // bottom-left
     ImGui::SetNextWindowSize(ImVec2(displaySize.x, displaySize.y * 0.3f));
 
-    ImGui::Begin("Project Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Project Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
     // Example: iterate over loaded assets
     /*auto& textures = m_Renderer->getResourceManager()->getAllTextures();
@@ -217,7 +210,7 @@ void Application::drawScenePanel() {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
 
-    ImGui::Begin("Scene Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Scene Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
     auto view = m_Scene->getRegistry().view<ZEN::TagComp>();
 
