@@ -94,7 +94,7 @@ void Application::processEvents() {
     
 }
 void Application::onUpdate(float deltaTime) {
-    m_CameraSystem->onUpdate(m_Scene->getRegistry());
+    m_CameraSystem->onUpdate(m_Scene->getRegistry(), deltaTime);
     m_RenderSystem->onUpdate(m_Scene->getRegistry());
 }
 
@@ -122,7 +122,17 @@ void Application::drawSceneViewPanel() {
     ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.2f, 0));
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.6f, displaySize.y * 0.7f));
 
-    ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
+        | ImGuiWindowFlags_NoCollapse);
+
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+        ImGui::SetWindowFocus(); // make panel focused, same as left-click
+    }
+    if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
+            ZEN::PanelFocusEvent{ .panel = "Scene View" }
+        );
+    }
 
     ImVec2 newSize = ImGui::GetContentRegionAvail();
     if (m_SceneViewPanelSize.x != newSize.x || m_SceneViewPanelSize.y != newSize.y) {
@@ -150,7 +160,14 @@ void Application::drawInspectorPanel() {
     ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.8f, 0));
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
     ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+        ImGui::SetWindowFocus(); // make panel focused, same as left-click
+    }
+    if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
+            ZEN::PanelFocusEvent{ .panel = "Inspector" }
+        );
+    }
     if (m_SelectedEntity != entt::null && m_Scene->getRegistry().valid(m_SelectedEntity)) {
         if (auto* name = m_Scene->getRegistry().try_get<ZEN::TagComp>(m_SelectedEntity)) {
             char buffer[128];
@@ -180,7 +197,14 @@ void Application::drawProjectPanel() {
     ImGui::SetNextWindowSize(ImVec2(displaySize.x, displaySize.y * 0.3f));
 
     ImGui::Begin("Project Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+        ImGui::SetWindowFocus(); // make panel focused, same as left-click
+    }
+    if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
+            ZEN::PanelFocusEvent{ .panel = "Project"}
+        );
+    }
     // Example: iterate over loaded assets
     /*auto& textures = m_Renderer->getResourceManager()->getAllTextures();
     if (ImGui::TreeNode("Textures")) {
@@ -211,7 +235,14 @@ void Application::drawScenePanel() {
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
 
     ImGui::Begin("Scene Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+        ImGui::SetWindowFocus(); // make panel focused, same as left-click
+    }
+    if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
+            ZEN::PanelFocusEvent{ .panel = "Scene" }
+        );
+    }
     auto view = m_Scene->getRegistry().view<ZEN::TagComp>();
 
     if (ImGui::BeginPopupContextWindow("SceneContextMenu", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight)) {

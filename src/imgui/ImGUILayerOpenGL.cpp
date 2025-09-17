@@ -11,7 +11,8 @@ ImGUILayerOpenGL::ImGUILayerOpenGL(GLFWwindow *window) {
     //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-    ImGui::StyleColorsDark();
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
 #ifdef __APPLE__
