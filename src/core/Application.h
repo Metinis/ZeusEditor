@@ -7,6 +7,11 @@
 #include <ZeusEngineCore/Window.h>
 #include <ZeusEngineCore/Scene.h>
 
+#include "../imgui/panels/InspectorPanel.h"
+#include "../imgui/panels/ScenePanel.h"
+#include "../imgui/panels/ProjectPanel.h"
+#include "../imgui/panels/ViewPanel.h"
+
 namespace ZEN {
     class Scene;
 }
@@ -35,11 +40,6 @@ namespace ZED {
 
         void onUIRender();
 
-        void drawSceneViewPanel();
-        void drawScenePanel();
-        void drawProjectPanel();
-        void drawInspectorPanel();
-
         std::unique_ptr<ImGUILayer> m_ImGuiLayer{};
         std::unique_ptr<ZEN::Window> m_Window{};
         std::unique_ptr<ZEN::Scene> m_Scene{};
@@ -47,7 +47,10 @@ namespace ZED {
         std::unique_ptr<ZEN::RenderSystem> m_RenderSystem{};
         std::unique_ptr<ZEN::CameraSystem> m_CameraSystem{};
 
-        ImVec2 m_SceneViewPanelSize{};
+        ViewPanel m_ViewPanel{};
+        InspectorPanel m_InspectorPanel{};
+        ProjectPanel m_ProjectPanel{};
+        ScenePanel m_ScenePanel{};
 
         bool m_Running { false };
 
