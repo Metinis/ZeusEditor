@@ -40,21 +40,23 @@ namespace ZED {
 
         void onUIRender();
 
+        //Core
         std::unique_ptr<ImGUILayer> m_ImGuiLayer{};
         std::unique_ptr<ZEN::Window> m_Window{};
         std::unique_ptr<ZEN::Scene> m_Scene{};
         std::unique_ptr<ZEN::Renderer> m_Renderer{};
+
+        //Systems
         std::unique_ptr<ZEN::RenderSystem> m_RenderSystem{};
         std::unique_ptr<ZEN::CameraSystem> m_CameraSystem{};
 
-        ViewPanel m_ViewPanel{};
-        InspectorPanel m_InspectorPanel{};
-        ProjectPanel m_ProjectPanel{};
-        ScenePanel m_ScenePanel{};
+        //UI
+        std::unique_ptr<ViewPanel> m_ViewPanel{};
+        std::unique_ptr<InspectorPanel> m_InspectorPanel{};
+        std::unique_ptr<ProjectPanel> m_ProjectPanel{};
+        std::unique_ptr<ScenePanel> m_ScenePanel{};
 
         bool m_Running { false };
-
-        entt::entity m_SelectedEntity = entt::null;
 
         ZEN::eRendererAPI m_API{};
     };

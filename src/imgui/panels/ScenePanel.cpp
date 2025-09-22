@@ -6,6 +6,10 @@
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/MeshLibrary.h>
 
+ScenePanel::ScenePanel(entt::dispatcher &dispatcher) {
+    dispatcher.sink<ZEN::SelectEntityEvent>().connect<&ScenePanel::onEntitySelect>(*this);
+}
+
 void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& registry) {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
@@ -27,12 +31,12 @@ void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& reg
         if (ImGui::MenuItem("Add Empty Entity")) {
             entt::entity entity = registry.create();
             registry.emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Empty Entity"});
-            m_SelectedEntity = entity;
+            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
         }
         if (ImGui::MenuItem("Add Cube")) {
             entt::entity entity = registry.create();
             registry.emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Cube"});
-            m_SelectedEntity = entity;
+            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
 
             registry.emplace<ZEN::TransformComp>(entity);
             registry.emplace<ZEN::MeshComp>(entity, *ZEN::MeshLibrary::get("Cube"));
@@ -40,7 +44,7 @@ void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& reg
         if (ImGui::MenuItem("Add Sphere")) {
             entt::entity entity = registry.create();
             registry.emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Sphere"});
-            m_SelectedEntity = entity;
+            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
 
             registry.emplace<ZEN::TransformComp>(entity);
             registry.emplace<ZEN::MeshComp>(entity, *ZEN::MeshLibrary::get("Sphere"));
@@ -60,11 +64,16 @@ void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& reg
         bool opened = ImGui::TreeNodeEx((void *)(intptr_t)entity, flags, "%s", name.tag.c_str());
 
         if (ImGui::IsItemClicked())
-            m_SelectedEntity = entity;
+            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
 
         if (opened)
             ImGui::TreePop();
+
     }
 
     ImGui::End();
+}
+
+void ScenePanel::onEntitySelect(ZEN::SelectEntityEvent &e) {
+    m_SelectedEntity = e.entity;
 }

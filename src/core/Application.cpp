@@ -21,6 +21,10 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_CameraSystem = std::make_unique<ZEN::CameraSystem>(m_Scene->getDispatcher());
 
     m_ImGuiLayer = ImGUILayer::create(m_Window->getNativeWindow(), api);
+    m_InspectorPanel = std::make_unique<InspectorPanel>(m_Scene->getDispatcher());
+    m_ProjectPanel = std::make_unique<ProjectPanel>();
+    m_ViewPanel = std::make_unique<ViewPanel>();
+    m_ScenePanel = std::make_unique<ScenePanel>(m_Scene->getDispatcher());
 
     m_Running = true;
 
@@ -30,9 +34,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
 
 
 }
-Application::~Application() {
-     
-}
+Application::~Application() = default;
 
 void Application::run() {
     while(m_Running && !m_Window->shouldClose()) {
@@ -43,9 +45,7 @@ void Application::run() {
         onRender();
     }
 }
-void Application::processEvents() {
-    
-}
+
 void Application::onUpdate(float deltaTime) {
     m_CameraSystem->onUpdate(m_Scene->getRegistry(), deltaTime);
     m_RenderSystem->onUpdate(m_Scene->getRegistry());
@@ -55,13 +55,10 @@ void Application::onUpdate(float deltaTime) {
 void Application::onUIRender() {
     m_ImGuiLayer->beginFrame();
 
-    m_ScenePanel.onImGuiRender(m_Scene->getDispatcher(), m_Scene->getRegistry());
-    m_ViewPanel.onImGuiRender(m_Scene->getDispatcher(), m_Renderer->getColorTextureHandle());
-    m_InspectorPanel.setSelectedEntity(m_ScenePanel.getSelectedEntity());
-    m_InspectorPanel.onImGuiRender(m_Scene->getDispatcher(), m_Scene->getRegistry());
-    m_ProjectPanel.onImGuiRender(m_Scene->getDispatcher());
-
-
+    m_ScenePanel->onImGuiRender(m_Scene->getDispatcher(), m_Scene->getRegistry());
+    m_ViewPanel->onImGuiRender(m_Scene->getDispatcher(), m_Renderer->getColorTextureHandle());
+    m_InspectorPanel->onImGuiRender(m_Scene->getDispatcher(), m_Scene->getRegistry());
+    m_ProjectPanel->onImGuiRender(m_Scene->getDispatcher());
 
     m_ImGuiLayer->render();
     m_ImGuiLayer->endFrame(nullptr);

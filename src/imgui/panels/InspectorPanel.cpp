@@ -6,11 +6,17 @@
 #include <ZeusEngineCore/Components.h>
 #include <ZeusEngineCore/InputEvents.h>
 
+
 static auto const inspectTransform = [](ZEN::TransformComp& out) {
     ImGui::DragFloat3("position", &out.position.x, 0.01f);
     ImGui::DragFloat3("rotation", &out.rotation.x);
     ImGui::DragFloat3("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
 };
+
+InspectorPanel::InspectorPanel(entt::dispatcher &dispatcher) {
+    dispatcher.sink<ZEN::SelectEntityEvent>().connect<&InspectorPanel::onEntitySelect>(*this);
+}
+
 void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& registry) {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
@@ -18,7 +24,7 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
     ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
     if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
-        ImGui::SetWindowFocus(); // make panel focused, same as left-click
+        ImGui::SetWindowFocus();
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
         dispatcher.trigger<ZEN::PanelFocusEvent>(
@@ -46,9 +52,6 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
 
         // Shader selection
         if (ImGui::TreeNode("Shader")) {
-            // you could fetch list from resource manager if you expose it:
-            // auto& shaders = m_Renderer->getResourceManager()->getAllShaders();
-            // for (auto& [id, shader] : shaders) ...
             ImGui::Text("Current Shader ID: %u", material->shaderID);
             ImGui::TreePop();
         }
@@ -57,7 +60,6 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
         if (ImGui::TreeNode("Textures")) {
             ImGui::Text("Diffuse Tex ID: %u", material->textureID);
             ImGui::Text("Specular Tex ID: %u", material->specularTexID);
-            // Here you can add an ImGui::Selectable list from your resource manager
             ImGui::TreePop();
         }
     }
@@ -71,17 +73,19 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
         static std::string selectedMesh;
         // find current mesh name from pointer
         for (auto& [name, mesh] : meshes) {
-           // if (&mesh == &(*meshComp)) {
-            //    selectedMesh = name;
+            if (mesh.get() == &(*meshComp)) {
+                selectedMesh = name;
                 break;
-            //}
+            }
         }
 
         if (ImGui::BeginCombo("Mesh", selectedMesh.c_str())) {
             for (auto& [name, mesh] : meshes) {
                 bool isSelected = (selectedMesh == name);
                 if (ImGui::Selectable(name.c_str(), isSelected)) {
-                    //*meshComp = mesh; // replace the mesh data
+                    //meshComp = mesh.get(); // replace the mesh data
+                    //meshComp->indices = mesh->indices;
+                    //meshComp->vertices = mesh->vertices;
                     selectedMesh = name;
                 }
                 if (isSelected)
@@ -112,6 +116,12 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
                         ImGui::CloseCurrentPopup();
                     }
                 }
+                if (!registry.all_of<ZEN::MeshComp>(m_SelectedEntity)) {
+                    if (ImGui::MenuItem("Mesh")) {
+                        registry.emplace<ZEN::MeshComp>(m_SelectedEntity);
+                        ImGui::CloseCurrentPopup();
+                    }
+                }
 
                 ImGui::EndPopup();
             }
@@ -120,4 +130,8 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
     }
 
     ImGui::End();
+}
+
+void InspectorPanel::onEntitySelect(ZEN::SelectEntityEvent &e) {
+    m_SelectedEntity = e.entity;
 }
