@@ -21,16 +21,6 @@ void ProjectPanel::onImGuiRender(entt::dispatcher &dispatcher) {
             ZEN::PanelFocusEvent{ .panel = "Project"}
         );
     }
-    // Example: iterate over loaded assets
-    /*auto& textures = m_Renderer->getResourceManager()->getAllTextures();
-    if (ImGui::TreeNode("Textures")) {
-        for (auto& [id, tex] : textures) {
-            if (ImGui::Selectable(tex.name.c_str())) {
-                // Optionally assign selected texture to the currently selected entity
-            }
-        }
-        ImGui::TreePop();
-    }*/
 
     auto& meshes = ZEN::ModelLibrary::getAll();
     if (ImGui::TreeNode("Meshes")) {
