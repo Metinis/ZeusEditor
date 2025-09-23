@@ -1,6 +1,6 @@
 
 #include "InspectorPanel.h"
-#include <ZeusEngineCore/MeshLibrary.h>
+#include <ZeusEngineCore/ModelLibrary.h>
 
 #include <imgui.h>
 #include <ZeusEngineCore/Components.h>
@@ -58,8 +58,8 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
 
         // Texture selection
         if (ImGui::TreeNode("Textures")) {
-            ImGui::Text("Diffuse Tex ID: %u", material->textureID);
-            ImGui::Text("Specular Tex ID: %u", material->specularTexID);
+            ImGui::Text("Diffuse Tex ID: %u", material->textureIDs[0]);
+            ImGui::Text("Specular Tex ID: %u", material->specularTexIDs[0]);
             ImGui::TreePop();
         }
     }
@@ -69,7 +69,7 @@ void InspectorPanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry&
         ImGui::SeparatorText("Mesh");
 
         // Show current mesh name
-        const auto& meshes = ZEN::MeshLibrary::getAll();
+        const auto& meshes = ZEN::ModelLibrary::getAll();
         static std::string selectedMesh;
         // find current mesh name from pointer
         for (auto& [name, mesh] : meshes) {

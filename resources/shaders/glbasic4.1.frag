@@ -1,8 +1,10 @@
 #version 410 core
 
-uniform sampler2D u_DiffuseMap;
-uniform sampler2D u_SpecularMap;
 
+#define MAX_DIFFUSE 8
+#define MAX_SPECULAR 8
+uniform sampler2D u_DiffuseMap[MAX_DIFFUSE];
+uniform sampler2D u_SpecularMap[MAX_SPECULAR];
 
 layout(std140) uniform Globals {
   vec3 u_LightDir;
@@ -29,8 +31,8 @@ void main() {
   vec3 viewDir  = normalize(u_CameraPos - v_FragPos);
 
   //Sample textures
-  vec3 albedo = texture(u_DiffuseMap, v_UV).rgb;
-  vec3 specMap = texture(u_SpecularMap, v_UV).rgb;
+  vec3 albedo = texture(u_DiffuseMap[0], v_UV).rgb;
+  vec3 specMap = texture(u_SpecularMap[0], v_UV).rgb;
 
   //Ambient component
   vec3 ambient = u_AmbientColor * albedo;

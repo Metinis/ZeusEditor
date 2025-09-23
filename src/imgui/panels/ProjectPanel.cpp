@@ -3,7 +3,7 @@
 
 #include <imgui.h>
 #include <ZeusEngineCore/InputEvents.h>
-#include <ZeusEngineCore/MeshLibrary.h>
+#include <ZeusEngineCore/ModelLibrary.h>
 
 void ProjectPanel::onImGuiRender(entt::dispatcher &dispatcher) {
     ImGuiIO& io = ImGui::GetIO();
@@ -32,7 +32,7 @@ void ProjectPanel::onImGuiRender(entt::dispatcher &dispatcher) {
         ImGui::TreePop();
     }*/
 
-    auto& meshes = ZEN::MeshLibrary::getAll();
+    auto& meshes = ZEN::ModelLibrary::getAll();
     if (ImGui::TreeNode("Meshes")) {
         for (auto& [name, mesh] : meshes) {
             if (ImGui::Selectable(name.c_str())) {

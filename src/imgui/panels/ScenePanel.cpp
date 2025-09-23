@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <ZeusEngineCore/Components.h>
 #include <ZeusEngineCore/InputEvents.h>
-#include <ZeusEngineCore/MeshLibrary.h>
+#include <ZeusEngineCore/ModelLibrary.h>
 
 ScenePanel::ScenePanel(entt::dispatcher &dispatcher) {
     dispatcher.sink<ZEN::SelectEntityEvent>().connect<&ScenePanel::onEntitySelect>(*this);
@@ -39,7 +39,7 @@ void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& reg
             dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
 
             registry.emplace<ZEN::TransformComp>(entity);
-            registry.emplace<ZEN::MeshComp>(entity, *ZEN::MeshLibrary::get("Cube"));
+            registry.emplace<ZEN::MeshComp>(entity, *ZEN::ModelLibrary::get("Cube"));
         }
         if (ImGui::MenuItem("Add Sphere")) {
             entt::entity entity = registry.create();
@@ -47,7 +47,7 @@ void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& reg
             dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
 
             registry.emplace<ZEN::TransformComp>(entity);
-            registry.emplace<ZEN::MeshComp>(entity, *ZEN::MeshLibrary::get("Sphere"));
+            registry.emplace<ZEN::MeshComp>(entity, *ZEN::ModelLibrary::get("Sphere"));
         }
         ImGui::EndPopup();
     }

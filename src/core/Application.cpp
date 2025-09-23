@@ -5,7 +5,7 @@
 #include <ZeusEngineCore/Renderer.h>
 #include <ZeusEngineCore/RenderSystem.h>
 #include <ZeusEngineCore/CameraSystem.h>
-#include <ZeusEngineCore/MeshLibrary.h>
+#include <ZeusEngineCore/ModelLibrary.h>
 
 using namespace ZED;
 Application::Application(ZEN::eRendererAPI api) : m_API(api) {
@@ -28,7 +28,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
 
     m_Running = true;
 
-    ZEN::MeshLibrary::init();
+    ZEN::ModelLibrary::init(m_Renderer->getResourceManager());
 
     m_Scene->createDefaultScene(resourceRoot, m_Renderer.get());
 
