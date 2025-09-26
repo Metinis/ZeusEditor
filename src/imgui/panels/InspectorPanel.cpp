@@ -7,9 +7,9 @@
 
 
 static auto const inspectTransform = [](ZEN::TransformComp &out) {
-    ImGui::DragFloat3("position", &out.position.x, 0.01f);
-    ImGui::DragFloat3("rotation", &out.rotation.x);
-    ImGui::DragFloat3("scale", &out.scale.x, 0.01f, 0.0f, 100.0f);
+    ImGui::DragFloat3("position", &out.localPosition.x, 0.01f);
+    ImGui::DragFloat3("rotation", &out.localRotation.x);
+    ImGui::DragFloat3("scale", &out.localScale.x, 0.01f, 0.0f, 100.0f);
 };
 
 InspectorPanel::InspectorPanel(entt::dispatcher &dispatcher) {
@@ -96,7 +96,8 @@ void InspectorPanel::onImGuiRender(entt::dispatcher &dispatcher, entt::registry 
                 for (auto &[name, mesh]: meshes) {
                     bool isSelected = (selectedMesh == name);
                     if (ImGui::Selectable(name.c_str(), isSelected)) {
-                        meshComp->meshes = mesh->meshes;
+                        meshComp->indices = mesh->indices;
+                        meshComp->vertices = mesh->vertices;
                         meshComp->name = mesh->name;
                         registry.remove<ZEN::MeshDrawableComp>(m_SelectedEntity);
                         selectedMesh = name;

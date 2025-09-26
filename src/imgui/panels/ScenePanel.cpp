@@ -9,7 +9,37 @@
 ScenePanel::ScenePanel(entt::dispatcher &dispatcher) {
     dispatcher.sink<ZEN::SelectEntityEvent>().connect<&ScenePanel::onEntitySelect>(*this);
 }
+void ScenePanel::drawEntityNode(entt::registry& registry, entt::dispatcher& dispatcher, entt::entity entity) {
+    auto &name = registry.get<ZEN::TagComp>(entity);
 
+    ImGuiTreeNodeFlags flags =
+        (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) |
+        ImGuiTreeNodeFlags_OpenOnArrow |
+        ImGuiTreeNodeFlags_SpanAvailWidth;
+
+    // Determine if this entity has children
+    bool hasChildren = false;
+    registry.view<ZEN::ParentComp>().each([&](auto childEntity, auto &pc){
+        if (pc.parent == entity) {
+            hasChildren = true;
+        }
+    });
+    if (!hasChildren) flags |= ImGuiTreeNodeFlags_Leaf;
+
+    const bool opened = ImGui::TreeNodeEx((void *) (intptr_t) entity, flags, "%s", name.tag.c_str());
+
+    if (ImGui::IsItemClicked())
+        dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
+
+    if (opened) {
+        registry.view<ZEN::ParentComp>().each([&](auto childEntity, auto &pc){
+            if (pc.parent == entity) {
+                drawEntityNode(registry, dispatcher, childEntity);
+            }
+        });
+        ImGui::TreePop();
+    }
+}
 void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& registry) {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
@@ -51,25 +81,14 @@ void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& reg
         }
         ImGui::EndPopup();
     }
-
-    for (auto entity : view) {
-        auto &name = view.get<ZEN::TagComp>(entity);
-
-        ImGuiTreeNodeFlags flags =
-            (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) |
-            ImGuiTreeNodeFlags_OpenOnArrow |
-            ImGuiTreeNodeFlags_SpanAvailWidth |
-            ImGuiTreeNodeFlags_Leaf;
-
-        bool opened = ImGui::TreeNodeEx((void *)(intptr_t)entity, flags, "%s", name.tag.c_str());
-
-        if (ImGui::IsItemClicked())
-            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
-
-        if (opened)
-            ImGui::TreePop();
-
+    for(auto entity : view) {
+        if (!registry.any_of<ZEN::ParentComp>(entity) ||
+        registry.get<ZEN::ParentComp>(entity).parent == entt::null) {
+            drawEntityNode(registry, dispatcher, entity);
+        }
     }
+
+
 
     ImGui::End();
 }

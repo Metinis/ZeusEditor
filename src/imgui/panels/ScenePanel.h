@@ -9,6 +9,7 @@ namespace ZEN {
 class ScenePanel {
 public:
     explicit ScenePanel(entt::dispatcher& dispatcher);
+    void drawEntityNode(entt::registry& registry, entt::dispatcher& dispatcher, entt::entity entity);
     void onImGuiRender(entt::dispatcher& dispatcher, entt::registry& registry);
     void setSelectedEntity(entt::entity entity) {m_SelectedEntity = entity;}
     void onEntitySelect(ZEN::SelectEntityEvent& e);
