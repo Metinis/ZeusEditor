@@ -1,16 +1,16 @@
 
 #include "ScenePanel.h"
-
 #include <imgui.h>
 #include <ZeusEngineCore/Components.h>
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/ModelLibrary.h>
+#include <ZeusEngineCore/Scene.h>
 
-ScenePanel::ScenePanel(entt::dispatcher &dispatcher) {
-    dispatcher.sink<ZEN::SelectEntityEvent>().connect<&ScenePanel::onEntitySelect>(*this);
+ScenePanel::ScenePanel(ZEN::Scene* scene, ZEN::ModelLibrary* modelLibrary) : m_Scene(scene), m_ModelLibrary(modelLibrary){
+    m_Scene->getDispatcher().sink<ZEN::SelectEntityEvent>().connect<&ScenePanel::onEntitySelect>(*this);
 }
-void ScenePanel::drawEntityNode(entt::registry& registry, entt::dispatcher& dispatcher, entt::entity entity) {
-    auto &name = registry.get<ZEN::TagComp>(entity);
+void ScenePanel::drawEntityNode(entt::entity entity) {
+    auto &name = m_Scene->getRegistry().get<ZEN::TagComp>(entity);
 
     ImGuiTreeNodeFlags flags =
         (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) |
@@ -19,7 +19,7 @@ void ScenePanel::drawEntityNode(entt::registry& registry, entt::dispatcher& disp
 
     // Determine if this entity has children
     bool hasChildren = false;
-    registry.view<ZEN::ParentComp>().each([&](auto childEntity, auto &pc){
+    m_Scene->getRegistry().view<ZEN::ParentComp>().each([&](auto childEntity, auto &pc){
         if (pc.parent == entity) {
             hasChildren = true;
         }
@@ -29,18 +29,18 @@ void ScenePanel::drawEntityNode(entt::registry& registry, entt::dispatcher& disp
     const bool opened = ImGui::TreeNodeEx((void *) (intptr_t) entity, flags, "%s", name.tag.c_str());
 
     if (ImGui::IsItemClicked())
-        dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
+        m_Scene->getDispatcher().trigger<ZEN::SelectEntityEvent>({entity});
 
     if (opened) {
-        registry.view<ZEN::ParentComp>().each([&](auto childEntity, auto &pc){
+        m_Scene->getRegistry().view<ZEN::ParentComp>().each([&](auto childEntity, auto &pc){
             if (pc.parent == entity) {
-                drawEntityNode(registry, dispatcher, childEntity);
+                drawEntityNode(childEntity);
             }
         });
         ImGui::TreePop();
     }
 }
-void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& registry) {
+void ScenePanel::onImGuiRender() {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
     ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -51,40 +51,40 @@ void ScenePanel::onImGuiRender(entt::dispatcher& dispatcher, entt::registry& reg
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        dispatcher.trigger<ZEN::PanelFocusEvent>(
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{ .panel = "Scene" }
         );
     }
-    auto view = registry.view<ZEN::TagComp>();
+    auto view = m_Scene->getRegistry().view<ZEN::TagComp>();
 
     if (ImGui::BeginPopupContextWindow("SceneContextMenu", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight)) {
         if (ImGui::MenuItem("Add Empty Entity")) {
-            entt::entity entity = registry.create();
-            registry.emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Empty Entity"});
-            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
+            entt::entity entity = m_Scene->getRegistry().create();
+            m_Scene->getRegistry().emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Empty Entity"});
+            m_Scene->getDispatcher().trigger<ZEN::SelectEntityEvent>({entity});
         }
         if (ImGui::MenuItem("Add Cube")) {
-            entt::entity entity = registry.create();
-            registry.emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Cube"});
-            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
+            entt::entity entity = m_Scene->createEntity();
+            m_Scene->getRegistry().emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Cube"});
+            m_Scene->getDispatcher().trigger<ZEN::SelectEntityEvent>({entity});
 
-            registry.emplace<ZEN::TransformComp>(entity);
-            registry.emplace<ZEN::MeshComp>(entity, *ZEN::ModelLibrary::get("Cube"));
+            m_Scene->getRegistry().emplace<ZEN::TransformComp>(entity);
+            m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, *m_ModelLibrary->getMesh("Cube"));
         }
         if (ImGui::MenuItem("Add Sphere")) {
-            entt::entity entity = registry.create();
-            registry.emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Sphere"});
-            dispatcher.trigger<ZEN::SelectEntityEvent>({entity});
+            entt::entity entity = m_Scene->createEntity();
+            m_Scene->getRegistry().emplace<ZEN::TagComp>(entity, ZEN::TagComp{.tag = "Sphere"});
+            m_Scene->getDispatcher().trigger<ZEN::SelectEntityEvent>({entity});
 
-            registry.emplace<ZEN::TransformComp>(entity);
-            registry.emplace<ZEN::MeshComp>(entity, *ZEN::ModelLibrary::get("Sphere"));
+            m_Scene->getRegistry().emplace<ZEN::TransformComp>(entity);
+            m_Scene->getRegistry().emplace<ZEN::MeshComp>(entity, *m_ModelLibrary->getMesh("Sphere"));
         }
         ImGui::EndPopup();
     }
     for(auto entity : view) {
-        if (!registry.any_of<ZEN::ParentComp>(entity) ||
-        registry.get<ZEN::ParentComp>(entity).parent == entt::null) {
-            drawEntityNode(registry, dispatcher, entity);
+        if (!m_Scene->getRegistry().any_of<ZEN::ParentComp>(entity) ||
+        m_Scene->getRegistry().get<ZEN::ParentComp>(entity).parent == entt::null) {
+            drawEntityNode(entity);
         }
     }
 

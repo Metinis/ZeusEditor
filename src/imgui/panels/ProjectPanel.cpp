@@ -1,11 +1,17 @@
 
 #include "ProjectPanel.h"
-
 #include <imgui.h>
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/ModelLibrary.h>
+#include <ZeusEngineCore/Scene.h>
 
-void ProjectPanel::onImGuiRender(entt::dispatcher &dispatcher) {
+
+ProjectPanel::ProjectPanel(ZEN::Scene *scene, ZEN::ModelLibrary *modelLibrary)
+: m_Scene(scene), m_ModelLibrary(modelLibrary) {
+
+}
+
+void ProjectPanel::onImGuiRender(){
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
 
@@ -17,12 +23,12 @@ void ProjectPanel::onImGuiRender(entt::dispatcher &dispatcher) {
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        dispatcher.trigger<ZEN::PanelFocusEvent>(
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{ .panel = "Project"}
         );
     }
 
-    auto& meshes = ZEN::ModelLibrary::getAll();
+    auto& meshes = m_ModelLibrary->getAllMeshes();
     if (ImGui::TreeNode("Meshes")) {
         for (auto& [name, mesh] : meshes) {
             if (ImGui::Selectable(name.c_str())) {

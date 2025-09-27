@@ -6,6 +6,7 @@
 #include <ZeusEngineCore/RenderSystem.h>
 #include <ZeusEngineCore/CameraSystem.h>
 #include <ZeusEngineCore/ModelLibrary.h>
+#include <ZeusEngineCore/ModelImporter.h>
 
 using namespace ZED;
 Application::Application(ZEN::eRendererAPI api) : m_API(api) {
@@ -16,21 +17,21 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
 
     std::string resourceRoot = RESOURCE_ROOT;
     m_Renderer->createDefaultShader("/shaders/glbasic4.1.vert", "/shaders/glbasic4.1.frag", resourceRoot);
+    m_ModelImporter = std::make_unique<ZEN::ModelImporter>(m_Scene.get(), m_Renderer->getResourceManager());
+    m_ModelLibrary = std::make_unique<ZEN::ModelLibrary>(m_Renderer->getResourceManager());
 
     m_RenderSystem = std::make_unique<ZEN::RenderSystem>(m_Renderer.get(), m_Scene.get());
-    m_CameraSystem = std::make_unique<ZEN::CameraSystem>(m_Scene->getDispatcher());
+    m_CameraSystem = std::make_unique<ZEN::CameraSystem>(m_Scene.get());
 
     m_ImGuiLayer = ImGUILayer::create(m_Window->getNativeWindow(), api);
-    m_InspectorPanel = std::make_unique<InspectorPanel>(m_Scene->getDispatcher());
-    m_ProjectPanel = std::make_unique<ProjectPanel>();
-    m_ViewPanel = std::make_unique<ViewPanel>();
-    m_ScenePanel = std::make_unique<ScenePanel>(m_Scene->getDispatcher());
+    m_InspectorPanel = std::make_unique<InspectorPanel>(m_Scene.get(), m_ModelLibrary.get());
+    m_ProjectPanel = std::make_unique<ProjectPanel>(m_Scene.get(), m_ModelLibrary.get());
+    m_ViewPanel = std::make_unique<ViewPanel>(m_Scene.get(), m_Renderer->getColorTextureHandle());
+    m_ScenePanel = std::make_unique<ScenePanel>(m_Scene.get(), m_ModelLibrary.get());
 
     m_Running = true;
 
-    ZEN::ModelLibrary::init(m_Renderer->getResourceManager());
-
-    m_Scene->createDefaultScene(resourceRoot, m_Renderer.get());
+    m_Scene->createDefaultScene(resourceRoot, m_Renderer.get(), m_ModelLibrary.get(), m_ModelImporter.get());
 
 
 }
@@ -47,18 +48,18 @@ void Application::run() {
 }
 
 void Application::onUpdate(float deltaTime) {
-    m_CameraSystem->onUpdate(m_Scene->getRegistry(), deltaTime);
-    m_RenderSystem->onUpdate(m_Scene->getRegistry());
+    m_CameraSystem->onUpdate(deltaTime);
+    m_RenderSystem->onUpdate();
 }
 
 
 void Application::onUIRender() {
     m_ImGuiLayer->beginFrame();
 
-    m_ScenePanel->onImGuiRender(m_Scene->getDispatcher(), m_Scene->getRegistry());
-    m_ViewPanel->onImGuiRender(m_Scene->getDispatcher(), m_Renderer->getColorTextureHandle());
-    m_InspectorPanel->onImGuiRender(m_Scene->getDispatcher(), m_Scene->getRegistry());
-    m_ProjectPanel->onImGuiRender(m_Scene->getDispatcher());
+    m_ScenePanel->onImGuiRender();
+    m_ViewPanel->onImGuiRender();
+    m_InspectorPanel->onImGuiRender();
+    m_ProjectPanel->onImGuiRender();
 
     m_ImGuiLayer->render();
     m_ImGuiLayer->endFrame(nullptr);
@@ -66,7 +67,7 @@ void Application::onUIRender() {
 
 void Application::onRender() {
     m_Renderer->beginFrame();
-    m_RenderSystem->onRender(m_Scene->getRegistry());
+    m_RenderSystem->onRender();
     m_Renderer->bindDefaultFBO();
     onUIRender();
     m_Renderer->endFrame();

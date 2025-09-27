@@ -1,12 +1,14 @@
 
 #include "ViewPanel.h"
 #include <ZeusEngineCore/InputEvents.h>
+#include <ZeusEngineCore/Scene.h>
 
-ViewPanel::ViewPanel() {
+ViewPanel::ViewPanel(ZEN::Scene* scene, void* colorTex)
+: m_Scene(scene), m_ColorTexture(colorTex){
     m_PanelSize = {800, 600};
 }
 
-void ViewPanel::onImGuiRender(entt::dispatcher& dispatcher, void* colorTexture) {
+void ViewPanel::onImGuiRender() {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
 
@@ -20,7 +22,7 @@ void ViewPanel::onImGuiRender(entt::dispatcher& dispatcher, void* colorTexture) 
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        dispatcher.trigger<ZEN::PanelFocusEvent>(
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{ .panel = "Scene View" }
         );
     }
@@ -28,12 +30,12 @@ void ViewPanel::onImGuiRender(entt::dispatcher& dispatcher, void* colorTexture) 
     ImVec2 newSize = ImGui::GetContentRegionAvail();
     if (m_PanelSize.x != newSize.x || m_PanelSize.y != newSize.y) {
         m_PanelSize = newSize;
-        dispatcher.trigger<ZEN::SceneViewResizeEvent>(
+        m_Scene->getDispatcher().trigger<ZEN::SceneViewResizeEvent>(
             ZEN::SceneViewResizeEvent{ newSize.x, newSize.y }
         );
     }
     ImGui::Image(
-        (void*)(intptr_t)colorTexture,
+        (void*)(intptr_t)m_ColorTexture,
         m_PanelSize,
         ImVec2(0, 1), // uv0 (top-left)
         ImVec2(1, 0)  // uv1 (bottom-right)

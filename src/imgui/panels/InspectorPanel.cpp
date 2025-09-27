@@ -1,9 +1,9 @@
 #include "InspectorPanel.h"
 #include <ZeusEngineCore/ModelLibrary.h>
-
-#include <imgui.h>
 #include <ZeusEngineCore/Components.h>
 #include <ZeusEngineCore/InputEvents.h>
+#include <ZeusEngineCore/Scene.h>
+#include <imgui.h>
 
 
 static auto const inspectTransform = [](ZEN::TransformComp &out) {
@@ -12,11 +12,12 @@ static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("scale", &out.localScale.x, 0.01f, 0.0f, 100.0f);
 };
 
-InspectorPanel::InspectorPanel(entt::dispatcher &dispatcher) {
-    dispatcher.sink<ZEN::SelectEntityEvent>().connect<&InspectorPanel::onEntitySelect>(*this);
+InspectorPanel::InspectorPanel(ZEN::Scene* scene, ZEN::ModelLibrary* modelLibrary)
+: m_Scene(scene), m_ModelLibrary(modelLibrary){
+    m_Scene->getDispatcher().sink<ZEN::SelectEntityEvent>().connect<&InspectorPanel::onEntitySelect>(*this);
 }
 
-void InspectorPanel::onImGuiRender(entt::dispatcher &dispatcher, entt::registry &registry) {
+void InspectorPanel::onImGuiRender() {
     ImGuiIO &io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
     ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.8f, 0));
@@ -27,12 +28,12 @@ void InspectorPanel::onImGuiRender(entt::dispatcher &dispatcher, entt::registry 
         ImGui::SetWindowFocus();
     }
     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        dispatcher.trigger<ZEN::PanelFocusEvent>(
+        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{.panel = "Inspector"}
         );
     }
-    if (m_SelectedEntity != entt::null && registry.valid(m_SelectedEntity)) {
-        if (auto *name = registry.try_get<ZEN::TagComp>(m_SelectedEntity)) {
+    if (m_SelectedEntity != entt::null && m_Scene->getRegistry().valid(m_SelectedEntity)) {
+        if (auto *name = m_Scene->getRegistry().try_get<ZEN::TagComp>(m_SelectedEntity)) {
             char buffer[128];
             strncpy(buffer, name->tag.c_str(), sizeof(buffer));
             if (ImGui::InputText("Name", buffer, sizeof(buffer))) {
@@ -40,11 +41,11 @@ void InspectorPanel::onImGuiRender(entt::dispatcher &dispatcher, entt::registry 
             }
         }
 
-        if (auto *transform = registry.try_get<ZEN::TransformComp>(m_SelectedEntity)) {
+        if (auto *transform = m_Scene->getRegistry().try_get<ZEN::TransformComp>(m_SelectedEntity)) {
             inspectTransform(*transform);
         }
 
-        if (auto *material = registry.try_get<ZEN::MaterialComp>(m_SelectedEntity)) {
+        if (auto *material = m_Scene->getRegistry().try_get<ZEN::MaterialComp>(m_SelectedEntity)) {
             ImGui::SeparatorText("Material");
 
             ImGui::DragFloat("Specular", &material->specular, 0.01f, 0.0f, 1.0f);
@@ -78,11 +79,11 @@ void InspectorPanel::onImGuiRender(entt::dispatcher &dispatcher, entt::registry 
         }
 
         // --- MeshComp ---
-        if (auto *meshComp = registry.try_get<ZEN::MeshComp>(m_SelectedEntity)) {
+        if (auto *meshComp = m_Scene->getRegistry().try_get<ZEN::MeshComp>(m_SelectedEntity)) {
             ImGui::SeparatorText("Mesh");
 
             // Show current mesh name
-            const auto &meshes = ZEN::ModelLibrary::getAll();
+            const auto &meshes = m_ModelLibrary->getAllMeshes();
             static std::string selectedMesh;
             // find current mesh name from pointer
             for (auto &[name, mesh]: meshes) {
@@ -99,7 +100,7 @@ void InspectorPanel::onImGuiRender(entt::dispatcher &dispatcher, entt::registry 
                         meshComp->indices = mesh->indices;
                         meshComp->vertices = mesh->vertices;
                         meshComp->name = mesh->name;
-                        registry.remove<ZEN::MeshDrawableComp>(m_SelectedEntity);
+                        m_Scene->getRegistry().remove<ZEN::MeshDrawableComp>(m_SelectedEntity);
                         selectedMesh = name;
                     }
                     if (isSelected)
@@ -109,29 +110,29 @@ void InspectorPanel::onImGuiRender(entt::dispatcher &dispatcher, entt::registry 
             }
         }
 
-        if (m_SelectedEntity != entt::null && registry.valid(m_SelectedEntity)) {
+        if (m_SelectedEntity != entt::null && m_Scene->getRegistry().valid(m_SelectedEntity)) {
             ImGui::Separator();
 
             if (ImGui::Button("Add Component"))
                 ImGui::OpenPopup("AddComponentPopup");
 
             if (ImGui::BeginPopup("AddComponentPopup")) {
-                if (!registry.all_of<ZEN::MaterialComp>(m_SelectedEntity)) {
+                if (!m_Scene->getRegistry().all_of<ZEN::MaterialComp>(m_SelectedEntity)) {
                     if (ImGui::MenuItem("Material")) {
-                        registry.emplace<ZEN::MaterialComp>(m_SelectedEntity);
+                        m_Scene->getRegistry().emplace<ZEN::MaterialComp>(m_SelectedEntity);
                         ImGui::CloseCurrentPopup();
                     }
                 }
 
-                if (!registry.all_of<ZEN::TransformComp>(m_SelectedEntity)) {
+                if (!m_Scene->getRegistry().all_of<ZEN::TransformComp>(m_SelectedEntity)) {
                     if (ImGui::MenuItem("Transform")) {
-                        registry.emplace<ZEN::TransformComp>(m_SelectedEntity);
+                        m_Scene->getRegistry().emplace<ZEN::TransformComp>(m_SelectedEntity);
                         ImGui::CloseCurrentPopup();
                     }
                 }
-                if (!registry.all_of<ZEN::MeshComp>(m_SelectedEntity)) {
+                if (!m_Scene->getRegistry().all_of<ZEN::MeshComp>(m_SelectedEntity)) {
                     if (ImGui::MenuItem("Mesh")) {
-                        registry.emplace<ZEN::MeshComp>(m_SelectedEntity);
+                        m_Scene->getRegistry().emplace<ZEN::MeshComp>(m_SelectedEntity);
                         ImGui::CloseCurrentPopup();
                     }
                 }

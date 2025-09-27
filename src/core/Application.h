@@ -20,6 +20,8 @@ namespace ZEN {
     class Renderer;
     class RenderSystem;
     class CameraSystem;
+    class ModelImporter;
+    class ModelLibrary;
 }
 
 namespace ZED {
@@ -45,6 +47,10 @@ namespace ZED {
         std::unique_ptr<ZEN::Window> m_Window{};
         std::unique_ptr<ZEN::Scene> m_Scene{};
         std::unique_ptr<ZEN::Renderer> m_Renderer{};
+
+        //Libraries/Loaders
+        std::unique_ptr<ZEN::ModelImporter> m_ModelImporter{};
+        std::unique_ptr<ZEN::ModelLibrary> m_ModelLibrary{};
 
         //Systems
         std::unique_ptr<ZEN::RenderSystem> m_RenderSystem{};
