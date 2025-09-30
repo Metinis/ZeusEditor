@@ -4,19 +4,17 @@
 
 namespace ZEN {
     struct SelectEntityEvent;
-    class Scene;
-    class ModelLibrary;
+    class ZEngine;
 }
 
 class InspectorPanel {
 public:
-    explicit InspectorPanel(ZEN::Scene* scene, ZEN::ModelLibrary* modelLibrary);
+    explicit InspectorPanel(ZEN::ZEngine* engine);
     void onImGuiRender();
     void setSelectedEntity(entt::entity entity) {m_SelectedEntity = entity;}
     entt::entity getSelectedEntity() {return m_SelectedEntity;}
     void onEntitySelect(ZEN::SelectEntityEvent& e);
 private:
-    ZEN::Scene* m_Scene{};
-    ZEN::ModelLibrary* m_ModelLibrary{};
+    ZEN::ZEngine* m_Engine{};
     entt::entity m_SelectedEntity{entt::null};
 };

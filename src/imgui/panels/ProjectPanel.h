@@ -3,14 +3,12 @@
 #include <entt.hpp>
 
 namespace ZEN {
-    class Scene;
-    class ModelLibrary;
+    class ZEngine;
 }
 class ProjectPanel {
 public:
-    explicit ProjectPanel(ZEN::Scene* scene, ZEN::ModelLibrary* modelLibrary);
+    explicit ProjectPanel(ZEN::ZEngine* engine);
     void onImGuiRender();
 private:
-    ZEN::ModelLibrary* m_ModelLibrary{};
-    ZEN::Scene* m_Scene{};
+    ZEN::ZEngine* m_Engine{};
 };

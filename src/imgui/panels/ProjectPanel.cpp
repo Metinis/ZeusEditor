@@ -3,11 +3,11 @@
 #include <imgui.h>
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/ModelLibrary.h>
+#include <ZeusEngineCore/ZEngine.h>
 #include <ZeusEngineCore/Scene.h>
 
 
-ProjectPanel::ProjectPanel(ZEN::Scene *scene, ZEN::ModelLibrary *modelLibrary)
-: m_Scene(scene), m_ModelLibrary(modelLibrary) {
+ProjectPanel::ProjectPanel(ZEN::ZEngine* engine) : m_Engine(engine){
 
 }
 
@@ -23,12 +23,12 @@ void ProjectPanel::onImGuiRender(){
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        m_Scene->getDispatcher().trigger<ZEN::PanelFocusEvent>(
+        m_Engine->getScene().getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{ .panel = "Project"}
         );
     }
 
-    auto& meshes = m_ModelLibrary->getAllMeshes();
+    auto& meshes = m_Engine->getModelLibrary().getAllMeshes();
     if (ImGui::TreeNode("Meshes")) {
         for (auto& [name, mesh] : meshes) {
             if (ImGui::Selectable(name.c_str())) {

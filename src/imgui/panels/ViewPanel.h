@@ -4,15 +4,14 @@
 #include <imgui.h>
 
 namespace ZEN {
-    class Scene;
+    class ZEngine;
 }
 class ViewPanel {
 public:
-    explicit ViewPanel(ZEN::Scene* scene, void* colorTex);
+    explicit ViewPanel(ZEN::ZEngine* engine);
     void onImGuiRender();
 
 private:
-    ZEN::Scene* m_Scene;
+    ZEN::ZEngine* m_Engine{};
     ImVec2 m_PanelSize;
-    void* m_ColorTexture;
 };
