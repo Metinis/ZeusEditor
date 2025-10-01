@@ -27,6 +27,7 @@ void InspectorPanel::onImGuiRender() {
     ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.2f, displaySize.y * 0.7f));
     ImGui::Begin("Inspector", nullptr,
                  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+
     if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
         ImGui::SetWindowFocus();
     }
@@ -35,6 +36,7 @@ void InspectorPanel::onImGuiRender() {
             ZEN::PanelFocusEvent{.panel = "Inspector"}
         );
     }
+
     if (m_SelectedEntity.isValid()) {
         if (auto name = m_SelectedEntity.tryGetComponent<ZEN::TagComp>()) {
             char buffer[128];
@@ -144,7 +146,20 @@ void InspectorPanel::onImGuiRender() {
                 ImGui::EndPopup();
             }
         }
+        ImGui::BeginChild("Drop", ImVec2(0, 200), true);
+        ImGui::Dummy(ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+        if(ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIAL_NAME")) {
+                handleMaterialDrop(payload);
+            }
+            if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESH_NAME")) {
+                handleMeshDrop(payload);
+            }
+            ImGui::EndDragDropTarget();
+        }
+        ImGui::EndChild();
     }
+
 
     ImGui::End();
 }
@@ -152,3 +167,31 @@ void InspectorPanel::onImGuiRender() {
 void InspectorPanel::onEntitySelect(ZEN::SelectEntityEvent &e) {
     m_SelectedEntity = e.entity;
 }
+
+void InspectorPanel::handleMaterialDrop(const ImGuiPayload* payload) {
+    const char* data = (const char*)payload->Data;
+    auto material = m_Engine->getModelLibrary().getMaterial(data);
+
+    std::cout << "Dropped Material \n";
+
+    if(!m_SelectedEntity.hasComponent<ZEN::MaterialComp>())
+        m_SelectedEntity.addComponent<ZEN::MaterialComp>(*material);
+    else
+        m_SelectedEntity.getComponent<ZEN::MaterialComp>() = *material;
+}
+void InspectorPanel::handleMeshDrop(const ImGuiPayload *payload) {
+    const char* data = (const char*)payload->Data;
+    auto mesh = m_Engine->getModelLibrary().getMesh(data);
+
+    std::cout << "Dropped Mesh \n";
+
+    if(!m_SelectedEntity.hasComponent<ZEN::MeshComp>()) {
+        m_SelectedEntity.addComponent<ZEN::MeshComp>(*mesh);
+    }
+    else {
+        m_SelectedEntity.getComponent<ZEN::MeshComp>() = *mesh;
+        if(m_SelectedEntity.hasComponent<ZEN::MeshDrawableComp>())
+            m_SelectedEntity.removeComponent<ZEN::MeshDrawableComp>();
+    }
+}
+

@@ -7,6 +7,7 @@ namespace ZEN {
     class ZEngine;
     class Entity;
 }
+struct ImGuiPayload;
 
 class InspectorPanel {
 public:
@@ -16,6 +17,8 @@ public:
     ZEN::Entity getSelectedEntity() {return m_SelectedEntity;}
     void onEntitySelect(ZEN::SelectEntityEvent& e);
 private:
+    void handleMaterialDrop(const ImGuiPayload* payload);
+    void handleMeshDrop(const ImGuiPayload* payload);
     ZEN::ZEngine* m_Engine{};
     ZEN::Entity m_SelectedEntity;
 };

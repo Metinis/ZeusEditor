@@ -4,6 +4,7 @@
 #include <ZeusEngineCore/Scene.h>
 #include <ZeusEngineCore/ZEngine.h>
 #include <ZeusEngineCore/EventDispatcher.h>
+#include <ZeusEngineCore/ModelLibrary.h>
 
 ViewPanel::ViewPanel(ZEN::ZEngine* engine) : m_Engine(engine){
     m_PanelSize = {800, 600};
@@ -43,6 +44,25 @@ void ViewPanel::onImGuiRender() {
         ImVec2(0, 1), // uv0 (top-left)
         ImVec2(1, 0)  // uv1 (bottom-right)
     );
+    ImVec2 imagePos = ImGui::GetItemRectMin(); // top-left corner of the last item
+    ImVec2 mousePos = ImGui::GetMousePos();
+    if(ImGui::BeginDragDropTarget()) {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESH_NAME")) {
+            const char* data = (const char*)payload->Data;
+            auto mesh = m_Engine->getModelLibrary().getMesh(data);
+            // Mouse position relative to viewport
+            ImVec2 relative = {
+                mousePos.x - imagePos.x,
+                mousePos.y - imagePos.y
+            };
+
+            std::cout << "Dropped payload " << data
+                      << " at viewport coords: "
+                      << relative.x << ", " << relative.y << "\n";
+            m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(*mesh);
+        }
+        ImGui::EndDragDropTarget();
+    }
 
     ImGui::End();
 }

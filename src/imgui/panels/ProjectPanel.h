@@ -10,5 +10,8 @@ public:
     explicit ProjectPanel(ZEN::ZEngine* engine);
     void onImGuiRender();
 private:
+    void drawFolderTree();
+    void drawAssetGrid();
+    std::string m_SelectedFolder{};
     ZEN::ZEngine* m_Engine{};
 };
