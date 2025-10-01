@@ -1,6 +1,6 @@
 
 #pragma once
-#include <entt.hpp>
+#include <ZeusEngineCore/Entity.h>
 
 namespace ZEN {
     struct SelectEntityEvent;
@@ -11,12 +11,12 @@ namespace ZEN {
 class ScenePanel {
 public:
     explicit ScenePanel(ZEN::ZEngine* engine);
-    void drawEntityNode(entt::entity entity);
+    void drawEntityNode(ZEN::Entity& entity);
     void onImGuiRender();
-    void setSelectedEntity(entt::entity entity) {m_SelectedEntity = entity;}
+    void setSelectedEntity(ZEN::Entity entity) {m_SelectedEntity = entity;}
     void onEntitySelect(ZEN::SelectEntityEvent& e);
-    entt::entity getSelectedEntity() {return m_SelectedEntity;}
+    ZEN::Entity getSelectedEntity() {return m_SelectedEntity;}
 private:
     ZEN::ZEngine* m_Engine{};
-    entt::entity m_SelectedEntity = entt::null;
+    ZEN::Entity m_SelectedEntity;
 };

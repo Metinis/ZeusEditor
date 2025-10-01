@@ -4,6 +4,7 @@
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/ZEngine.h>
 #include <ZeusEngineCore/Scene.h>
+#include <ZeusEngineCore/Entity.h>
 #include <imgui.h>
 
 
@@ -32,8 +33,8 @@ void InspectorPanel::onImGuiRender() {
             ZEN::PanelFocusEvent{.panel = "Inspector"}
         );
     }
-    if (m_SelectedEntity != entt::null && m_Engine->getScene().getRegistry().valid(m_SelectedEntity)) {
-        if (auto *name = m_Engine->getScene().getRegistry().try_get<ZEN::TagComp>(m_SelectedEntity)) {
+    if (m_SelectedEntity.isValid()) {
+        if (auto name = m_SelectedEntity.tryGetComponent<ZEN::TagComp>()) {
             char buffer[128];
             strncpy(buffer, name->tag.c_str(), sizeof(buffer));
             if (ImGui::InputText("Name", buffer, sizeof(buffer))) {
@@ -41,11 +42,11 @@ void InspectorPanel::onImGuiRender() {
             }
         }
 
-        if (auto *transform = m_Engine->getScene().getRegistry().try_get<ZEN::TransformComp>(m_SelectedEntity)) {
+        if (auto *transform = m_SelectedEntity.tryGetComponent<ZEN::TransformComp>()) {
             inspectTransform(*transform);
         }
 
-        if (auto *material = m_Engine->getScene().getRegistry().try_get<ZEN::MaterialComp>(m_SelectedEntity)) {
+        if (auto *material = m_SelectedEntity.tryGetComponent<ZEN::MaterialComp>()) {
             ImGui::SeparatorText("Material");
 
             ImGui::DragFloat("Specular", &material->specular, 0.01f, 0.0f, 1.0f);
@@ -79,7 +80,7 @@ void InspectorPanel::onImGuiRender() {
         }
 
         // --- MeshComp ---
-        if (auto *meshComp = m_Engine->getScene().getRegistry().try_get<ZEN::MeshComp>(m_SelectedEntity)) {
+        if (auto *meshComp = m_SelectedEntity.tryGetComponent<ZEN::MeshComp>()) {
             ImGui::SeparatorText("Mesh");
 
             // Show current mesh name
@@ -100,7 +101,7 @@ void InspectorPanel::onImGuiRender() {
                         meshComp->indices = mesh->indices;
                         meshComp->vertices = mesh->vertices;
                         meshComp->name = mesh->name;
-                        m_Engine->getScene().getRegistry().remove<ZEN::MeshDrawableComp>(m_SelectedEntity);
+                        m_SelectedEntity.removeComponent<ZEN::MeshDrawableComp>();
                         selectedMesh = name;
                     }
                     if (isSelected)
@@ -110,32 +111,33 @@ void InspectorPanel::onImGuiRender() {
             }
         }
 
-        if (m_SelectedEntity != entt::null && m_Engine->getScene().getRegistry().valid(m_SelectedEntity)) {
+        if (m_SelectedEntity.isValid()) {
             ImGui::Separator();
 
             if (ImGui::Button("Add Component"))
                 ImGui::OpenPopup("AddComponentPopup");
 
             if (ImGui::BeginPopup("AddComponentPopup")) {
-                if (!m_Engine->getScene().getRegistry().all_of<ZEN::MaterialComp>(m_SelectedEntity)) {
+                if (!m_SelectedEntity.hasComponent<ZEN::MaterialComp>()) {
                     if (ImGui::MenuItem("Material")) {
-                        m_Engine->getScene().getRegistry().emplace<ZEN::MaterialComp>(m_SelectedEntity);
+                        m_SelectedEntity.addComponent<ZEN::MaterialComp>();
                         ImGui::CloseCurrentPopup();
                     }
                 }
 
-                if (!m_Engine->getScene().getRegistry().all_of<ZEN::TransformComp>(m_SelectedEntity)) {
+                if (!m_SelectedEntity.hasComponent<ZEN::TransformComp>()) {
                     if (ImGui::MenuItem("Transform")) {
-                        m_Engine->getScene().getRegistry().emplace<ZEN::TransformComp>(m_SelectedEntity);
+                        m_SelectedEntity.addComponent<ZEN::TransformComp>();
                         ImGui::CloseCurrentPopup();
                     }
                 }
-                if (!m_Engine->getScene().getRegistry().all_of<ZEN::MeshComp>(m_SelectedEntity)) {
+                if (!m_SelectedEntity.hasComponent<ZEN::MeshComp>()) {
                     if (ImGui::MenuItem("Mesh")) {
-                        m_Engine->getScene().getRegistry().emplace<ZEN::MeshComp>(m_SelectedEntity);
+                        m_SelectedEntity.addComponent<ZEN::MeshComp>();
                         ImGui::CloseCurrentPopup();
                     }
                 }
+
 
                 ImGui::EndPopup();
             }

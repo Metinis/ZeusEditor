@@ -1,20 +1,21 @@
 
 #pragma once
-#include <entt.hpp>
+#include <ZeusEngineCore/Entity.h>
 
 namespace ZEN {
     struct SelectEntityEvent;
     class ZEngine;
+    class Entity;
 }
 
 class InspectorPanel {
 public:
     explicit InspectorPanel(ZEN::ZEngine* engine);
     void onImGuiRender();
-    void setSelectedEntity(entt::entity entity) {m_SelectedEntity = entity;}
-    entt::entity getSelectedEntity() {return m_SelectedEntity;}
+    void setSelectedEntity(ZEN::Entity entity) {m_SelectedEntity = entity;}
+    ZEN::Entity getSelectedEntity() {return m_SelectedEntity;}
     void onEntitySelect(ZEN::SelectEntityEvent& e);
 private:
     ZEN::ZEngine* m_Engine{};
-    entt::entity m_SelectedEntity{entt::null};
+    ZEN::Entity m_SelectedEntity;
 };
