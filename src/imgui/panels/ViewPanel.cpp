@@ -3,6 +3,7 @@
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/Scene.h>
 #include <ZeusEngineCore/ZEngine.h>
+#include <ZeusEngineCore/EventDispatcher.h>
 
 ViewPanel::ViewPanel(ZEN::ZEngine* engine) : m_Engine(engine){
     m_PanelSize = {800, 600};
@@ -22,7 +23,7 @@ void ViewPanel::onImGuiRender() {
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        m_Engine->getScene().getDispatcher().trigger<ZEN::PanelFocusEvent>(
+        m_Engine->getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{
                 .panel = "Scene View"
             }
@@ -32,7 +33,7 @@ void ViewPanel::onImGuiRender() {
     ImVec2 newSize = ImGui::GetContentRegionAvail();
     if (m_PanelSize.x != newSize.x || m_PanelSize.y != newSize.y) {
         m_PanelSize = newSize;
-        m_Engine->getScene().getDispatcher().trigger<ZEN::SceneViewResizeEvent>(
+        m_Engine->getDispatcher().trigger<ZEN::SceneViewResizeEvent>(
             ZEN::SceneViewResizeEvent{ newSize.x, newSize.y }
         );
     }

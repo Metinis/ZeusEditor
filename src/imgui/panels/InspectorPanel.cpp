@@ -7,6 +7,8 @@
 #include <ZeusEngineCore/Entity.h>
 #include <imgui.h>
 
+#include "ZeusEngineCore/EventDispatcher.h"
+
 
 static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("position", &out.localPosition.x, 0.01f);
@@ -15,7 +17,7 @@ static auto const inspectTransform = [](ZEN::TransformComp &out) {
 };
 
 InspectorPanel::InspectorPanel(ZEN::ZEngine* engine) : m_Engine(engine){
-    m_Engine->getScene().getDispatcher().sink<ZEN::SelectEntityEvent>().connect<&InspectorPanel::onEntitySelect>(*this);
+    m_Engine->getDispatcher().attach<ZEN::SelectEntityEvent, InspectorPanel, &InspectorPanel::onEntitySelect>(this);
 }
 
 void InspectorPanel::onImGuiRender() {
@@ -29,7 +31,7 @@ void InspectorPanel::onImGuiRender() {
         ImGui::SetWindowFocus();
     }
     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-       m_Engine->getScene().getDispatcher().trigger<ZEN::PanelFocusEvent>(
+       m_Engine->getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{.panel = "Inspector"}
         );
     }

@@ -12,7 +12,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", m_API);
     std::string resourceRoot = RESOURCE_ROOT;
     m_Engine = std::make_unique<ZEN::ZEngine>(m_API, m_Window->getNativeWindow(), resourceRoot);
-    m_Window->attachDispatcher(m_Engine->getScene().getDispatcher());
+    m_Window->attachDispatcher(m_Engine->getDispatcher());
 
     m_ImGuiLayer = ImGUILayer::create(m_Window->getNativeWindow(), api);
     m_InspectorPanel = std::make_unique<InspectorPanel>(m_Engine.get());

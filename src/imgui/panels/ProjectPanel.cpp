@@ -4,7 +4,7 @@
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/ModelLibrary.h>
 #include <ZeusEngineCore/ZEngine.h>
-#include <ZeusEngineCore/Scene.h>
+#include <ZeusEngineCore/EventDispatcher.h>
 
 
 ProjectPanel::ProjectPanel(ZEN::ZEngine* engine) : m_Engine(engine){
@@ -23,7 +23,7 @@ void ProjectPanel::onImGuiRender(){
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        m_Engine->getScene().getDispatcher().trigger<ZEN::PanelFocusEvent>(
+        m_Engine->getDispatcher().trigger<ZEN::PanelFocusEvent>(
             ZEN::PanelFocusEvent{ .panel = "Project"}
         );
     }
