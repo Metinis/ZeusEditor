@@ -122,13 +122,6 @@ void InspectorPanel::onImGuiRender() {
                 ImGui::OpenPopup("AddComponentPopup");
 
             if (ImGui::BeginPopup("AddComponentPopup")) {
-                if (!m_SelectedEntity.hasComponent<ZEN::MaterialComp>()) {
-                    if (ImGui::MenuItem("Material")) {
-                        m_SelectedEntity.addComponent<ZEN::MaterialComp>();
-                        ImGui::CloseCurrentPopup();
-                    }
-                }
-
                 if (!m_SelectedEntity.hasComponent<ZEN::TransformComp>()) {
                     if (ImGui::MenuItem("Transform")) {
                         m_SelectedEntity.addComponent<ZEN::TransformComp>();
