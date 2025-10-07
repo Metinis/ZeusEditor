@@ -71,12 +71,12 @@ void ScenePanel::onImGuiRender() {
         }
         if (ImGui::MenuItem("Add Cube")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity("Cube");
-            entity.addComponent<ZEN::MeshComp>(*m_Engine->getModelLibrary().getMesh("Cube"));
+            entity.addComponent<ZEN::MeshComp>(ZEN::MeshComp{"Cube"});
             m_Engine->getDispatcher().trigger<ZEN::SelectEntityEvent>({.entity = entity});
         }
         if (ImGui::MenuItem("Add Sphere")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity("Sphere");
-            entity.addComponent<ZEN::MeshComp>(*m_Engine->getModelLibrary().getMesh("Sphere"));
+            entity.addComponent<ZEN::MeshComp>(ZEN::MeshComp{"Sphere"});
             m_Engine->getDispatcher().trigger<ZEN::SelectEntityEvent>({.entity = entity});
         }
         ImGui::EndPopup();

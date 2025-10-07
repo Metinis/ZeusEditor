@@ -49,7 +49,7 @@ void ViewPanel::onImGuiRender() {
     if(ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESH_NAME")) {
             const char* data = (const char*)payload->Data;
-            auto mesh = m_Engine->getModelLibrary().getMesh(data);
+            //auto mesh = m_Engine->getModelLibrary().getMesh(data);
             // Mouse position relative to viewport
             ImVec2 relative = {
                 mousePos.x - imagePos.x,
@@ -59,7 +59,7 @@ void ViewPanel::onImGuiRender() {
             std::cout << "Dropped payload " << data
                       << " at viewport coords: "
                       << relative.x << ", " << relative.y << "\n";
-            m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(*mesh);
+            m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(ZEN::MeshComp{.name = data});
         }
         ImGui::EndDragDropTarget();
     }

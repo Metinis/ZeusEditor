@@ -37,6 +37,9 @@ void ProjectPanel::drawFolderTree() {
         if (ImGui::Selectable("Materials", m_SelectedFolder == "Materials")) {
             m_SelectedFolder = "Materials";
         }
+        if (ImGui::Selectable("Textures", m_SelectedFolder == "Textures")) {
+            m_SelectedFolder = "Textures";
+        }
         if (ImGui::Selectable("Scenes", m_SelectedFolder == "Scenes")) {
             m_SelectedFolder = "Scenes";
         }
@@ -48,7 +51,6 @@ void ProjectPanel::drawFolderTree() {
 
 }
 std::string getFileName(const std::string& path) {
-    // Find the last directory separator (handle both '/' and '\')
     size_t pos1 = path.find_last_of('/');
     size_t pos2 = path.find_last_of('\\');
     size_t pos = std::string::npos;
@@ -61,7 +63,7 @@ std::string getFileName(const std::string& path) {
         pos = pos2;
 
     if (pos == std::string::npos)
-        return path; // no directory in path
+        return path;
     return path.substr(pos + 1);
 }
 
@@ -75,11 +77,19 @@ void ProjectPanel::drawAssetGrid() {
     ImGui::BeginChild("RightPane", ImVec2(0, 0), true);
     if (ImGui::BeginPopupContextWindow("ProjectPanelContext", ImGuiPopupFlags_MouseButtonRight)) {
         if (ImGui::MenuItem("Add Model from Disk")) {
-            const char* filters[] = { "*.obj", "*.fbx", "*.glb" };
-            const char* filePath = tinyfd_openFileDialog("Choose a model", "", 3, filters, "3D Model Files", 0);
+            const char* filters[] = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
+            const char* filePath = tinyfd_openFileDialog("Choose a model", "", 4, filters, "3D Model Files", 0);
             if (filePath)
             {
                 m_Engine->getModelImporter().loadModel(getNameWithoutExtension(filePath), filePath);
+            }
+        }
+        if (ImGui::MenuItem("Add Texture from Disk")) {
+            const char* filters[] = { "*.png", "*.jpg" };
+            const char* filePath = tinyfd_openFileDialog("Choose a texture", "", 2, filters, "Image Files", 0);
+            if (filePath)
+            {
+                m_Engine->getModelImporter().loadTexture(getNameWithoutExtension(filePath), filePath);
             }
         }
         ImGui::EndPopup();
@@ -98,7 +108,6 @@ void ProjectPanel::drawAssetGrid() {
             ImGui::PushID(name.c_str());
             ImGui::Button("##thumbnail", ImVec2(thumbnailSize, thumbnailSize));
             if(ImGui::BeginDragDropSource()) {
-                //handle drop material onto object
                 const char* payload = name.c_str();
                 ImGui::SetDragDropPayload("MESH_NAME", payload, strlen(payload) + 1);
 
@@ -119,14 +128,44 @@ void ProjectPanel::drawAssetGrid() {
             if(!material->textureIDs.empty()) {
                 texHandle = (void*)m_Engine->getRenderer().getResourceManager()->getTexture(material->textureIDs[0]);
             }
-            ImGui::ImageButton("##thumbnail", texHandle, ImVec2(thumbnailSize, thumbnailSize));
+            if (ImGui::ImageButton("##thumbnail", texHandle, ImVec2(thumbnailSize, thumbnailSize),
+                   ImVec2(0,1), ImVec2(1,0))) {
+                m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(ZEN::SelectMaterialEvent{
+                    .materialName = name
+                });
+            }
 
 
             if(ImGui::BeginDragDropSource()) {
                 const char* payload = name.c_str();
                 ImGui::SetDragDropPayload("MATERIAL_NAME", payload, strlen(payload) + 1);
 
-                ImGui::Image(texHandle, ImVec2(16, 16));
+                ImGui::Image(texHandle, ImVec2(16, 16), ImVec2(0,1), ImVec2(1,0));
+                ImGui::Text(payload);
+                ImGui::EndDragDropSource();
+            }
+
+            ImGui::TextWrapped("%s", name.c_str());
+            ImGui::NextColumn();
+            ImGui::PopID();
+        }
+    }
+    if(m_SelectedFolder == "Textures") {
+        for(auto& [name, texID] : m_Engine->getModelLibrary().getAllTextures()) {
+            ImGui::PushID(name.c_str());
+            void* texHandle{};
+
+            texHandle = (void*)m_Engine->getRenderer().getResourceManager()->getTexture(texID);
+            ImGui::ImageButton("##thumbnail", texHandle, ImVec2(thumbnailSize, thumbnailSize),
+                   ImVec2(0,1), ImVec2(1,0));
+
+
+
+            if(ImGui::BeginDragDropSource()) {
+                const char* payload = name.c_str();
+                ImGui::SetDragDropPayload("TEXTURE_NAME", payload, strlen(payload) + 1);
+
+                ImGui::Image(texHandle, ImVec2(16, 16), ImVec2(0,1), ImVec2(1,0));
                 ImGui::Text(payload);
                 ImGui::EndDragDropSource();
             }
