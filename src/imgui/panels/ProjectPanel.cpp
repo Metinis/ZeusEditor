@@ -75,7 +75,7 @@ std::string getNameWithoutExtension(const std::string& path) {
 }
 void ProjectPanel::drawAssetGrid() {
     ImGui::BeginChild("RightPane", ImVec2(0, 0), true);
-    if (ImGui::BeginPopupContextWindow("ProjectPanelContext", ImGuiPopupFlags_MouseButtonRight)) {
+    if (ImGui::BeginPopupContextWindow("ProjectPanelContext", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems)) {
         if (ImGui::MenuItem("Add Model from Disk")) {
             const char* filters[] = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
             const char* filePath = tinyfd_openFileDialog("Choose a model", "", 4, filters, "3D Model Files", 0);
@@ -103,6 +103,8 @@ void ProjectPanel::drawAssetGrid() {
     if (columnCount < 1) columnCount = 1;
 
     ImGui::Columns(columnCount, 0, false);
+
+    std::vector<std::string> meshesToRemove{};
     if(m_SelectedFolder == "Meshes") {
         for(auto& [name, mesh] : m_Engine->getModelLibrary().getAllMeshes()) {
             ImGui::PushID(name.c_str());
@@ -115,10 +117,22 @@ void ProjectPanel::drawAssetGrid() {
                 ImGui::Text(payload);
                 ImGui::EndDragDropSource();
             }
+            if (ImGui::BeginPopupContextWindow("ThumbnailContext", ImGuiPopupFlags_MouseButtonRight)) {
+                if (ImGui::MenuItem("Delete")) {
+                    meshesToRemove.push_back(name);
+                }
+                if (ImGui::MenuItem("Rename")) {
+
+                }
+                ImGui::EndPopup();
+            }
             ImGui::TextWrapped("%s", name.c_str());
             ImGui::NextColumn();
             ImGui::PopID();
         }
+    }
+    for(auto& name : meshesToRemove) {
+        m_Engine->getModelLibrary().removeMesh(name);
     }
     if(m_SelectedFolder == "Materials") {
         for(auto& [name, material] : m_Engine->getModelLibrary().getAllMaterials()) {

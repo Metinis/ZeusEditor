@@ -92,6 +92,10 @@ void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, std::vector<
     textures[0] = texture;
 }
 void InspectorPanel::renderTextureDrop(std::vector<uint32_t>& textures, const char* name) {
+    if(textures.empty()) {
+        std::cout<<"ERROR: No textures found: "<< name<<"\n";
+        return;
+    }
     constexpr float thumbnailSize = 8.0f;
 
     int texID = static_cast<int>(textures[0]);
@@ -118,12 +122,8 @@ void InspectorPanel::editMaterial() {
         }
 
         if (ImGui::TreeNode("Texture")) {
-            if (!m_SelectedMaterial->textureIDs.empty()) {
-                renderTextureDrop(m_SelectedMaterial->textureIDs, "Diffuse");
-            }
-            if (!m_SelectedMaterial->specularTexIDs.empty()) {
-                renderTextureDrop(m_SelectedMaterial->specularTexIDs, "Specular");
-            }
+            renderTextureDrop(m_SelectedMaterial->textureIDs, "Diffuse");
+            renderTextureDrop(m_SelectedMaterial->specularTexIDs, "Specular");
             ImGui::TreePop();
         }
 }
