@@ -1,218 +1,195 @@
-
 #include "ProjectPanel.h"
 #include <imgui.h>
+#include <tinyfiledialogs/tinyfiledialogs.h>
 #include <ZeusEngineCore/InputEvents.h>
 #include <ZeusEngineCore/ModelLibrary.h>
 #include <ZeusEngineCore/ModelImporter.h>
-#include <ZeusEngineCore/ZEngine.h>
 #include <ZeusEngineCore/EventDispatcher.h>
-#include <tinyfiledialogs/tinyfiledialogs.h>
+#include <ZeusEngineCore/ZEngine.h>
+#include <unordered_set>
+
+ProjectPanel::ProjectPanel(ZEN::ZEngine* engine)
+    : m_Engine(engine) {}
 
 
-ProjectPanel::ProjectPanel(ZEN::ZEngine* engine) : m_Engine(engine){
-
+static std::string getFileName(const std::string& path) {
+    size_t pos = std::max(path.find_last_of('/'), path.find_last_of('\\'));
+    return (pos == std::string::npos) ? path : path.substr(pos + 1);
 }
-void checkWindowFocus(ZEN::EventDispatcher& dispatcher) {
-    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+
+static std::string getNameWithoutExtension(const std::string& path) {
+    std::string filename = getFileName(path);
+    size_t dot = filename.find_last_of('.');
+    return (dot == std::string::npos) ? filename : filename.substr(0, dot);
+}
+
+static void checkWindowFocus(ZEN::EventDispatcher& dispatcher) {
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
         ImGui::SetWindowFocus();
-    }
-    if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        dispatcher.trigger<ZEN::PanelFocusEvent>(
-            ZEN::PanelFocusEvent{ .panel = "Project"}
-        );
-    }
+
+    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
+        dispatcher.trigger<ZEN::PanelFocusEvent>({ .panel = "Project" });
 }
-void drawSearchBar() {
+
+static void drawSearchBar() {
     static char search[128] = "";
     ImGui::InputTextWithHint("##search", "Search assets...", search, sizeof(search));
     ImGui::Separator();
 }
+
+static auto processThumbnail = [](
+    const std::string& name,
+    std::vector<std::string>& toRemove,
+    const std::unordered_set<std::string>& defaultNames,
+    const std::string& payloadType,
+    void* texHandle = nullptr,
+    std::function<void()> onClick = nullptr
+) {
+    constexpr float size = 64.0f;
+    ImGui::PushID(name.c_str());
+
+    if (ImGui::ImageButton("##thumbnail", texHandle, { size, size }, { 0,1 }, { 1,0 }) && onClick)
+        onClick();
+
+    if (ImGui::BeginDragDropSource()) {
+        const char* payload = name.c_str();
+        ImGui::SetDragDropPayload(payloadType.c_str(), payload, strlen(payload) + 1);
+        ImGui::Image(texHandle, { 16, 16 });
+        ImGui::Text("%s", payload);
+        ImGui::EndDragDropSource();
+    }
+
+    if (!defaultNames.contains(name) &&
+        ImGui::BeginPopupContextItem(("ThumbnailContext_" + name).c_str())) {
+        if (ImGui::MenuItem("Delete")) toRemove.push_back(name);
+        if (ImGui::MenuItem("Rename")) { /* TODO */ }
+        ImGui::EndPopup();
+    }
+
+    ImGui::TextWrapped("%s", name.c_str());
+    ImGui::NextColumn();
+    ImGui::PopID();
+};
+
 void ProjectPanel::drawFolderTree() {
     ImGui::BeginChild("LeftPane", ImVec2(200, 0), true);
 
-    if(ImGui::TreeNode("Assets")) {
-        if (ImGui::Selectable("Meshes", m_SelectedFolder == "Meshes")) {
-            m_SelectedFolder = "Meshes";
-        }
-        if (ImGui::Selectable("Materials", m_SelectedFolder == "Materials")) {
-            m_SelectedFolder = "Materials";
-        }
-        if (ImGui::Selectable("Textures", m_SelectedFolder == "Textures")) {
-            m_SelectedFolder = "Textures";
-        }
-        if (ImGui::Selectable("Scenes", m_SelectedFolder == "Scenes")) {
-            m_SelectedFolder = "Scenes";
-        }
+    if (ImGui::TreeNode("Assets")) {
+        const char* folders[] = { "Meshes", "Materials", "Textures", "Scenes" };
+        for (const char* folder : folders)
+            if (ImGui::Selectable(folder, m_SelectedFolder == folder))
+                m_SelectedFolder = folder;
 
         ImGui::TreePop();
     }
-
     ImGui::EndChild();
-
-}
-std::string getFileName(const std::string& path) {
-    size_t pos1 = path.find_last_of('/');
-    size_t pos2 = path.find_last_of('\\');
-    size_t pos = std::string::npos;
-
-    if (pos1 != std::string::npos && pos2 != std::string::npos)
-        pos = std::max(pos1, pos2);
-    else if (pos1 != std::string::npos)
-        pos = pos1;
-    else
-        pos = pos2;
-
-    if (pos == std::string::npos)
-        return path;
-    return path.substr(pos + 1);
 }
 
-std::string getNameWithoutExtension(const std::string& path) {
-    std::string filename = getFileName(path);
-    size_t dotPos = filename.find_last_of('.');
-    if (dotPos == std::string::npos) return filename;
-    return filename.substr(0, dotPos);
-}
-void ProjectPanel::drawAssetGrid() {
-    ImGui::BeginChild("RightPane", ImVec2(0, 0), true);
-    if (ImGui::BeginPopupContextWindow("ProjectPanelContext", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems)) {
+void ProjectPanel::drawContextMenu() {
+    if (ImGui::BeginPopupContextWindow("ProjectPanelContext",
+            ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
+    {
         if (ImGui::MenuItem("Add Model from Disk")) {
             const char* filters[] = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
-            const char* filePath = tinyfd_openFileDialog("Choose a model", "", 4, filters, "3D Model Files", 0);
-            if (filePath)
-            {
-                m_Engine->getModelImporter().loadModel(getNameWithoutExtension(filePath), filePath);
-            }
+            const char* path = tinyfd_openFileDialog("Choose a model", "", 4, filters, "3D Model Files", 0);
+            if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);
         }
+
         if (ImGui::MenuItem("Add Texture from Disk")) {
             const char* filters[] = { "*.png", "*.jpg" };
-            const char* filePath = tinyfd_openFileDialog("Choose a texture", "", 2, filters, "Image Files", 0);
-            if (filePath)
-            {
-                m_Engine->getModelImporter().loadTexture(getNameWithoutExtension(filePath), filePath);
-            }
+            const char* path = tinyfd_openFileDialog("Choose a texture", "", 2, filters, "Image Files", 0);
+            if (path) m_Engine->getModelImporter().loadTexture(getNameWithoutExtension(path), path);
         }
+
         ImGui::EndPopup();
     }
-    const float thumbnailSize = 64.0f;
-    const float padding = 16.0f;
-    const float cellSize = thumbnailSize + padding;
+}
 
-    float panelWidth = ImGui::GetContentRegionAvail().x;
-    int columnCount = (int)(panelWidth / cellSize);
-    if (columnCount < 1) columnCount = 1;
+void ProjectPanel::drawMeshesGrid() {
+    std::vector<std::string> toRemove;
+    for (auto& [name, mesh] : m_Engine->getModelLibrary().getAllMeshes())
+        processThumbnail(name, toRemove, ZEN::defaultMeshes, "MESH_NAME");
 
-    ImGui::Columns(columnCount, 0, false);
-
-    std::vector<std::string> meshesToRemove{};
-    if(m_SelectedFolder == "Meshes") {
-        for(auto& [name, mesh] : m_Engine->getModelLibrary().getAllMeshes()) {
-            ImGui::PushID(name.c_str());
-            ImGui::Button("##thumbnail", ImVec2(thumbnailSize, thumbnailSize));
-            if(ImGui::BeginDragDropSource()) {
-                const char* payload = name.c_str();
-                ImGui::SetDragDropPayload("MESH_NAME", payload, strlen(payload) + 1);
-
-                //ImGui::Image(texHandle, ImVec2(16, 16));
-                ImGui::Text(payload);
-                ImGui::EndDragDropSource();
-            }
-            if (ImGui::BeginPopupContextWindow("ThumbnailContext", ImGuiPopupFlags_MouseButtonRight)) {
-                if (ImGui::MenuItem("Delete")) {
-                    meshesToRemove.push_back(name);
-                }
-                if (ImGui::MenuItem("Rename")) {
-
-                }
-                ImGui::EndPopup();
-            }
-            ImGui::TextWrapped("%s", name.c_str());
-            ImGui::NextColumn();
-            ImGui::PopID();
-        }
-    }
-    for(auto& name : meshesToRemove) {
+    for (auto& name : toRemove)
         m_Engine->getModelLibrary().removeMesh(name);
-    }
-    if(m_SelectedFolder == "Materials") {
-        for(auto& [name, material] : m_Engine->getModelLibrary().getAllMaterials()) {
-            ImGui::PushID(name.c_str());
-            void* texHandle{};
+}
 
-            if(!material->textureIDs.empty()) {
-                texHandle = (void*)m_Engine->getRenderer().getResourceManager()->getTexture(material->textureIDs[0]);
-            }
-            if (ImGui::ImageButton("##thumbnail", texHandle, ImVec2(thumbnailSize, thumbnailSize),
-                   ImVec2(0,1), ImVec2(1,0))) {
-                m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(ZEN::SelectMaterialEvent{
-                    .materialName = name
-                });
-            }
-
-
-            if(ImGui::BeginDragDropSource()) {
-                const char* payload = name.c_str();
-                ImGui::SetDragDropPayload("MATERIAL_NAME", payload, strlen(payload) + 1);
-
-                ImGui::Image(texHandle, ImVec2(16, 16), ImVec2(0,1), ImVec2(1,0));
-                ImGui::Text(payload);
-                ImGui::EndDragDropSource();
-            }
-
-            ImGui::TextWrapped("%s", name.c_str());
-            ImGui::NextColumn();
-            ImGui::PopID();
+void ProjectPanel::drawMaterialsGrid() {
+    std::vector<std::string> toRemove;
+    for (auto& [name, material] : m_Engine->getModelLibrary().getAllMaterials()) {
+        void* texHandle = nullptr;
+        if (!material->textureIDs.empty()) {
+            texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
+                m_Engine->getRenderer().getResourceManager()->getTexture(material->textureIDs[0])));
         }
-    }
-    if(m_SelectedFolder == "Textures") {
-        for(auto& [name, texID] : m_Engine->getModelLibrary().getAllTextures()) {
-            ImGui::PushID(name.c_str());
-            void* texHandle{};
 
-            texHandle = (void*)m_Engine->getRenderer().getResourceManager()->getTexture(texID);
-            ImGui::ImageButton("##thumbnail", texHandle, ImVec2(thumbnailSize, thumbnailSize),
-                   ImVec2(0,1), ImVec2(1,0));
-
-
-
-            if(ImGui::BeginDragDropSource()) {
-                const char* payload = name.c_str();
-                ImGui::SetDragDropPayload("TEXTURE_NAME", payload, strlen(payload) + 1);
-
-                ImGui::Image(texHandle, ImVec2(16, 16), ImVec2(0,1), ImVec2(1,0));
-                ImGui::Text(payload);
-                ImGui::EndDragDropSource();
+        processThumbnail(
+            name,
+            toRemove,
+            ZEN::defaultMaterials,
+            "MATERIAL_NAME",
+            texHandle,
+            [&, name]() {
+                m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
+                    ZEN::SelectMaterialEvent{ .materialName = name });
             }
-
-            ImGui::TextWrapped("%s", name.c_str());
-            ImGui::NextColumn();
-            ImGui::PopID();
-        }
+        );
     }
+
+    for (auto& name : toRemove)
+        m_Engine->getModelLibrary().removeMaterial(name);
+}
+
+void ProjectPanel::drawTexturesGrid() {
+    std::vector<std::string> toRemove;
+    for (auto& [name, texID] : m_Engine->getModelLibrary().getAllTextures()) {
+        void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
+            m_Engine->getRenderer().getResourceManager()->getTexture(texID)));
+
+        processThumbnail(
+            name, toRemove, {}, "TEXTURE_NAME", texHandle,
+            [&, name]() {
+                m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
+                    ZEN::SelectMaterialEvent{ .materialName = name });
+            }
+        );
+    }
+    for (auto& name : toRemove)
+        m_Engine->getModelLibrary().removeTexture(name);
+}
+
+void ProjectPanel::drawAssetGrid() {
+    ImGui::BeginChild("RightPane", ImVec2(0, 0), true);
+    drawContextMenu();
+
+    constexpr float thumbSize = 64.0f, padding = 16.0f;
+    const float cellSize = thumbSize + padding;
+    const float panelWidth = ImGui::GetContentRegionAvail().x;
+    int columns = std::max(1, (int)(panelWidth / cellSize));
+    ImGui::Columns(columns, 0, false);
+
+    if (m_SelectedFolder == "Meshes")       drawMeshesGrid();
+    else if (m_SelectedFolder == "Materials") drawMaterialsGrid();
+    else if (m_SelectedFolder == "Textures")  drawTexturesGrid();
 
     ImGui::EndChild();
-
 }
-void ProjectPanel::onImGuiRender(){
+
+void ProjectPanel::onImGuiRender() {
     ImGuiIO& io = ImGui::GetIO();
-    ImVec2 displaySize = io.DisplaySize;
+    ImVec2 size = io.DisplaySize;
 
-    ImGui::SetNextWindowPos(ImVec2(0, displaySize.y * 0.7f));
-    ImGui::SetNextWindowSize(ImVec2(displaySize.x, displaySize.y * 0.3f));
+    ImGui::SetNextWindowPos({ 0, size.y * 0.7f });
+    ImGui::SetNextWindowSize({ size.x, size.y * 0.3f });
 
-    ImGui::Begin("Project Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Project Panel", nullptr,
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
     checkWindowFocus(m_Engine->getDispatcher());
-
     drawSearchBar();
-
     drawFolderTree();
-
     ImGui::SameLine();
-
     drawAssetGrid();
-
-    //drawMeshList(m_Engine->getModelLibrary().getAllMeshes());
 
     ImGui::End();
 }
