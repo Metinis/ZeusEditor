@@ -20,7 +20,6 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
         ImGuiTreeNodeFlags_OpenOnArrow |
         ImGuiTreeNodeFlags_SpanAvailWidth;
 
-    // Determine if this entity has children
     bool hasChildren = false;
     for (auto childEntity : m_Engine->getScene().getEntities<ZEN::ParentComp>()) {
         auto& pc = childEntity.getComponent<ZEN::ParentComp>();
@@ -32,6 +31,16 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
     if (!hasChildren) flags |= ImGuiTreeNodeFlags_Leaf;
 
     const bool opened = ImGui::TreeNodeEx((void *) (intptr_t)entity, flags, "%s", name.tag.c_str());
+
+    ImGui::PushID((intptr_t)entity);
+    if (ImGui::BeginPopupContextItem("EntityPanelContext", ImGuiPopupFlags_MouseButtonRight)) {
+        if (ImGui::MenuItem("Delete")) {
+            m_Engine->getScene().removeEntity(entity);
+
+        }
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
 
     if (ImGui::IsItemClicked())
         m_Engine->getDispatcher().trigger<ZEN::SelectEntityEvent>({entity});

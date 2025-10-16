@@ -20,6 +20,7 @@ void ViewPanel::onImGuiRender() {
     ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoCollapse);
 
+
     if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }

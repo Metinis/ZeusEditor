@@ -43,7 +43,7 @@ static auto processThumbnail = [](
     const std::unordered_set<std::string>& defaultNames,
     const std::string& payloadType,
     void* texHandle = nullptr,
-    std::function<void()> onClick = nullptr
+    const std::function<void()>& onClick = nullptr
 ) {
     constexpr float size = 64.0f;
     ImGui::PushID(name.c_str());

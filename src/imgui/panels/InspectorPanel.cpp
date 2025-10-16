@@ -22,34 +22,49 @@ InspectorPanel::InspectorPanel(ZEN::ZEngine *engine) : m_Engine(engine) {
 }
 void InspectorPanel::editMesh() {
     if (auto *meshComp = m_SelectedEntity.tryGetComponent<ZEN::MeshComp>()) {
-        const auto& entityMesh = m_Engine->getModelLibrary().getMesh(meshComp->name);
         ImGui::SeparatorText("Mesh");
 
-        // Show current mesh name
+
         const auto &meshes = m_Engine->getModelLibrary().getAllMeshes();
         static std::string selectedMesh;
-        // find current mesh name from pointer
+
         for (auto &[name, mesh]: meshes) {
             if (name == meshComp->name) {
                 selectedMesh = name;
                 break;
             }
         }
+        ImGui::BeginGroup();
 
-        if (ImGui::BeginCombo("Mesh", selectedMesh.c_str())) {
+        float buttonWidth = ImGui::CalcTextSize("X").x + ImGui::GetStyle().FramePadding.x * 2;
+        float itemSpacing = ImGui::GetStyle().ItemSpacing.x;
+        float comboWidth = ImGui::GetContentRegionAvail().x - buttonWidth - itemSpacing;
+
+        ImGui::SetNextItemWidth(comboWidth);
+        if (ImGui::BeginCombo("##mesh", selectedMesh.c_str())) {
             for (auto &[name, mesh] : meshes) {
                 bool isSelected = (selectedMesh == name);
                 if (ImGui::Selectable(name.c_str(), isSelected)) {
-                    entityMesh->indices = mesh->indices;
-                    entityMesh->vertices = mesh->vertices;
-                    m_SelectedEntity.removeComponent<ZEN::MeshDrawableComp>();
-                    selectedMesh = name;
+                    meshComp->name = name;
+                    //remove current drawable for regenaration
+                    if(m_SelectedEntity.hasComponent<ZEN::MeshDrawableComp>())
+                        m_SelectedEntity.removeComponent<ZEN::MeshDrawableComp>();
                 }
                 if (isSelected)
                     ImGui::SetItemDefaultFocus();
             }
             ImGui::EndCombo();
         }
+
+
+        ImGui::SameLine();
+        if (ImGui::Button("X")) {
+            m_SelectedEntity.removeComponent<ZEN::MeshComp>();
+        }
+
+        ImGui::EndGroup();
+
+
     }
 }
 void InspectorPanel::editComponents() {
