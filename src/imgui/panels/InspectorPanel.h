@@ -22,7 +22,8 @@ public:
 private:
     void editMesh();
     void editComponents();
-    void editMaterial();
+    void editMaterialProps();
+    void editMaterialComp();
     void inspectEntity();
     void inspectMaterial();
     void renderTextureDrop(std::vector<uint32_t>& textures, const char* name);

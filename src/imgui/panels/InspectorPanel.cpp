@@ -35,6 +35,7 @@ void InspectorPanel::editMesh() {
             }
         }
         ImGui::BeginGroup();
+        //ImGui::PushID("Mesh")
 
         float buttonWidth = ImGui::CalcTextSize("X").x + ImGui::GetStyle().FramePadding.x * 2;
         float itemSpacing = ImGui::GetStyle().ItemSpacing.x;
@@ -58,9 +59,11 @@ void InspectorPanel::editMesh() {
 
 
         ImGui::SameLine();
+        ImGui::PushID("RemoveMesh");
         if (ImGui::Button("X")) {
             m_SelectedEntity.removeComponent<ZEN::MeshComp>();
         }
+        ImGui::PopID();
 
         ImGui::EndGroup();
 
@@ -84,6 +87,8 @@ void InspectorPanel::editComponents() {
                 ImGui::CloseCurrentPopup();
             }
         }
+
+
 
 
         ImGui::EndPopup();
@@ -125,7 +130,61 @@ void InspectorPanel::renderTextureDrop(std::vector<uint32_t>& textures, const ch
     ImGui::SameLine();
     ImGui::Text(name);
 }
-void InspectorPanel::editMaterial() {
+void InspectorPanel::editMaterialComp() {
+    if (auto *materialComp = m_SelectedEntity.tryGetComponent<ZEN::MaterialComp>()) {
+        ImGui::SeparatorText("Material");
+
+
+        const auto &materials = m_Engine->getModelLibrary().getAllMaterials();
+        static std::string selectedMaterial;
+
+        for (auto &[name, material] : materials) {
+            if (name == materialComp->name) {
+                selectedMaterial = name;
+                break;
+            }
+        }
+        ImGui::BeginGroup();
+
+        float buttonWidth = ImGui::CalcTextSize("X").x + ImGui::GetStyle().FramePadding.x * 2;
+        float itemSpacing = ImGui::GetStyle().ItemSpacing.x;
+        float comboWidth = ImGui::GetContentRegionAvail().x - buttonWidth - itemSpacing;
+
+        ImGui::SetNextItemWidth(comboWidth);
+        if (ImGui::BeginCombo("##material", selectedMaterial.c_str())) {
+            for (auto &[name, mesh] : materials) {
+                bool isSelected = (selectedMaterial == name);
+                if (ImGui::Selectable(name.c_str(), isSelected)) {
+                    materialComp->name = name;
+                }
+                if (isSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+
+        ImGui::SameLine();
+        ImGui::PushID("RemoveMat");
+        if (ImGui::Button("X")) {
+            //reset to default if has mesh, otherwise allow removal
+            if(m_SelectedEntity.hasComponent<ZEN::MeshDrawableComp>()) {
+                m_SelectedEntity.getComponent<ZEN::MaterialComp>() = ZEN::MaterialComp{.name = "Default"};
+            }
+            else {
+                m_SelectedEntity.removeComponent<ZEN::MaterialComp>();
+            }
+        }
+        ImGui::PopID();
+
+        ImGui::EndGroup();
+
+
+    }
+}
+
+
+void InspectorPanel::editMaterialProps() {
         ImGui::SeparatorText("Material");
 
         ImGui::DragFloat("Specular", &m_SelectedMaterial->specular, 0.01f, 0.0f, 1.0f);
@@ -158,12 +217,16 @@ void InspectorPanel::inspectEntity() {
 
     editMesh();
 
+    editMaterialComp();
+
     ImGui::Separator();
 
     editComponents();
+
+
 }
 void InspectorPanel::inspectMaterial() {
-    editMaterial();
+    editMaterialProps();
 }
 
 void InspectorPanel::onImGuiRender() {
