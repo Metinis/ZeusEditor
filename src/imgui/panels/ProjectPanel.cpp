@@ -117,11 +117,8 @@ void ProjectPanel::drawMeshesGrid() {
 void ProjectPanel::drawMaterialsGrid() {
     std::vector<std::string> toRemove;
     for (auto& [name, material] : m_Engine->getModelLibrary().getAllMaterials()) {
-        void* texHandle = nullptr;
-        if (!material->textureIDs.empty()) {
-            texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-                m_Engine->getRenderer().getResourceManager()->getTexture(material->textureIDs[0])));
-        }
+        void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
+                m_Engine->getRenderer().getResourceManager()->getTexture(material->textureID)));
 
         processThumbnail(
             name,

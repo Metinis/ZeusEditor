@@ -6,7 +6,6 @@
 #include <ZeusEngineCore/Scene.h>
 #include <ZeusEngineCore/Entity.h>
 #include <imgui.h>
-
 #include "ZeusEngineCore/EventDispatcher.h"
 
 
@@ -106,24 +105,20 @@ void InspectorPanel::editComponents() {
     }
     ImGui::EndChild();
 }
-void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, std::vector<uint32_t>& textures) {
+void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, uint32_t& outTexture) {
     const char *data = (const char *) payload->Data;
     auto texture = m_Engine->getModelLibrary().getTexture(data);
-    textures[0] = texture;
+    outTexture = texture;
 }
-void InspectorPanel::renderTextureDrop(std::vector<uint32_t>& textures, const char* name) {
-    if(textures.empty()) {
-        std::cout<<"ERROR: No textures found: "<< name<<"\n";
-        return;
-    }
+void InspectorPanel::renderTextureDrop(uint32_t& texture, const char* name) {
     constexpr float thumbnailSize = 8.0f;
 
-    int texID = static_cast<int>(textures[0]);
+    int texID = static_cast<int>(texture);
     ImGui::ImageButton(name, (void*)m_Engine->getRenderer().getResourceManager()->getTexture(texID),
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0,1), ImVec2(1,0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
-            handleTextureDrop(payload, textures);
+            handleTextureDrop(payload, texture);
         }
         ImGui::EndDragDropTarget();
     }
@@ -185,21 +180,24 @@ void InspectorPanel::editMaterialComp() {
 
 
 void InspectorPanel::editMaterialProps() {
-        ImGui::SeparatorText("Material");
+    ImGui::SeparatorText("Material");
 
-        ImGui::DragFloat("Specular", &m_SelectedMaterial->specular, 0.01f, 0.0f, 1.0f);
-        ImGui::DragInt("Shininess", &m_SelectedMaterial->shininess, 1, 1, 256);
+    ImGui::DragFloat3("Albedo", &m_SelectedMaterial->albedo.x, 0.01f, 0.0f, 1.0f);
+    ImGui::DragFloat("Metallic", &m_SelectedMaterial->metallic, 0.01f, 0.0f, 1.0f);
+    ImGui::DragFloat("Roughness", &m_SelectedMaterial->roughness, 0.01f, 0.0f, 1.0f);
+    ImGui::DragFloat("Ambient Oclussion", &m_SelectedMaterial->ao, 0.01f, 0.0f, 1.0f);
+    ImGui::Checkbox("Is Metal", &m_SelectedMaterial->metal);
 
-        if (ImGui::TreeNode("Shader")) {
-            ImGui::Text("Current Shader ID: %u", m_SelectedMaterial->shaderID);
-            ImGui::TreePop();
-        }
+    if (ImGui::TreeNode("Shader")) {
+        ImGui::Text("Current Shader ID: %u", m_SelectedMaterial->shaderID);
+        ImGui::TreePop();
+    }
 
-        if (ImGui::TreeNode("Texture")) {
-            renderTextureDrop(m_SelectedMaterial->textureIDs, "Diffuse");
-            renderTextureDrop(m_SelectedMaterial->specularTexIDs, "Specular");
-            ImGui::TreePop();
-        }
+    if (ImGui::TreeNode("Texture")) {
+        renderTextureDrop(m_SelectedMaterial->textureID, "Diffuse");
+        //renderTextureDrop(m_SelectedMaterial->specularTexID, "Specular");
+        ImGui::TreePop();
+    }
 }
 
 void InspectorPanel::inspectEntity() {

@@ -26,10 +26,10 @@ private:
     void editMaterialComp();
     void inspectEntity();
     void inspectMaterial();
-    void renderTextureDrop(std::vector<uint32_t>& textures, const char* name);
+    void renderTextureDrop(uint32_t& textures, const char* name);
     void handleMaterialDrop(const ImGuiPayload* payload);
     void handleMeshDrop(const ImGuiPayload* payload);
-    void handleTextureDrop(const ImGuiPayload* payload, std::vector<uint32_t>& textures);
+    void handleTextureDrop(const ImGuiPayload *payload, uint32_t& outTexture);
     ZEN::ZEngine* m_Engine{};
     ZEN::Entity m_SelectedEntity;
     ZEN::Material* m_SelectedMaterial{};
