@@ -55,11 +55,11 @@ vec3 getNormalFromMapObjectSpace() {
 }
 
 void main() {
-  vec3 albedo = pow(texture(u_AlbedoMap, v_UV).rgb, vec3(2.2));
+  vec3 albedo = pow(texture(u_AlbedoMap, v_UV).rgb, vec3(2.2)) * u_Albedo.rgb;
   vec3 normal = texture(u_NormalMap, v_UV).rgb;
-  float metallic = texture(u_MetallicMap, v_UV).r;
-  float roughness = texture(u_RoughnessMap, v_UV).r;
-  float ao = texture(u_AOMap, v_UV).r + u_Params.z;
+  float metallic = texture(u_MetallicMap, v_UV).r * u_Params.x;
+  float roughness = texture(u_RoughnessMap, v_UV).r * u_Params.y;
+  float ao = texture(u_AOMap, v_UV).r + u_Params.z * u_Params.z;
 
   //vec3 N = normal;
   vec3 N = normalize(v_Normal);
@@ -75,7 +75,10 @@ void main() {
 
 
   vec3 F0 = vec3(0.04);
-  F0 = mix(F0, albedo, metallic);
+  //F0 = mix(F0, albedo, metallic);
+  if(u_Params.w > 0.0){
+    F0 = albedo;
+  }
   vec3 F = schlickFresnel(vDotH, F0);
 
   float G = geomSmith(nDotV, roughness) * geomSmith(nDotL, roughness);

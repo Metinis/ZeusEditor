@@ -12,11 +12,8 @@ target_include_directories(imgui PUBLIC
         include/imgui/backends
 )
 
-target_compile_definitions(imgui PUBLIC VK_NO_PROTOTYPES)
-
 target_link_libraries(imgui PUBLIC
         ZeusEngineCore
-        Vulkan::Vulkan
 )
 
 target_sources(imgui PRIVATE
@@ -27,7 +24,6 @@ target_sources(imgui PRIVATE
         include/imgui/imgui_demo.cpp
         include/imgui/backends/imgui_impl_glfw.cpp
         include/imgui/backends/imgui_impl_opengl3.cpp
-        include/imgui/backends/imgui_impl_vulkan.cpp
 )
 add_executable(ZeusEditor)
 
@@ -36,12 +32,9 @@ file(GLOB_RECURSE ZEUSEDITOR_SOURCES
 )
 target_sources(ZeusEditor PRIVATE ${ZEUSEDITOR_SOURCES})
 
-find_package(Vulkan REQUIRED)
-
 target_link_libraries(ZeusEditor PRIVATE
         imgui
         ZeusEngineCore
-        Vulkan::Vulkan
 )
 
 if (APPLE)

@@ -1,7 +1,7 @@
 #include "ImGUILayerVulkan.h"
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
-#include <imgui_impl_vulkan.h>
+//#include <imgui_impl_vulkan.h>
 #include <glm/vec4.hpp>
 #include <glm/glm.hpp>
 #include <glm/common.hpp>
@@ -63,13 +63,13 @@ ImGUILayerVulkan::ImGUILayerVulkan(GLFWwindow *window) {
 }
 
 ImGUILayerVulkan::~ImGUILayerVulkan() {
-	ImGui_ImplVulkan_Shutdown();
+	//ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 void ImGUILayerVulkan::beginFrame() {
 	ImGui_ImplGlfw_NewFrame();
-	ImGui_ImplVulkan_NewFrame();
+	//ImGui_ImplVulkan_NewFrame();
 
 	ImGui::NewFrame();
 }
@@ -80,7 +80,7 @@ void ImGUILayerVulkan::render() {
 void ImGUILayerVulkan::endFrame(void* commandBuffer) {
 	ImDrawData* data = ImGui::GetDrawData();
 	if (data == nullptr) { return; }
-	VkCommandBuffer vkCommandBuffer = reinterpret_cast<VkCommandBuffer>(commandBuffer);
-	ImGui_ImplVulkan_RenderDrawData(data, vkCommandBuffer);
+	//VkCommandBuffer vkCommandBuffer = reinterpret_cast<VkCommandBuffer>(commandBuffer);
+	//ImGui_ImplVulkan_RenderDrawData(data, vkCommandBuffer);
 }
 

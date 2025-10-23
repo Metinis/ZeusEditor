@@ -194,8 +194,11 @@ void InspectorPanel::editMaterialProps() {
     }
 
     if (ImGui::TreeNode("Texture")) {
-        renderTextureDrop(m_SelectedMaterial->textureID, "Diffuse");
-        //renderTextureDrop(m_SelectedMaterial->specularTexID, "Specular");
+        renderTextureDrop(m_SelectedMaterial->textureID, "Albedo");
+        renderTextureDrop(m_SelectedMaterial->metallicTexID, "Metallic");
+        renderTextureDrop(m_SelectedMaterial->roughnessTexID, "Roughness");
+        renderTextureDrop(m_SelectedMaterial->AOTexID, "AO");
+        renderTextureDrop(m_SelectedMaterial->normalTexID, "Normal");
         ImGui::TreePop();
     }
 }
