@@ -22,7 +22,7 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
 
     m_Running = true;
 
-    m_Engine->getScene().createDefaultScene(resourceRoot, m_Engine.get());
+    m_Engine->getScene().createDefaultScene(m_Engine.get());
 }
 Application::~Application() = default;
 
