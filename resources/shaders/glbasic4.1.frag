@@ -6,11 +6,12 @@ uniform sampler2D u_MetallicMap;
 uniform sampler2D u_RoughnessMap;
 uniform sampler2D u_NormalMap;
 uniform sampler2D u_AOMap;
+uniform samplerCube u_IrradianceMap;
 
 layout(std140) uniform Globals {
   vec3 u_LightDir;
   vec3 u_CameraPos;
-  //float u_Time;
+//float u_Time;
   vec3 u_AmbientColor;
 };
 
@@ -41,11 +42,12 @@ float geomSmith(float dp, float roughness){
   float denom = dp * (1 - k) + k;
   return dp / denom;
 }
-vec3 schlickFresnel(float vDotH, vec3 F0){
+vec3 schlickFresnel(float vDotH, vec3 F0, float roughness){
   //F = F0 + (1-F0)*(1-dot(view, half))^5
   //F0 = base reflectivity of the surface
-  vec3 F = F0 + (1 - F0) * pow(clamp(1.0 - vDotH, 0.0, 1.0), 5);
-  return F;
+  //vec3 F = F0 + (1 - F0) * pow(clamp(1.0 - vDotH, 0.0, 1.0), 5);
+  return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - vDotH, 0.0, 1.0), 5.0);
+  //return F;
 }
 //kd + ks = 1 always
 vec3 getNormalFromMapObjectSpace() {
@@ -79,7 +81,7 @@ void main() {
   if(u_Params.w > 0.0){
     F0 = albedo;
   }
-  vec3 F = schlickFresnel(vDotH, F0);
+  vec3 F = schlickFresnel(vDotH, F0, roughness);
 
   float G = geomSmith(nDotV, roughness) * geomSmith(nDotL, roughness);
 
@@ -93,7 +95,9 @@ void main() {
   vec3 diffuse = kd * albedo / PI;
 
   vec3 lightColor = vec3(1.0);
-  vec3 ambient = u_AmbientColor * albedo * ao;
+  vec3 irradiance = texture(u_IrradianceMap, N).rgb;
+  vec3 diffuseIBL = irradiance * albedo;
+  vec3 ambient = diffuseIBL * ao;
 
   vec3 color = (diffuse + specular) * lightColor * nDotL + ambient;
   color = color / (color + vec3(1.0));
@@ -101,3 +105,4 @@ void main() {
 
   fragColor = vec4(color, 1.0);
 }
+
