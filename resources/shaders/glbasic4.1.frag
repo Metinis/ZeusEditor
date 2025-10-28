@@ -7,6 +7,8 @@ uniform sampler2D u_RoughnessMap;
 uniform sampler2D u_NormalMap;
 uniform sampler2D u_AOMap;
 uniform samplerCube u_IrradianceMap;
+uniform samplerCube u_PrefilterMap;
+uniform sampler2D u_BRDFLUT;
 
 layout(std140) uniform Globals {
   vec3 u_LightDir;
@@ -94,10 +96,16 @@ void main() {
   vec3 kd = (1.0 - F) * (1.0 - metallic);
   vec3 diffuse = kd * albedo / PI;
 
+  vec3 R = reflect(-V, N);
+  const float MAX_REFLECTION_LOD = 4.0;
+  vec3 prefilteredColor = textureLod(u_PrefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;
+  vec2 brdf  = texture(u_BRDFLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+  vec3 specularIBL = prefilteredColor * (F * brdf.x + brdf.y);
+
   vec3 lightColor = vec3(1.0);
   vec3 irradiance = texture(u_IrradianceMap, N).rgb;
   vec3 diffuseIBL = irradiance * albedo;
-  vec3 ambient = diffuseIBL * ao;
+  vec3 ambient = (diffuseIBL + specularIBL) * ao;
 
   vec3 color = (diffuse + specular) * lightColor * nDotL + ambient;
   color = color / (color + vec3(1.0));
