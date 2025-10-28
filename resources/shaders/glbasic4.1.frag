@@ -79,10 +79,10 @@ void main() {
 
 
   vec3 F0 = vec3(0.04);
-  //F0 = mix(F0, albedo, metallic);
-  if(u_Params.w > 0.0){
+  F0 = mix(F0, albedo, metallic);
+  /*if(u_Params.w > 0.0){
     F0 = albedo;
-  }
+  }*/
   vec3 F = schlickFresnel(vDotH, F0, roughness);
 
   float G = geomSmith(nDotV, roughness) * geomSmith(nDotL, roughness);
