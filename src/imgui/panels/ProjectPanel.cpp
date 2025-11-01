@@ -90,14 +90,14 @@ void ProjectPanel::drawContextMenu() {
             ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
     {
         if (ImGui::MenuItem("Add Model from Disk")) {
-            const char* filters[] = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
-            const char* path = tinyfd_openFileDialog("Choose a model", "", 4, filters, "3D Model Files", 0);
+            constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
+            const char* path = tinyfd_openFileDialog("Choose a model", "", filters.size(), filters.data(), "3D Model Files", 0);
             if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
-            const char* filters[] = { "*.png", "*.jpg" };
-            const char* path = tinyfd_openFileDialog("Choose a texture", "", 2, filters, "Image Files", 0);
+            constexpr std::array filters = { "*.png", "*.jpg", "*.tga" };
+            const char* path = tinyfd_openFileDialog("Choose a texture", "", filters.size(), filters.data(), "Image Files", 0);
             if (path) m_Engine->getModelImporter().loadTexture(getNameWithoutExtension(path), path);
         }
 
