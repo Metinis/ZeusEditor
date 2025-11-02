@@ -6,6 +6,13 @@ uniform sampler2D u_MetallicMap;
 uniform sampler2D u_RoughnessMap;
 uniform sampler2D u_NormalMap;
 uniform sampler2D u_AOMap;
+
+uniform bool u_HasAlbedoMap;
+uniform bool u_HasMetallicMap;
+uniform bool u_HasRoughnessMap;
+uniform bool u_HasNormalMap;
+uniform bool u_HasAOMap;
+
 uniform samplerCube u_IrradianceMap;
 uniform samplerCube u_PrefilterMap;
 uniform sampler2D u_BRDFLUT;
@@ -28,11 +35,6 @@ in vec4 v_Color;
 in vec2 v_UV;
 in vec3 v_FragPos;
 in vec3 v_Normal;
-
-in vec3 v_AmbientColor;
-in vec3 v_TangentLightPos;
-in vec3 v_TangentViewPos;
-in vec3 v_TangentFragPos;
 in mat3 v_TBN;
 
 out vec4 fragColor;
@@ -67,13 +69,43 @@ vec3 getNormalFromMapObjectSpace() {
 }
 
 void main() {
-  vec3 albedo = pow(texture(u_AlbedoMap, v_UV).rgb, vec3(2.2)) * u_Albedo.rgb;
-  vec3 Nmap = texture(u_NormalMap, v_UV).rgb * 2.0 - 1.0;
-  vec3 normal = normalize(v_TBN * Nmap);
+  vec3 albedo;
+  vec3 normal;
+  float metallic;
+  float roughness;
+  float ao;
 
-  float metallic = texture(u_MetallicMap, v_UV).r * u_Params.x;
-  float roughness = texture(u_RoughnessMap, v_UV).r * u_Params.y;
-  float ao = texture(u_AOMap, v_UV).r + u_Params.z * u_Params.z;
+  if(u_HasAlbedoMap){
+    albedo = pow(texture(u_AlbedoMap, v_UV).rgb, vec3(2.2));
+  }
+  else{
+    albedo = u_Albedo.rgb;
+  }
+  if(u_HasNormalMap){
+    vec3 Nmap = texture(u_NormalMap, v_UV).rgb * 2.0 - 1.0;
+    normal = normalize(v_TBN * Nmap);
+  }
+  else{
+    normal = normalize(v_Normal);
+  }
+  if(u_HasMetallicMap){
+    metallic = texture(u_MetallicMap, v_UV).r;
+  }
+  else{
+    metallic = u_Params.x;
+  }
+  if(u_HasRoughnessMap){
+    roughness = texture(u_RoughnessMap, v_UV).r;
+  }
+  else{
+    roughness = u_Params.y;
+  }
+  if(u_HasAOMap){
+    ao = texture(u_AOMap, v_UV).r;
+  }
+  else{
+    ao = u_Params.z;
+  }
 
   vec3 N = normal;
   //vec3 N = normalize(v_Normal);

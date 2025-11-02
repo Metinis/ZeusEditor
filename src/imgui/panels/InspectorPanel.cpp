@@ -194,13 +194,39 @@ void InspectorPanel::editMaterialProps() {
     }
 
     if (ImGui::TreeNode("Texture")) {
+        ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnWidth(0, 150);
+        ImGui::SetColumnWidth(1, 100);
+
         renderTextureDrop(m_SelectedMaterial->textureID, "Albedo");
+        ImGui::NextColumn();
+        ImGui::Checkbox("Use##Albedo", &m_SelectedMaterial->useAlbedo);
+        ImGui::NextColumn();
+
         renderTextureDrop(m_SelectedMaterial->metallicTexID, "Metallic");
+        ImGui::NextColumn();
+        ImGui::Checkbox("Use##Metallic", &m_SelectedMaterial->useMetallic);
+        ImGui::NextColumn();
+
         renderTextureDrop(m_SelectedMaterial->roughnessTexID, "Roughness");
-        renderTextureDrop(m_SelectedMaterial->AOTexID, "AO");
+        ImGui::NextColumn();
+        ImGui::Checkbox("Use##Roughness", &m_SelectedMaterial->useRoughness);
+        ImGui::NextColumn();
+
+        renderTextureDrop(m_SelectedMaterial->aoTexID, "AO");
+        ImGui::NextColumn();
+        ImGui::Checkbox("Use##AO", &m_SelectedMaterial->useAO);
+        ImGui::NextColumn();
+
         renderTextureDrop(m_SelectedMaterial->normalTexID, "Normal");
+        ImGui::NextColumn();
+        ImGui::Checkbox("Use##Normal", &m_SelectedMaterial->useNormal);
+        ImGui::NextColumn();
+
+        ImGui::Columns(1);
         ImGui::TreePop();
     }
+
 }
 
 void InspectorPanel::inspectEntity() {
