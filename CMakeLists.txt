@@ -25,7 +25,8 @@ target_sources(imgui PRIVATE
         include/imgui/backends/imgui_impl_glfw.cpp
         include/imgui/backends/imgui_impl_opengl3.cpp
 )
-add_executable(ZeusEditor)
+add_executable(ZeusEditor
+        src/imgui/panels/MenuBarPanel.h)
 
 file(GLOB_RECURSE ZEUSEDITOR_SOURCES
         src/*.cpp

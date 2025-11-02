@@ -15,6 +15,8 @@ Application::Application(ZEN::eRendererAPI api) : m_API(api) {
     m_Window->attachDispatcher(m_Engine->getDispatcher());
 
     m_ImGuiLayer = ImGUILayer::create(m_Window->getNativeWindow(), api);
+
+    m_MenuBarPanel = std::make_unique<MenuBarPanel>(m_Engine.get());
     m_InspectorPanel = std::make_unique<InspectorPanel>(m_Engine.get());
     m_ProjectPanel = std::make_unique<ProjectPanel>(m_Engine.get());
     m_ViewPanel = std::make_unique<ViewPanel>(m_Engine.get());
@@ -44,10 +46,13 @@ void Application::onUpdate(float deltaTime) {
 void Application::onUIRender() {
     m_ImGuiLayer->beginFrame();
 
+    m_MenuBarPanel->onImGuiRender();
     m_ScenePanel->onImGuiRender();
     m_ViewPanel->onImGuiRender();
     m_InspectorPanel->onImGuiRender();
     m_ProjectPanel->onImGuiRender();
+
+
 
     m_ImGuiLayer->render();
     m_ImGuiLayer->endFrame(nullptr);

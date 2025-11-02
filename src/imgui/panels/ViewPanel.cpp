@@ -13,9 +13,10 @@ ViewPanel::ViewPanel(ZEN::ZEngine* engine) : m_Engine(engine){
 void ViewPanel::onImGuiRender() {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
+    float menuBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
 
-    ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.2f, 0));
-    ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.6f, displaySize.y * 0.7f));
+    ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.2f, menuBarHeight));
+    ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.6f, displaySize.y * 0.7f - menuBarHeight));
 
     ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoCollapse);
