@@ -1,12 +1,6 @@
-
 #pragma once
-#include <entt.hpp>
-#include <imgui.h>
-#include <ZeusEngineCore/Layer.h>
+#include <ZeusEngine.h>
 
-namespace ZEN {
-    class ZEngine;
-}
 class ViewPanel : public ZEN::Layer  {
 public:
     explicit ViewPanel(ZEN::ZEngine* engine);

@@ -1,15 +1,6 @@
-
 #pragma once
-#include <ZeusEngineCore/Entity.h>
-#include <ZeusEngineCore/Layer.h>
+#include <ZeusEngine.h>
 
-namespace ZEN {
-    struct SelectEntityEvent;
-    struct SelectMaterialEvent;
-    struct Material;
-    class ZEngine;
-    class Entity;
-}
 struct ImGuiPayload;
 
 class InspectorPanel : public ZEN::Layer {

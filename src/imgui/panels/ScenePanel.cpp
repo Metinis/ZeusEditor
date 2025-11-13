@@ -1,13 +1,4 @@
-
 #include "ScenePanel.h"
-#include <imgui.h>
-#include <ZeusEngineCore/Components.h>
-#include <ZeusEngineCore/Entity.h>
-#include <ZeusEngineCore/InputEvents.h>
-#include <ZeusEngineCore/ModelLibrary.h>
-#include <ZeusEngineCore/Scene.h>
-#include <ZeusEngineCore/ZEngine.h>
-#include <ZeusEngineCore/EventDispatcher.h>
 
 ScenePanel::ScenePanel(ZEN::ZEngine* engine) : m_Engine(engine) {
     m_Engine->getDispatcher().attach<ZEN::SelectEntityEvent, ScenePanel, &ScenePanel::onEntitySelect>(this);

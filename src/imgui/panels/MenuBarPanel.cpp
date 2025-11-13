@@ -1,10 +1,4 @@
-
 #include "MenuBarPanel.h"
-#include <ZeusEngineCore/ZEngine.h>
-#include <ZeusEngineCore/EventDispatcher.h>
-#include <ZeusEngineCore/InputEvents.h>
-
-#include <imgui.h>
 
 MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine) : m_Engine(engine) {
 }

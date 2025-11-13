@@ -1,12 +1,6 @@
 #include "ProjectPanel.h"
-#include <imgui.h>
-#include <tinyfiledialogs/tinyfiledialogs.h>
-#include <ZeusEngineCore/InputEvents.h>
-#include <ZeusEngineCore/ModelLibrary.h>
-#include <ZeusEngineCore/ModelImporter.h>
-#include <ZeusEngineCore/EventDispatcher.h>
-#include <ZeusEngineCore/ZEngine.h>
-#include <unordered_set>
+
+#include <tinyfiledialogs.h>
 
 ProjectPanel::ProjectPanel(ZEN::ZEngine* engine)
     : m_Engine(engine) {}

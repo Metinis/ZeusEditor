@@ -1,11 +1,11 @@
 #include "EditorApp.h"
-#include <ZeusEngineCore/ZEngine.h>
 #include "src/config.h"
-#include "../imgui/panels/InspectorPanel.h"
-#include "../imgui/panels/MenuBarPanel.h"
-#include "../imgui/panels/ProjectPanel.h"
-#include "../imgui/panels/ScenePanel.h"
-#include "../imgui/panels/ViewPanel.h"
+
+#include "InspectorPanel.h"
+#include "MenuBarPanel.h"
+#include "ProjectPanel.h"
+#include "ScenePanel.h"
+#include "ViewPanel.h"
 
 
 using namespace ZED;

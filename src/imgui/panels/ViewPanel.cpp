@@ -1,10 +1,4 @@
-
 #include "ViewPanel.h"
-#include <ZeusEngineCore/InputEvents.h>
-#include <ZeusEngineCore/Scene.h>
-#include <ZeusEngineCore/ZEngine.h>
-#include <ZeusEngineCore/EventDispatcher.h>
-#include <ZeusEngineCore/ModelLibrary.h>
 
 ViewPanel::ViewPanel(ZEN::ZEngine* engine) : m_Engine(engine){
     m_PanelSize = {800, 600};

@@ -1,11 +1,6 @@
-
 #pragma once
-#include <entt.hpp>
-#include <ZeusEngineCore/Layer.h>
+#include <ZeusEngine.h>
 
-namespace ZEN {
-    class ZEngine;
-}
 class ProjectPanel : public ZEN::Layer  {
 public:
     explicit ProjectPanel(ZEN::ZEngine* engine);

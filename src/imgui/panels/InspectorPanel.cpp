@@ -1,13 +1,4 @@
 #include "InspectorPanel.h"
-#include <ZeusEngineCore/ModelLibrary.h>
-#include <ZeusEngineCore/Components.h>
-#include <ZeusEngineCore/InputEvents.h>
-#include <ZeusEngineCore/ZEngine.h>
-#include <ZeusEngineCore/Scene.h>
-#include <ZeusEngineCore/Entity.h>
-#include <imgui.h>
-#include "ZeusEngineCore/EventDispatcher.h"
-
 
 static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("position", &out.localPosition.x, 0.01f);

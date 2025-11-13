@@ -1,6 +1,5 @@
 #pragma once
-#include <ZeusEngineCore/API.h>
-#include <ZeusEngineCore/Application.h>
+#include <ZeusEngine.h>
 
 class ScenePanel;
 class ProjectPanel;

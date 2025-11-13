@@ -1,10 +1,5 @@
-
 #pragma once
-#include <ZeusEngineCore/Layer.h>
-
-namespace ZEN {
-    class ZEngine;
-}
+#include <ZeusEngine.h>
 
 class MenuBarPanel : public ZEN::Layer  {
 public:
