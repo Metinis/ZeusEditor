@@ -10,7 +10,7 @@ ViewPanel::ViewPanel(ZEN::ZEngine* engine) : m_Engine(engine){
     m_PanelSize = {800, 600};
 }
 
-void ViewPanel::onImGuiRender() {
+void ViewPanel::onUIRender() {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
     float menuBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();

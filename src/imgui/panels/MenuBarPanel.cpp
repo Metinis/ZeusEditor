@@ -9,7 +9,7 @@
 MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine) : m_Engine(engine) {
 }
 
-void MenuBarPanel::onImGuiRender() {
+void MenuBarPanel::onUIRender() {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("Open")) {}

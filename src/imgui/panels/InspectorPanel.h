@@ -1,6 +1,7 @@
 
 #pragma once
 #include <ZeusEngineCore/Entity.h>
+#include <ZeusEngineCore/Layer.h>
 
 namespace ZEN {
     struct SelectEntityEvent;
@@ -11,10 +12,10 @@ namespace ZEN {
 }
 struct ImGuiPayload;
 
-class InspectorPanel {
+class InspectorPanel : public ZEN::Layer {
 public:
     explicit InspectorPanel(ZEN::ZEngine* engine);
-    void onImGuiRender();
+    void onUIRender() override;
     void setSelectedEntity(ZEN::Entity entity) {m_SelectedEntity = entity;}
     ZEN::Entity getSelectedEntity() {return m_SelectedEntity;}
     void onEntitySelect(ZEN::SelectEntityEvent& e);

@@ -1,14 +1,15 @@
 
 #pragma once
 #include <entt.hpp>
+#include <ZeusEngineCore/Layer.h>
 
 namespace ZEN {
     class ZEngine;
 }
-class ProjectPanel {
+class ProjectPanel : public ZEN::Layer  {
 public:
     explicit ProjectPanel(ZEN::ZEngine* engine);
-    void onImGuiRender();
+    void onUIRender() override;
 private:
     void drawFolderTree();
     void drawAssetGrid();

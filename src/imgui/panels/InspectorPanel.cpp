@@ -256,7 +256,7 @@ void InspectorPanel::inspectMaterial() {
     editMaterialProps();
 }
 
-void InspectorPanel::onImGuiRender() {
+void InspectorPanel::onUIRender() {
     ImGuiIO &io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
     float menuBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();

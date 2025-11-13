@@ -172,7 +172,7 @@ void ProjectPanel::drawAssetGrid() {
     ImGui::EndChild();
 }
 
-void ProjectPanel::onImGuiRender() {
+void ProjectPanel::onUIRender() {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 size = io.DisplaySize;
 
