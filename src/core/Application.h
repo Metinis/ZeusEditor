@@ -7,11 +7,7 @@
 #include <ZeusEngineCore/Window.h>
 #include <ZeusEngineCore/Scene.h>
 
-#include "../imgui/panels/MenuBarPanel.h"
-#include "../imgui/panels/InspectorPanel.h"
-#include "../imgui/panels/ScenePanel.h"
-#include "../imgui/panels/ProjectPanel.h"
-#include "../imgui/panels/ViewPanel.h"
+#include "Editor.h"
 
 
 namespace ZEN {
@@ -42,11 +38,7 @@ namespace ZED {
         std::unique_ptr<ZEN::Window> m_Window{};
 
         //UI
-        std::unique_ptr<MenuBarPanel> m_MenuBarPanel{};
-        std::unique_ptr<ViewPanel> m_ViewPanel{};
-        std::unique_ptr<InspectorPanel> m_InspectorPanel{};
-        std::unique_ptr<ProjectPanel> m_ProjectPanel{};
-        std::unique_ptr<ScenePanel> m_ScenePanel{};
+        std::unique_ptr<Editor> m_Editor{};
 
         bool m_Running { false };
 
