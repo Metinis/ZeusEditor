@@ -1,9 +1,10 @@
 #include <iostream>
-#include "core/Application.h"
+#include "core/EditorApp.h"
 #include "ZeusEngineCore/API.h"
 
-int main() {
+int main(int argc, char** argv) {
     ZEN::eRendererAPI api = ZEN::eRendererAPI::OpenGL;
-    ZED::Application app(api);
-    app.run();
+    ZED::EditorApp* app = new ZED::EditorApp(api);
+    app->run();
+    delete(app);
 }

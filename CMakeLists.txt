@@ -5,28 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(imgui STATIC)
-
-target_include_directories(imgui PUBLIC
-        include/imgui
-        include/imgui/backends
-)
-
-target_link_libraries(imgui PUBLIC
-        ZeusEngineCore
-)
-
-target_sources(imgui PRIVATE
-        include/imgui/imgui.cpp
-        include/imgui/imgui_draw.cpp
-        include/imgui/imgui_tables.cpp
-        include/imgui/imgui_widgets.cpp
-        include/imgui/imgui_demo.cpp
-        include/imgui/backends/imgui_impl_glfw.cpp
-        include/imgui/backends/imgui_impl_opengl3.cpp
-)
-add_executable(ZeusEditor
-        src/imgui/panels/MenuBarPanel.h)
+add_executable(ZeusEditor)
 
 file(GLOB_RECURSE ZEUSEDITOR_SOURCES
         src/*.cpp
@@ -34,7 +13,6 @@ file(GLOB_RECURSE ZEUSEDITOR_SOURCES
 target_sources(ZeusEditor PRIVATE ${ZEUSEDITOR_SOURCES})
 
 target_link_libraries(ZeusEditor PRIVATE
-        imgui
         ZeusEngineCore
 )
 
