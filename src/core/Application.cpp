@@ -8,7 +8,6 @@
 using namespace ZED;
 Application::Application(ZEN::eRendererAPI api) : m_API(api) {
 
-
     m_Window = std::make_unique<ZEN::Window>(1280, 720, "Zeus Editor", m_API);
     std::string resourceRoot = RESOURCE_ROOT;
     m_Engine = std::make_unique<ZEN::ZEngine>(m_API, m_Window->getNativeWindow(), resourceRoot);
