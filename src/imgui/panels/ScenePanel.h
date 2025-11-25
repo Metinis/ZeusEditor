@@ -1,15 +1,18 @@
 #pragma once
 #include <ZeusEngine.h>
 
+#include "SelectionContext.h"
+
+namespace ZED {
+    class EditorApp;
+}
+
 class ScenePanel : public ZEN::Layer  {
 public:
-    explicit ScenePanel(ZEN::ZEngine* engine);
+    explicit ScenePanel(ZEN::ZEngine* engine, SelectionContext& selection);
     void drawEntityNode(ZEN::Entity& entity);
     void onUIRender() override;
-    void setSelectedEntity(ZEN::Entity entity) {m_SelectedEntity = entity;}
-    void onEntitySelect(ZEN::SelectEntityEvent& e);
-    ZEN::Entity getSelectedEntity() {return m_SelectedEntity;}
 private:
     ZEN::ZEngine* m_Engine{};
-    ZEN::Entity m_SelectedEntity;
+    SelectionContext& m_SelectionContext;
 };

@@ -1,6 +1,5 @@
 #include "EditorApp.h"
 #include "src/config.h"
-
 #include "InspectorPanel.h"
 #include "MenuBarPanel.h"
 #include "ProjectPanel.h"
@@ -18,12 +17,14 @@ EditorApp::EditorApp(ZEN::eRendererAPI api) {
     //can now actually initialize main app from engine
     init();
 
-    pushOverlay(new InspectorPanel(m_Engine.get()));
-    pushOverlay(new ProjectPanel(m_Engine.get()));
-    pushOverlay(new MenuBarPanel(m_Engine.get()));
-    pushOverlay(new ScenePanel(m_Engine.get()));
-    pushOverlay(new ViewPanel(m_Engine.get()));
+    pushOverlay(new InspectorPanel(m_Engine.get(), m_SelectionContext));
+    pushOverlay(new ProjectPanel(m_Engine.get(), m_SelectionContext));
+    pushOverlay(new MenuBarPanel(m_Engine.get(), m_SelectionContext));
+    pushOverlay(new ScenePanel(m_Engine.get(), m_SelectionContext));
+    pushOverlay(new ViewPanel(m_Engine.get(), m_SelectionContext));
 }
+
+
 EditorApp::~EditorApp() = default;
 
 

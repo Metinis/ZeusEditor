@@ -1,16 +1,27 @@
 #include "ViewPanel.h"
 
-ViewPanel::ViewPanel(ZEN::ZEngine* engine) : m_Engine(engine){
+ViewPanel::ViewPanel(ZEN::ZEngine* engine, SelectionContext& selection) : m_Engine(engine), m_SelectionContext(selection) {
     m_PanelSize = {800, 600};
+    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, ViewPanel, &ViewPanel::onToggleEditor>(this);
 }
-
+/*void ViewPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
+    //ZEN::Application::get().popOverlay(this);
+    m_EditorToggled = false;
+}*/
 void ViewPanel::onUIRender() {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
     float menuBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
 
-    ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.2f, menuBarHeight));
-    ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.6f, displaySize.y * 0.7f - menuBarHeight));
+    if(m_EditorToggled) {
+        ImGui::SetNextWindowPos(ImVec2(displaySize.x * 0.2f, menuBarHeight));
+        ImGui::SetNextWindowSize(ImVec2(displaySize.x * 0.6f, displaySize.y * 0.7f - menuBarHeight));
+    }
+    else {
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(ImVec2(displaySize.x, displaySize.y));
+    }
+
 
     ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoCollapse);
@@ -20,19 +31,20 @@ void ViewPanel::onUIRender() {
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        m_Engine->getDispatcher().trigger<ZEN::PanelFocusEvent>(
-            ZEN::PanelFocusEvent{
-                .panel = "Scene View"
-            }
-        );
+        //m_Engine->getDispatcher().trigger<ZEN::PanelFocusEvent>(
+        //    ZEN::PanelFocusEvent{
+        //        .panel = "Scene View"
+        //    }
+        //);
     }
 
     ImVec2 newSize = ImGui::GetContentRegionAvail();
     if (m_PanelSize.x != newSize.x || m_PanelSize.y != newSize.y) {
         m_PanelSize = newSize;
-        m_Engine->getDispatcher().trigger<ZEN::SceneViewResizeEvent>(
-            ZEN::SceneViewResizeEvent{ newSize.x, newSize.y }
-        );
+        ZEN::Application::get().setViewportSize({newSize.x, newSize.y});
+        //m_Engine->getDispatcher().trigger<ZEN::SceneViewResizeEvent>(
+        //    ZEN::SceneViewResizeEvent{ newSize.x, newSize.y }
+        //);
     }
     ImGui::Image(
         (void*)(intptr_t)m_Engine->getRenderer().getColorTextureHandle(),
@@ -62,3 +74,7 @@ void ViewPanel::onUIRender() {
 
     ImGui::End();
 }
+
+void ViewPanel::onEvent(ZEN::Event &event) {
+}
+

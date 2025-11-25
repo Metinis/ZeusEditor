@@ -2,10 +2,15 @@
 
 #include <tinyfiledialogs.h>
 
-ProjectPanel::ProjectPanel(ZEN::ZEngine* engine)
-    : m_Engine(engine) {}
+ProjectPanel::ProjectPanel(ZEN::ZEngine* engine, SelectionContext& selection)
+    : m_Engine(engine), m_SelectionContext(selection)  {
+    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, ProjectPanel, &ProjectPanel::onToggleEditor>(this);
 
+}
 
+/*void ProjectPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
+    ZEN::Application::get().popOverlay(this);
+}*/
 static std::string getFileName(const std::string& path) {
     size_t pos = std::max(path.find_last_of('/'), path.find_last_of('\\'));
     return (pos == std::string::npos) ? path : path.substr(pos + 1);
@@ -21,8 +26,8 @@ static void checkWindowFocus(ZEN::EventDispatcher& dispatcher) {
     if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
         ImGui::SetWindowFocus();
 
-    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
-        dispatcher.trigger<ZEN::PanelFocusEvent>({ .panel = "Project" });
+    //if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
+        //dispatcher.trigger<ZEN::PanelFocusEvent>({ .panel = "Project" });
 }
 
 static void drawSearchBar() {
@@ -71,8 +76,8 @@ void ProjectPanel::drawFolderTree() {
     if (ImGui::TreeNode("Assets")) {
         const char* folders[] = { "Meshes", "Materials", "Textures", "Scenes" };
         for (const char* folder : folders)
-            if (ImGui::Selectable(folder, m_SelectedFolder == folder))
-                m_SelectedFolder = folder;
+            if (ImGui::Selectable(folder, m_SelectionContext.selectedFolder == folder))
+                m_SelectionContext.selectedFolder = folder;
 
         ImGui::TreePop();
     }
@@ -121,8 +126,9 @@ void ProjectPanel::drawMaterialsGrid() {
             "MATERIAL_NAME",
             texHandle,
             [&, name]() {
-                m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
-                    ZEN::SelectMaterialEvent{ .materialName = name });
+                m_SelectionContext.setMaterial(m_Engine->getModelLibrary().getMaterial(name));
+                //m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
+                    //ZEN::SelectMaterialEvent{ .materialName = name });
             }
         );
     }
@@ -140,8 +146,10 @@ void ProjectPanel::drawTexturesGrid() {
         processThumbnail(
             name, toRemove, {}, "TEXTURE_NAME", texHandle,
             [&, name]() {
-                m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
-                    ZEN::SelectMaterialEvent{ .materialName = name });
+                //m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
+                    //ZEN::SelectMaterialEvent{ .materialName = name });
+                m_SelectionContext.setMaterial(m_Engine->getModelLibrary().getMaterial(name));
+
             }
         );
     }
@@ -159,9 +167,9 @@ void ProjectPanel::drawAssetGrid() {
     int columns = std::max(1, (int)(panelWidth / cellSize));
     ImGui::Columns(columns, 0, false);
 
-    if (m_SelectedFolder == "Meshes")       drawMeshesGrid();
-    else if (m_SelectedFolder == "Materials") drawMaterialsGrid();
-    else if (m_SelectedFolder == "Textures")  drawTexturesGrid();
+    if (m_SelectionContext.selectedFolder == "Meshes")       drawMeshesGrid();
+    else if (m_SelectionContext.selectedFolder == "Materials") drawMaterialsGrid();
+    else if (m_SelectionContext.selectedFolder == "Textures")  drawTexturesGrid();
 
     ImGui::EndChild();
 }
@@ -176,7 +184,7 @@ void ProjectPanel::onUIRender() {
     ImGui::Begin("Project Panel", nullptr,
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-    checkWindowFocus(m_Engine->getDispatcher());
+    //checkWindowFocus(m_Engine->getDispatcher());
     drawSearchBar();
     drawFolderTree();
     ImGui::SameLine();
