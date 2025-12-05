@@ -1,15 +1,9 @@
-
 #include "MenuBarPanel.h"
-#include <ZeusEngineCore/ZEngine.h>
-#include <ZeusEngineCore/EventDispatcher.h>
-#include <ZeusEngineCore/InputEvents.h>
 
-#include <imgui.h>
-
-MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine) : m_Engine(engine) {
+MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine, SelectionContext& selection) : m_Engine(engine), m_SelectionContext(selection)  {
 }
 
-void MenuBarPanel::onImGuiRender() {
+void MenuBarPanel::onUIRender() {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("Open")) {}
@@ -25,10 +19,26 @@ void MenuBarPanel::onImGuiRender() {
         if (ImGui::BeginMenu("View")) {
             if (ImGui::MenuItem("Fullscreen")) {}
             if (ImGui::MenuItem("Toggle Normals")) {
-                m_Engine->getDispatcher().trigger<ZEN::ToggleDrawNormalsEvent>(ZEN::ToggleDrawNormalsEvent{});
+                m_Engine->getRenderSystem().toggleDrawNormals();
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Run")) {
+            if (ImGui::MenuItem("Run Project")) {
+                ZEN::RunPlayModeEvent e(true);
+                ZEN::Application::get().callEvent(e);
+
             }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
     }
+}
+
+void MenuBarPanel::onEvent(ZEN::Event &event) {
+    Layer::onEvent(event);
+}
+
+bool MenuBarPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
+    return false;
 }

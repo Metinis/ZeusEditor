@@ -1,25 +1,16 @@
-
 #pragma once
-#include <ZeusEngineCore/Entity.h>
+#include <ZeusEngine.h>
+#include "SelectionContext.h"
 
-namespace ZEN {
-    struct SelectEntityEvent;
-    struct SelectMaterialEvent;
-    struct Material;
-    class ZEngine;
-    class Entity;
-}
 struct ImGuiPayload;
 
-class InspectorPanel {
+class InspectorPanel : public ZEN::Layer {
 public:
-    explicit InspectorPanel(ZEN::ZEngine* engine);
-    void onImGuiRender();
-    void setSelectedEntity(ZEN::Entity entity) {m_SelectedEntity = entity;}
-    ZEN::Entity getSelectedEntity() {return m_SelectedEntity;}
-    void onEntitySelect(ZEN::SelectEntityEvent& e);
-    void onMaterialSelect(ZEN::SelectMaterialEvent& e);
+    explicit InspectorPanel(ZEN::ZEngine* engine, SelectionContext& selection);
+    void onUIRender() override;
+    void onEvent(ZEN::Event& event) override;
 private:
+    bool onPlayModeEvent(ZEN::RunPlayModeEvent &e);
     void editMesh();
     void editComponents();
     void editMaterialProps();
@@ -31,6 +22,5 @@ private:
     void handleMeshDrop(const ImGuiPayload* payload);
     void handleTextureDrop(const ImGuiPayload *payload, uint32_t& outTexture);
     ZEN::ZEngine* m_Engine{};
-    ZEN::Entity m_SelectedEntity;
-    ZEN::Material* m_SelectedMaterial{};
+    SelectionContext& m_SelectionContext;
 };

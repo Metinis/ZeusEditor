@@ -1,17 +1,17 @@
-
 #pragma once
-#include <entt.hpp>
-#include <imgui.h>
+#include <ZeusEngine.h>
 
-namespace ZEN {
-    class ZEngine;
-}
-class ViewPanel {
+#include "SelectionContext.h"
+
+class ViewPanel : public ZEN::Layer  {
 public:
-    explicit ViewPanel(ZEN::ZEngine* engine);
-    void onImGuiRender();
-
+    explicit ViewPanel(ZEN::ZEngine* engine, SelectionContext& selection);
+    void onUIRender() override;
+    void onEvent(ZEN::Event& event) override;
 private:
+    bool onPlayModeEvent(ZEN::RunPlayModeEvent &e);
+    bool m_EditorToggled{true};
     ZEN::ZEngine* m_Engine{};
+    SelectionContext& m_SelectionContext;
     ImVec2 m_PanelSize;
 };
