@@ -106,11 +106,13 @@ void ProjectPanel::drawContextMenu() {
 
 void ProjectPanel::drawMeshesGrid() {
     std::vector<std::string> toRemove;
-    for (auto& [name, mesh] : m_Engine->getModelLibrary().getAllMeshes())
+    for (auto& [name, mesh] : m_Engine->getModelLibrary().getAllMeshData())
         processThumbnail(name, toRemove, ZEN::defaultMeshes, "MESH_NAME");
 
-    for (auto& name : toRemove)
-        m_Engine->getModelLibrary().removeMesh(name);
+    for (auto& name : toRemove) {
+        m_Engine->getModelLibrary().removeMeshData(name);
+        m_Engine->getModelLibrary().removeMeshDrawable(name);
+    }
 }
 
 void ProjectPanel::drawMaterialsGrid() {
@@ -133,8 +135,9 @@ void ProjectPanel::drawMaterialsGrid() {
         );
     }
 
-    for (auto& name : toRemove)
+    for (auto& name : toRemove) {
         m_Engine->getModelLibrary().removeMaterial(name);
+    }
 }
 
 void ProjectPanel::drawTexturesGrid() {
@@ -191,4 +194,20 @@ void ProjectPanel::onUIRender() {
     drawAssetGrid();
 
     ImGui::End();
+}
+
+void ProjectPanel::onEvent(ZEN::Event &event) {
+    ZEN::EventDispatcher dispatcher(event);
+
+    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
+}
+
+bool ProjectPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
+    if(e.getPlaying()) {
+        ZEN::Application::get().popOverlay(this);
+    }
+    else {
+        ZEN::Application::get().pushOverlay(this);
+    }
+    return false;
 }

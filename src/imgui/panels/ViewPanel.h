@@ -9,6 +9,7 @@ public:
     void onUIRender() override;
     void onEvent(ZEN::Event& event) override;
 private:
+    bool onPlayModeEvent(ZEN::RunPlayModeEvent &e);
     bool m_EditorToggled{true};
     ZEN::ZEngine* m_Engine{};
     SelectionContext& m_SelectionContext;

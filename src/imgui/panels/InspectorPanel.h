@@ -8,10 +8,9 @@ class InspectorPanel : public ZEN::Layer {
 public:
     explicit InspectorPanel(ZEN::ZEngine* engine, SelectionContext& selection);
     void onUIRender() override;
-    //void onEntitySelect(ZEN::SelectEntityEvent& e);
-    //void onMaterialSelect(ZEN::SelectMaterialEvent& e);
+    void onEvent(ZEN::Event& event) override;
 private:
-    //void onToggleEditor(ZEN::ToggleEditorEvent& e);
+    bool onPlayModeEvent(ZEN::RunPlayModeEvent &e);
     void editMesh();
     void editComponents();
     void editMaterialProps();

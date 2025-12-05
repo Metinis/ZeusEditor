@@ -1,7 +1,6 @@
 #include "MenuBarPanel.h"
 
 MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine, SelectionContext& selection) : m_Engine(engine), m_SelectionContext(selection)  {
-    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, MenuBarPanel, &MenuBarPanel::onToggleEditor>(this);
 }
 
 void MenuBarPanel::onUIRender() {
@@ -20,19 +19,26 @@ void MenuBarPanel::onUIRender() {
         if (ImGui::BeginMenu("View")) {
             if (ImGui::MenuItem("Fullscreen")) {}
             if (ImGui::MenuItem("Toggle Normals")) {
-                //m_Engine->getDispatcher().trigger<ZEN::ToggleDrawNormalsEvent>(ZEN::ToggleDrawNormalsEvent{});
+                m_Engine->getRenderSystem().toggleDrawNormals();
             }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Run")) {
             if (ImGui::MenuItem("Run Project")) {
-                //m_Engine->getDispatcher().trigger<ZEN::ToggleEditorEvent>(ZEN::ToggleEditorEvent{});
+                ZEN::RunPlayModeEvent e(true);
+                ZEN::Application::get().callEvent(e);
+
             }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
     }
 }
-/*void MenuBarPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
-    //ZEN::Application::get().popOverlay(this);
-}*/
+
+void MenuBarPanel::onEvent(ZEN::Event &event) {
+    Layer::onEvent(event);
+}
+
+bool MenuBarPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
+    return false;
+}

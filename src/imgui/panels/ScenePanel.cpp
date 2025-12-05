@@ -117,6 +117,22 @@ void ScenePanel::onUIRender() {
     ImGui::End();
 }
 
+void ScenePanel::onEvent(ZEN::Event &event) {
+    ZEN::EventDispatcher dispatcher(event);
+
+    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
+}
+
+bool ScenePanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
+    if(e.getPlaying()) {
+        ZEN::Application::get().popOverlay(this);
+    }
+    else {
+        ZEN::Application::get().pushOverlay(this);
+    }
+    return false;
+}
+
 /*void ScenePanel::onEntitySelect(ZEN::SelectEntityEvent &e) {
     m_SelectedEntity = e.entity;
 }*/

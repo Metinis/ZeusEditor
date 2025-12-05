@@ -12,14 +12,13 @@ InspectorPanel::InspectorPanel(ZEN::ZEngine *engine, SelectionContext& selection
     //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, InspectorPanel, &InspectorPanel::onToggleEditor>(this);
 }
 /*void InspectorPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
-    ZEN::Application::get().popOverlay(this);
 }*/
 void InspectorPanel::editMesh() {
     if (auto *meshComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MeshComp>()) {
         ImGui::SeparatorText("Mesh");
 
 
-        const auto &meshes = m_Engine->getModelLibrary().getAllMeshes();
+        const auto &meshes = m_Engine->getModelLibrary().getAllMeshData();
         static std::string selectedMesh;
 
         for (auto &[name, mesh]: meshes) {
@@ -278,17 +277,21 @@ void InspectorPanel::onUIRender() {
     ImGui::End();
 }
 
-/*void InspectorPanel::onEntitySelect(ZEN::SelectEntityEvent &e) {
-    m_SelectedEntity = e.entity;
-    m_SelectedMaterial = nullptr;
+void InspectorPanel::onEvent(ZEN::Event& event) {
+    ZEN::EventDispatcher dispatcher(event);
+
+    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
 }
 
-void InspectorPanel::onMaterialSelect(ZEN::SelectMaterialEvent &e) {
-    m_SelectedMaterial = m_Engine->getModelLibrary().getMaterial(e.materialName);
-    m_SelectedEntity = ZEN::Entity();
-}*/
-
-
+bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
+    if(e.getPlaying()) {
+        ZEN::Application::get().popOverlay(this);
+    }
+    else {
+        ZEN::Application::get().pushOverlay(this);
+    }
+    return false;
+}
 
 void InspectorPanel::handleMaterialDrop(const ImGuiPayload *payload) {
     const char *data = (const char *) payload->Data;
