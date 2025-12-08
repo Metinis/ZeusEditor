@@ -30,25 +30,36 @@ void ViewPanel::onUIRender() {
     if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
-    if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        //m_Engine->getDispatcher().trigger<ZEN::PanelFocusEvent>(
-        //    ZEN::PanelFocusEvent{
-        //        .panel = "Scene View"
-        //    }
-        //);
-    }
-
     ImVec2 newSize = ImGui::GetContentRegionAvail();
     if (m_PanelSize.x != newSize.x || m_PanelSize.y != newSize.y) {
         m_PanelSize = newSize;
-        ZEN::Application::get().setViewportSize({newSize.x, newSize.y});
-        //m_Engine->getDispatcher().trigger<ZEN::SceneViewResizeEvent>(
-        //    ZEN::SceneViewResizeEvent{ newSize.x, newSize.y }
-        //);
     }
+    glm::vec2 rendererSize = m_Engine->getRenderer().getSize();
+    ImVec2 texSize(rendererSize.x, rendererSize.y);
+    float aspect = texSize.x / texSize.y;
+    ImVec2 finalSize;
+    float panelAspect = m_PanelSize.x / m_PanelSize.y;
+
+    if (panelAspect > aspect)
+    {
+        finalSize.y = m_PanelSize.y;
+        finalSize.x = finalSize.y * aspect;
+    }
+    else
+    {
+        finalSize.x = m_PanelSize.x;
+        finalSize.y = finalSize.x / aspect;
+    }
+    float offsetX = (m_PanelSize.x - finalSize.x) * 0.5f;
+    float offsetY = (m_PanelSize.y - finalSize.y) * 0.5f;
+    ImGui::SetCursorPos(ImVec2(
+        ImGui::GetCursorPos().x + offsetX,
+        ImGui::GetCursorPos().y + offsetY
+    ));
+
     ImGui::Image(
         (void*)(intptr_t)m_Engine->getRenderer().getColorTextureHandle(),
-        m_PanelSize,
+        finalSize,
         ImVec2(0, 1), // uv0 (top-left)
         ImVec2(1, 0)  // uv1 (bottom-right)
     );
@@ -84,9 +95,6 @@ void ViewPanel::onEvent(ZEN::Event &event) {
 bool ViewPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
     if(e.getPlaying()) {
         ZEN::Application::get().popOverlay(this);
-    }
-    else {
-        ZEN::Application::get().pushOverlay(this);
     }
     return false;
 }

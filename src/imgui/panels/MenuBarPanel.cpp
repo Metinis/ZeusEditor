@@ -21,13 +21,32 @@ void MenuBarPanel::onUIRender() {
             if (ImGui::MenuItem("Toggle Normals")) {
                 m_Engine->getRenderSystem().toggleDrawNormals();
             }
+            if (ImGui::BeginMenu("Aspect Ratio")) {
+                if (ImGui::MenuItem("16:9")) {
+                    m_Engine->setAspectRatio(16.0f/9.0f);
+                }
+                if (ImGui::MenuItem("16:10")) {
+                    m_Engine->setAspectRatio(16.0f/10.0f);
+                }
+                if (ImGui::MenuItem("4:3")) {
+                    m_Engine->setAspectRatio(4.0f/3.0f);
+                }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Run")) {
-            if (ImGui::MenuItem("Run Project")) {
-                ZEN::RunPlayModeEvent e(true);
+            if(!m_isPLaying) {
+                if (ImGui::MenuItem("Run Project")) {
+                    ZEN::RunPlayModeEvent e(true);
+                    ZEN::Application::get().callEvent(e);
+                    m_isPLaying = true;
+                }
+            }
+            else if(ImGui::MenuItem("Stop Project")) {
+                ZEN::RunPlayModeEvent e(false);
                 ZEN::Application::get().callEvent(e);
-
+                m_isPLaying = false;
             }
             ImGui::EndMenu();
         }

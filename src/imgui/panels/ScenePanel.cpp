@@ -127,9 +127,6 @@ bool ScenePanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
     if(e.getPlaying()) {
         ZEN::Application::get().popOverlay(this);
     }
-    else {
-        ZEN::Application::get().pushOverlay(this);
-    }
     return false;
 }
 

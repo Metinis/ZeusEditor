@@ -1,13 +1,6 @@
 #pragma once
 #include <ZeusEngine.h>
-
-#include "SelectionContext.h"
-
-class ScenePanel;
-class ProjectPanel;
-class InspectorPanel;
-class ViewPanel;
-class MenuBarPanel;
+#include "EditorLayer.h"
 
 namespace ZED {
 
@@ -15,9 +8,6 @@ namespace ZED {
     public:
         EditorApp(ZEN::eRendererAPI api);
         ~EditorApp() override;
-
-    private:
-        SelectionContext m_SelectionContext;
     };
 
 

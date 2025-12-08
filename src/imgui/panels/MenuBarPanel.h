@@ -11,6 +11,7 @@ public:
 private:
     bool onPlayModeEvent(ZEN::RunPlayModeEvent &e);
     //void onToggleEditor(ZEN::ToggleEditorEvent& e);
+    bool m_isPLaying{ false };
     ZEN::ZEngine* m_Engine{};
     SelectionContext& m_SelectionContext;
 };
