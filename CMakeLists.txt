@@ -5,8 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(ZeusEditor
-        src/imgui/panels/SelectionContext.h)
+add_executable(ZeusEditor)
 
 file(GLOB_RECURSE ZEUSEDITOR_SOURCES
         src/*.cpp
