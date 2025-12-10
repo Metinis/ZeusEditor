@@ -14,7 +14,9 @@ void MenuBarPanel::onUIRender() {
                 ZEN::SceneSerializer serializer(&m_Engine->getScene());
                 serializer.serialize("/scenes/default.zen");
             }
-            if (ImGui::MenuItem("Exit")) {}
+            if (ImGui::MenuItem("Exit")) {
+                ZEN::Application::get().close();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")) {

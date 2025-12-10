@@ -118,8 +118,9 @@ void ProjectPanel::drawMeshesGrid() {
 void ProjectPanel::drawMaterialsGrid() {
     std::vector<std::string> toRemove;
     for (auto& [name, material] : m_Engine->getModelLibrary().getAllMaterials()) {
-        void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-                m_Engine->getRenderer().getResourceManager()->getTexture(material->textureID)));
+        auto texID = m_Engine->getModelLibrary().getTexture(material->texture);
+        auto tex = m_Engine->getRenderer().getResourceManager()->getTexture(texID->id);
+        void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(tex));
 
         processThumbnail(
             name,
@@ -142,9 +143,9 @@ void ProjectPanel::drawMaterialsGrid() {
 
 void ProjectPanel::drawTexturesGrid() {
     std::vector<std::string> toRemove;
-    for (auto& [name, texID] : m_Engine->getModelLibrary().getAllTextures()) {
+    for (auto& [name, tex] : m_Engine->getModelLibrary().getAllTextures()) {
         void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-            m_Engine->getRenderer().getResourceManager()->getTexture(texID)));
+            m_Engine->getRenderer().getResourceManager()->getTexture(tex->id)));
 
         processThumbnail(
             name, toRemove, {}, "TEXTURE_NAME", texHandle,

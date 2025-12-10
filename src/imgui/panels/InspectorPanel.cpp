@@ -102,7 +102,7 @@ void InspectorPanel::editComponents() {
 void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, uint32_t& outTexture) {
     const char *data = (const char *) payload->Data;
     auto texture = m_Engine->getModelLibrary().getTexture(data);
-    outTexture = texture;
+    outTexture = texture->id;
 }
 void InspectorPanel::renderTextureDrop(uint32_t& texture, const char* name) {
     constexpr float thumbnailSize = 8.0f;
@@ -183,10 +183,11 @@ void InspectorPanel::editMaterialProps() {
     ImGui::Checkbox("Is Metal", &m_SelectionContext.getMaterial()->metal);
 
     if (ImGui::TreeNode("Shader")) {
-        ImGui::Text("Current Shader ID: %u", m_SelectionContext.getMaterial()->shaderID);
+        //ImGui::Text("Current Shader ID: %u", m_SelectionContext.getMaterial()->shader);
         ImGui::TreePop();
     }
 
+    /*
     if (ImGui::TreeNode("Texture")) {
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnWidth(0, 150);
@@ -219,7 +220,7 @@ void InspectorPanel::editMaterialProps() {
 
         ImGui::Columns(1);
         ImGui::TreePop();
-    }
+    }*/
 
 }
 
