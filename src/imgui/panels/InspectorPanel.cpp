@@ -99,15 +99,15 @@ void InspectorPanel::editComponents() {
     }
     ImGui::EndChild();
 }
-void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, uint32_t& outTexture) {
+void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, std::string& outTexture) {
     const char *data = (const char *) payload->Data;
-    auto texture = m_Engine->getModelLibrary().getTexture(data);
-    outTexture = texture->id;
+    auto texture = data;
+    outTexture = texture;
 }
-void InspectorPanel::renderTextureDrop(uint32_t& texture, const char* name) {
+void InspectorPanel::renderTextureDrop(std::string& texture, const char* name) {
     constexpr float thumbnailSize = 8.0f;
 
-    int texID = static_cast<int>(texture);
+    int texID = m_Engine->getModelLibrary().getTexture(texture)->id;
     ImGui::ImageButton(name, (void*)m_Engine->getRenderer().getResourceManager()->getTexture(texID),
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0,1), ImVec2(1,0));
     if (ImGui::BeginDragDropTarget()) {
@@ -187,40 +187,40 @@ void InspectorPanel::editMaterialProps() {
         ImGui::TreePop();
     }
 
-    /*
+
     if (ImGui::TreeNode("Texture")) {
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnWidth(0, 150);
         ImGui::SetColumnWidth(1, 100);
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->textureID, "Albedo");
+        renderTextureDrop(m_SelectionContext.getMaterial()->texture, "Albedo");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Albedo", &m_SelectionContext.getMaterial()->useAlbedo);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->metallicTexID, "Metallic");
+        renderTextureDrop(m_SelectionContext.getMaterial()->metallicTex, "Metallic");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Metallic", &m_SelectionContext.getMaterial()->useMetallic);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTexID, "Roughness");
+        renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTex, "Roughness");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Roughness", &m_SelectionContext.getMaterial()->useRoughness);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->aoTexID, "AO");
+        renderTextureDrop(m_SelectionContext.getMaterial()->aoTex, "AO");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##AO", &m_SelectionContext.getMaterial()->useAO);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->normalTexID, "Normal");
+        renderTextureDrop(m_SelectionContext.getMaterial()->normalTex, "Normal");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Normal", &m_SelectionContext.getMaterial()->useNormal);
         ImGui::NextColumn();
 
         ImGui::Columns(1);
         ImGui::TreePop();
-    }*/
+    }
 
 }
 
