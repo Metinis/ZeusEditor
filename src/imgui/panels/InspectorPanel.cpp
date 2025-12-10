@@ -242,6 +242,18 @@ void InspectorPanel::inspectEntity() {
 
     ImGui::Separator();
 
+    if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
+        ImGui::SeparatorText("Material");
+
+        ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Near", &cameraComp->near, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Far", &cameraComp->far, 0.1f, 0.0f, 1000.0f);
+        ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
+    }
+
+    ImGui::Separator();
+
     editComponents();
 
 

@@ -6,8 +6,14 @@ MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine, SelectionContext& selection) : 
 void MenuBarPanel::onUIRender() {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Open")) {}
-            if (ImGui::MenuItem("Save")) {}
+            if (ImGui::MenuItem("Open")) {
+                ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                serializer.deserialize("/scenes/default.zen");
+            }
+            if (ImGui::MenuItem("Save")) {
+                ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                serializer.serialize("/scenes/default.zen");
+            }
             if (ImGui::MenuItem("Exit")) {}
             ImGui::EndMenu();
         }
