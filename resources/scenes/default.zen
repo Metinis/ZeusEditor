@@ -1,6 +1,6 @@
 Scene: Default
 Entities:
-  - Entity: 671526351623
+  - Entity: 16256448730463264616
     TagComponent:
       Tag: Directional Light
     TransformComponent:
@@ -10,12 +10,12 @@ Entities:
     DirLightComponent:
       Ambient: [0.00999999978, 0.00999999978, 0.00999999978]
       isPrimary: true
-  - Entity: 671526351623
+  - Entity: 10122683433228374483
     TagComponent:
       Tag: Scene Camera
     TransformComponent:
-      LocalPosition: [-0.819432497, 0.127401665, -4.37080717]
-      LocalRotation: [-12.8999977, -41.9999886, 0]
+      LocalPosition: [0, 0, 0]
+      LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     CameraComponent:
       Aspect: 1.76652896
@@ -23,7 +23,7 @@ Entities:
       Near: 0.100000001
       Far: 100
       isPrimary: true
-  - Entity: 671526351623
+  - Entity: 17968878629524858702
     TagComponent:
       Tag: Skybox
     TransformComponent:
@@ -39,21 +39,14 @@ Entities:
       PrefilterMaterialName: PrefilterMap
       BRDFLUTMaterialName: brdfLUT
       EnvGenerated: true
-  - Entity: 671526351623
+  - Entity: 16485460789098678153
     TagComponent:
-      Tag: Cerberus00_Fixed
+      Tag: Sphere
     TransformComponent:
       LocalPosition: [0, 0, -5]
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     MeshComponent:
-      MeshName: Cerberus00_Fixed
+      MeshName: Sphere
     MaterialComponent:
-      MaterialName: 08 - Default
-  - Entity: 671526351623
-    TagComponent:
-      Tag: Unnamed Entity
-    TransformComponent:
-      LocalPosition: [0, 0, 0]
-      LocalRotation: [0, 0, 0]
-      LocalScale: [1, 1, 1]
+      MaterialName: Default

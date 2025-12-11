@@ -2,8 +2,6 @@ Assets: Default
 Meshes:
   - Name: Sphere
     Path: /meshes/Sphere.bin
-  - Name: Cerberus00_Fixed
-    Path: /meshes/Cerberus00_Fixed.bin
   - Name: Quad
     Path: /meshes/Quad.bin
   - Name: Skybox
@@ -11,25 +9,12 @@ Meshes:
   - Name: Cube
     Path: /meshes/Cube.bin
 Textures:
-  - Name: Cerberus_AO
-    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Raw/Cerberus_AO.tga
-  - Name: Cerberus_R
-    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_R.tga
-  - Name: Cerberus_N
-    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_N.tga
-  - Name: Cerberus_M
-    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_M.tga
-  - Name: Cerberus_A
-    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_A.tga
-  - Name: DarkWood_Albedo
-    Path: /textures/dark-wood-stain-ue/dark-wood-stain_albedo.png
-  - Name: EqMap
   - Name: PrefilterMap
   - Name: ConMap
+  - Name: EqMap
   - Name: Skybox
   - Name: DarkWood_AO
     Path: /textures/dark-wood-stain-ue/dark-wood-stain_ao.png
-  - Name: ""
   - Name: DarkWood_Roughness
     Path: /textures/dark-wood-stain-ue/dark-wood-stain_roughness.png
   - Name: DarkWood_Normal
@@ -37,6 +22,8 @@ Textures:
   - Name: DarkWood_Metallic
     Path: /textures/dark-wood-stain-ue/dark-wood-stain_metallic.png
   - Name: brdfLUT
+  - Name: DarkWood_Albedo
+    Path: /textures/dark-wood-stain-ue/dark-wood-stain_albedo.png
   - Name: Default
 Shaders:
   - Name: brdfLUT
@@ -72,23 +59,6 @@ Shaders:
     FragPath: /shaders/eq-to-cubemap.frag
     GeoPath: ""
 Materials:
-  - Name: 08 - Default
-    Shader: Default
-    Texture: Cerberus_A
-    MetallicTexture: Cerberus_M
-    RoughnessTexture: Cerberus_R
-    NormalTexture: Cerberus_N
-    AoTexture: Cerberus_AO
-    Albedo: [1, 1, 1]
-    Metallic: 1
-    Roughness: 1
-    AO: 1
-    Metal: false
-    UseAlbedo: true
-    UseMetallic: true
-    UseRoughness: true
-    UseNormal: true
-    UseAO: true
   - Name: brdfLUT
     Shader: brdfLUT
     Texture: brdfLUT
