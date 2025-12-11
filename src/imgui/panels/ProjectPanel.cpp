@@ -17,9 +17,8 @@ static std::string getFileName(const std::string& path) {
 }
 
 static std::string getNameWithoutExtension(const std::string& path) {
-    std::string filename = getFileName(path);
-    size_t dot = filename.find_last_of('.');
-    return (dot == std::string::npos) ? filename : filename.substr(0, dot);
+    std::filesystem::path p(path);
+    return p.stem().string();
 }
 
 static void checkWindowFocus(ZEN::EventDispatcher& dispatcher) {

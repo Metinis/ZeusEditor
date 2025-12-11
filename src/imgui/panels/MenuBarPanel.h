@@ -1,6 +1,5 @@
 #pragma once
 #include <ZeusEngine.h>
-
 #include "SelectionContext.h"
 
 class MenuBarPanel : public ZEN::Layer  {

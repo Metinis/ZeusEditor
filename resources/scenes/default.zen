@@ -1,0 +1,59 @@
+Scene: Default
+Entities:
+  - Entity: 671526351623
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      LocalPosition: [0, 0, 0]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    DirLightComponent:
+      Ambient: [0.00999999978, 0.00999999978, 0.00999999978]
+      isPrimary: true
+  - Entity: 671526351623
+    TagComponent:
+      Tag: Scene Camera
+    TransformComponent:
+      LocalPosition: [-0.819432497, 0.127401665, -4.37080717]
+      LocalRotation: [-12.8999977, -41.9999886, 0]
+      LocalScale: [1, 1, 1]
+    CameraComponent:
+      Aspect: 1.76652896
+      Fov: 1.04719758
+      Near: 0.100000001
+      Far: 100
+      isPrimary: true
+  - Entity: 671526351623
+    TagComponent:
+      Tag: Skybox
+    TransformComponent:
+      LocalPosition: [0, 0, -5]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    MeshComponent:
+      MeshName: Skybox
+    SkyboxComponent:
+      SkyboxMaterialName: Skybox
+      EqMaterialName: EqMap
+      ConMaterialName: ConMap
+      PrefilterMaterialName: PrefilterMap
+      BRDFLUTMaterialName: brdfLUT
+      EnvGenerated: true
+  - Entity: 671526351623
+    TagComponent:
+      Tag: Cerberus00_Fixed
+    TransformComponent:
+      LocalPosition: [0, 0, -5]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    MeshComponent:
+      MeshName: Cerberus00_Fixed
+    MaterialComponent:
+      MaterialName: 08 - Default
+  - Entity: 671526351623
+    TagComponent:
+      Tag: Unnamed Entity
+    TransformComponent:
+      LocalPosition: [0, 0, 0]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]

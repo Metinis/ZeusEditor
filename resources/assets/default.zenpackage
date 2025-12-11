@@ -1,0 +1,244 @@
+Assets: Default
+Meshes:
+  - Name: Sphere
+    Path: /meshes/Sphere.bin
+  - Name: Cerberus00_Fixed
+    Path: /meshes/Cerberus00_Fixed.bin
+  - Name: Quad
+    Path: /meshes/Quad.bin
+  - Name: Skybox
+    Path: /meshes/Skybox.bin
+  - Name: Cube
+    Path: /meshes/Cube.bin
+Textures:
+  - Name: Cerberus_AO
+    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Raw/Cerberus_AO.tga
+  - Name: Cerberus_R
+    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_R.tga
+  - Name: Cerberus_N
+    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_N.tga
+  - Name: Cerberus_M
+    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_M.tga
+  - Name: Cerberus_A
+    Path: /models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_A.tga
+  - Name: DarkWood_Albedo
+    Path: /textures/dark-wood-stain-ue/dark-wood-stain_albedo.png
+  - Name: EqMap
+  - Name: PrefilterMap
+  - Name: ConMap
+  - Name: Skybox
+  - Name: DarkWood_AO
+    Path: /textures/dark-wood-stain-ue/dark-wood-stain_ao.png
+  - Name: ""
+  - Name: DarkWood_Roughness
+    Path: /textures/dark-wood-stain-ue/dark-wood-stain_roughness.png
+  - Name: DarkWood_Normal
+    Path: /textures/dark-wood-stain-ue/dark-wood-stain_normal-dx.png
+  - Name: DarkWood_Metallic
+    Path: /textures/dark-wood-stain-ue/dark-wood-stain_metallic.png
+  - Name: brdfLUT
+  - Name: Default
+Shaders:
+  - Name: brdfLUT
+    VertPath: /shaders/brdf-con.vert
+    FragPath: /shaders/brdf-con.frag
+    GeoPath: ""
+  - Name: PrefilterMap
+    VertPath: /shaders/prefilter.vert
+    FragPath: /shaders/prefilter.frag
+    GeoPath: ""
+  - Name: ConMap
+    VertPath: /shaders/irradiance-con.vert
+    FragPath: /shaders/irradiance-con.frag
+    GeoPath: ""
+  - Name: Normals
+    VertPath: /shaders/normal-visual.vert
+    FragPath: /shaders/normal-visual.frag
+    GeoPath: /shaders/normal-visual.geom
+  - Name: HDRSkybox
+    VertPath: /shaders/glskyboxHDR.vert
+    FragPath: /shaders/glskyboxHDR.frag
+    GeoPath: ""
+  - Name: Default
+    VertPath: /shaders/pbr.vert
+    FragPath: /shaders/pbr.frag
+    GeoPath: ""
+  - Name: ScreenQuad
+    VertPath: /shaders/screenQuad.vert
+    FragPath: /shaders/screenQuad.frag
+    GeoPath: ""
+  - Name: EqMap
+    VertPath: /shaders/eq-to-cubemap.vert
+    FragPath: /shaders/eq-to-cubemap.frag
+    GeoPath: ""
+Materials:
+  - Name: 08 - Default
+    Shader: Default
+    Texture: Cerberus_A
+    MetallicTexture: Cerberus_M
+    RoughnessTexture: Cerberus_R
+    NormalTexture: Cerberus_N
+    AoTexture: Cerberus_AO
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: true
+    UseMetallic: true
+    UseRoughness: true
+    UseNormal: true
+    UseAO: true
+  - Name: brdfLUT
+    Shader: brdfLUT
+    Texture: brdfLUT
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: PrefilterMap
+    Shader: PrefilterMap
+    Texture: PrefilterMap
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: ConMap
+    Shader: ConMap
+    Texture: ConMap
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: EqMap
+    Shader: EqMap
+    Texture: EqMap
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: Skybox
+    Shader: HDRSkybox
+    Texture: Skybox
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: DarkWoodMaterial
+    Shader: Default
+    Texture: DarkWood_Albedo
+    MetallicTexture: DarkWood_Metallic
+    RoughnessTexture: DarkWood_Roughness
+    NormalTexture: DarkWood_Normal
+    AoTexture: DarkWood_AO
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: NormalsMat
+    Shader: Normals
+    Texture: Default
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: ScreenQuad
+    Shader: ScreenQuad
+    Texture: Default
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
+  - Name: Default
+    Shader: Default
+    Texture: Default
+    MetallicTexture: Default
+    RoughnessTexture: Default
+    NormalTexture: Default
+    AoTexture: Default
+    Albedo: [1, 1, 1]
+    Metallic: 1
+    Roughness: 1
+    AO: 1
+    Metal: false
+    UseAlbedo: false
+    UseMetallic: false
+    UseRoughness: false
+    UseNormal: false
+    UseAO: false
