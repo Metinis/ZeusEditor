@@ -17,10 +17,11 @@ private:
     void editMaterialComp();
     void inspectEntity();
     void inspectMaterial();
-    void renderTextureDrop(std::string& texture, const char* name);
+    void renderTextureDrop(ZEN::AssetID& textureID, const char* name);
     void handleMaterialDrop(const ImGuiPayload* payload);
     void handleMeshDrop(const ImGuiPayload* payload);
-    void handleTextureDrop(const ImGuiPayload *payload, std::string& outTexture);
+    void handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture);
     ZEN::ZEngine* m_Engine{};
+    std::shared_ptr<ZEN::AssetLibrary> m_AssetLibrary;
     SelectionContext& m_SelectionContext;
 };
