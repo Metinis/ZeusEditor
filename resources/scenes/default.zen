@@ -1,46 +1,28 @@
 Scene: Default
 Entities:
-  - Entity: 6057978866168268545
+  - Entity: 13636745048208632419
     TagComponent:
-      Tag: Skybox
+      Tag: Sphere
     TransformComponent:
-      LocalPosition: [0, 0, -5]
+      LocalPosition: [-6.428513, 0.3661617, -3.3692126]
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     MeshComponent:
-      MeshID: 4114749655839311951
-    SkyboxComponent:
-      SkyboxMaterialID: 697830831261530857
-      EqMaterialID: 14988365802937832107
-      ConMaterialID: 12990501721368861333
-      PrefilterMaterialID: 14495095268153622386
-      BRDFLUTMaterialID: 1086299695368220285
-      EnvGenerated: true
-  - Entity: 9567637556874261314
-    TagComponent:
-      Tag: Cube
-    TransformComponent:
-      LocalPosition: [0, 0, -5]
-      LocalRotation: [0, 0, 0]
-      LocalScale: [1, 1, 1]
-    MeshComponent:
-      MeshID: 4257583142717207022
+      MeshID: 7509106509392976329
     MaterialComponent:
-      MaterialID: 141194066171133189
-  - Entity: 14375996696443455056
+      MaterialID: 16922926681631214375
+  - Entity: 12096481147272152016
     TagComponent:
-      Tag: Scene Camera
+      Tag: Sphere
     TransformComponent:
-      LocalPosition: [-2.4987073, 0, 0]
+      LocalPosition: [-2.8445764, 0.3661617, -3.3692126]
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
-    CameraComponent:
-      Aspect: 1.766529
-      Fov: 1.0471976
-      Near: 0.1
-      Far: 100
-      isPrimary: true
-  - Entity: 8511234511121014305
+    MeshComponent:
+      MeshID: 7509106509392976329
+    MaterialComponent:
+      MaterialID: 16922926681631214375
+  - Entity: 14493880815294463260
     TagComponent:
       Tag: Directional Light
     TransformComponent:
@@ -50,3 +32,43 @@ Entities:
     DirLightComponent:
       Ambient: [0.01, 0.01, 0.01]
       isPrimary: true
+  - Entity: 13175932420529418690
+    TagComponent:
+      Tag: Scene Camera
+    TransformComponent:
+      LocalPosition: [-0.49121028, 2.6100836, 6.899076]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    CameraComponent:
+      Aspect: 1.766529
+      Fov: 1.0471976
+      Near: 0.1
+      Far: 100
+      isPrimary: true
+  - Entity: 6811950479741586246
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      LocalPosition: [0, 0, -5]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    MeshComponent:
+      MeshID: 17876163362367132078
+    MaterialComponent:
+      MaterialID: 16922926681631214375
+  - Entity: 14434477143649013621
+    TagComponent:
+      Tag: Skybox
+    TransformComponent:
+      LocalPosition: [0, 0, -5]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    MeshComponent:
+      MeshID: 2716138340755320546
+    SkyboxComponent:
+      SkyboxMaterialID: 13705773673028564245
+      EqMaterialID: 17287212454866793750
+      ConMaterialID: 5296602344322496170
+      PrefilterMaterialID: 13473326577051037645
+      BRDFLUTMaterialID: 14416380360780866897
+      EnvGenerated: false
