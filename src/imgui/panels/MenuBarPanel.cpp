@@ -7,14 +7,14 @@ void MenuBarPanel::onUIRender() {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("Open")) {
-                //ZEN::AssetSerializer assetSerializer(&m_Engine->getModelLibrary());
-                //assetSerializer.deserialize("/assets/default.zenpackage");
+                ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
+                assetSerializer.deserialize("/assets/default.zenpackage");
                 ZEN::SceneSerializer serializer(&m_Engine->getScene());
                 serializer.deserialize("/scenes/default.zen");
             }
             if (ImGui::MenuItem("Save")) {
-                //ZEN::AssetSerializer assetSerializer(&m_Engine->getModelLibrary());
-                //assetSerializer.serialize("/assets/default.zenpackage");
+                ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
+                assetSerializer.serialize("/assets/default.zenpackage");
                 ZEN::SceneSerializer serializer(&m_Engine->getScene());
                 serializer.serialize("/scenes/default.zen");
             }

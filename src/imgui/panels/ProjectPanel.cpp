@@ -149,14 +149,17 @@ void ProjectPanel::drawMaterialsGrid() {
 }
 
 void ProjectPanel::drawTexturesGrid() {
-    /*std::vector<ZEN::AssetID> toRemove;
+    std::vector<ZEN::AssetID> toRemove;
 
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::TextureData>()) {
         auto* tex = m_AssetLibrary->get<ZEN::TextureData>(assetID);
         if (!tex) continue;
 
+        auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
+        int texID = resourceManager->get<ZEN::GPUTexture>(assetID)->drawableID;
+
         void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-            m_Engine->getRenderer().getResourceManager()->getTexture(tex->id)
+            m_Engine->getRenderer().getResourceManager()->getTexture(texID)
         ));
 
         processThumbnail(
@@ -174,7 +177,7 @@ void ProjectPanel::drawTexturesGrid() {
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
-    }*/
+    }
 }
 
 void ProjectPanel::drawAssetGrid() {

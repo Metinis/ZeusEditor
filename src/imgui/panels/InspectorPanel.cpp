@@ -105,9 +105,10 @@ void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID
     outTexture = assetID;
 }
 void InspectorPanel::renderTextureDrop(ZEN::AssetID& textureID, const char* name) {
-    /*constexpr float thumbnailSize = 8.0f;
+    constexpr float thumbnailSize = 8.0f;
 
-    int texID = m_AssetLibrary->get<ZEN::TextureData>(textureID)->id;
+    auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
+    int texID = resourceManager->get<ZEN::GPUTexture>(textureID)->drawableID;
     ImGui::ImageButton(name, (void*)m_Engine->getRenderer().getResourceManager()->getTexture(texID),
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0,1), ImVec2(1,0));
     if (ImGui::BeginDragDropTarget()) {
@@ -117,7 +118,7 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID& textureID, const char* name
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine();
-    ImGui::Text(name);*/
+    ImGui::Text(name);
 }
 void InspectorPanel::editMaterialComp() {
     if (auto *materialComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MaterialComp>()) {

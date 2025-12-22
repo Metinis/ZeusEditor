@@ -1,29 +1,6 @@
 Scene: Default
 Entities:
-  - Entity: 16256448730463264616
-    TagComponent:
-      Tag: Directional Light
-    TransformComponent:
-      LocalPosition: [0, 0, 0]
-      LocalRotation: [0, 0, 0]
-      LocalScale: [1, 1, 1]
-    DirLightComponent:
-      Ambient: [0.00999999978, 0.00999999978, 0.00999999978]
-      isPrimary: true
-  - Entity: 10122683433228374483
-    TagComponent:
-      Tag: Scene Camera
-    TransformComponent:
-      LocalPosition: [0, 0, 0]
-      LocalRotation: [0, 0, 0]
-      LocalScale: [1, 1, 1]
-    CameraComponent:
-      Aspect: 1.76652896
-      Fov: 1.04719758
-      Near: 0.100000001
-      Far: 100
-      isPrimary: true
-  - Entity: 17968878629524858702
+  - Entity: 6057978866168268545
     TagComponent:
       Tag: Skybox
     TransformComponent:
@@ -31,22 +8,45 @@ Entities:
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     MeshComponent:
-      MeshName: Skybox
+      MeshID: 4114749655839311951
     SkyboxComponent:
-      SkyboxMaterialName: Skybox
-      EqMaterialName: EqMap
-      ConMaterialName: ConMap
-      PrefilterMaterialName: PrefilterMap
-      BRDFLUTMaterialName: brdfLUT
+      SkyboxMaterialID: 697830831261530857
+      EqMaterialID: 14988365802937832107
+      ConMaterialID: 12990501721368861333
+      PrefilterMaterialID: 14495095268153622386
+      BRDFLUTMaterialID: 1086299695368220285
       EnvGenerated: true
-  - Entity: 16485460789098678153
+  - Entity: 9567637556874261314
     TagComponent:
-      Tag: Sphere
+      Tag: Cube
     TransformComponent:
       LocalPosition: [0, 0, -5]
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     MeshComponent:
-      MeshName: Sphere
+      MeshID: 4257583142717207022
     MaterialComponent:
-      MaterialName: Default
+      MaterialID: 141194066171133189
+  - Entity: 14375996696443455056
+    TagComponent:
+      Tag: Scene Camera
+    TransformComponent:
+      LocalPosition: [-2.4987073, 0, 0]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    CameraComponent:
+      Aspect: 1.766529
+      Fov: 1.0471976
+      Near: 0.1
+      Far: 100
+      isPrimary: true
+  - Entity: 8511234511121014305
+    TagComponent:
+      Tag: Directional Light
+    TransformComponent:
+      LocalPosition: [0, 0, 0]
+      LocalRotation: [0, 0, 0]
+      LocalScale: [1, 1, 1]
+    DirLightComponent:
+      Ambient: [0.01, 0.01, 0.01]
+      isPrimary: true
