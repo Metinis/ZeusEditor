@@ -80,7 +80,9 @@ void ViewPanel::onUIRender() {
             std::cout << "Dropped payload " << assetID
                       << " at viewport coords: "
                       << relative.x << ", " << relative.y << "\n";
-            m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(ZEN::AssetHandle<ZEN::MeshData>(assetID));
+            if(ZEN::Project::getActive()->getAssetLibrary()->get<ZEN::MeshData>(assetID)) {
+                m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(ZEN::AssetHandle<ZEN::MeshData>(assetID));
+            }
         }
         ImGui::EndDragDropTarget();
     }

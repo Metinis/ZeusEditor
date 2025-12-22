@@ -17,5 +17,6 @@ private:
     void drawMaterialsGrid();
     void drawTexturesGrid();
     SelectionContext& m_SelectionContext;
+    std::shared_ptr<ZEN::AssetLibrary> m_AssetLibrary{};
     ZEN::ZEngine* m_Engine{};
 };
