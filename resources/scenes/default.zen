@@ -1,26 +1,17 @@
 Scene: Default
 Entities:
-  - Entity: 7231152209100980395
+  - Entity: 12004119423672391093
     TagComponent:
-      Tag: Cerberus00_Fixed
+      Tag: Sphere
     TransformComponent:
-      LocalPosition: [-2.33146, 0, -5]
+      LocalPosition: [-2.7103431, 0.98504, -4.358334]
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     MeshComponent:
-      MeshID: 12676039599887404453
+      MeshID: 8365528223350964231
     MaterialComponent:
-      MaterialID: 10347940435909648607
-    ParentComponent:
-      ParentID: 13674247328668230759
-  - Entity: 13674247328668230759
-    TagComponent:
-      Tag: Cerberus_LP
-    TransformComponent:
-      LocalPosition: [-2.33146, 0, -5]
-      LocalRotation: [0, 0, 0]
-      LocalScale: [1, 1, 1]
-  - Entity: 349131747446554808
+      MaterialID: 3499041840404541961
+  - Entity: 16802857970989901108
     TagComponent:
       Tag: Skybox
     TransformComponent:
@@ -28,15 +19,15 @@ Entities:
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     MeshComponent:
-      MeshID: 1314314229098760891
+      MeshID: 7584152427687496072
     SkyboxComponent:
-      SkyboxMaterialID: 14067764121521085972
-      EqMaterialID: 12033378999147609171
-      ConMaterialID: 15860201467638974549
-      PrefilterMaterialID: 14187365869295245125
-      BRDFLUTMaterialID: 7522182853861799681
+      SkyboxMaterialID: 17788500523724722328
+      EqMaterialID: 10882850871125359889
+      ConMaterialID: 1061125204877281476
+      PrefilterMaterialID: 4545236092137161715
+      BRDFLUTMaterialID: 13958288222117320958
       EnvGenerated: false
-  - Entity: 18439384278131012884
+  - Entity: 8463544657742975680
     TagComponent:
       Tag: Cube
     TransformComponent:
@@ -44,14 +35,14 @@ Entities:
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     MeshComponent:
-      MeshID: 4891852125720053460
+      MeshID: 10711930699159053273
     MaterialComponent:
-      MaterialID: 17646627508269646183
-  - Entity: 4070347501775872501
+      MaterialID: 3499041840404541961
+  - Entity: 8349517967568815047
     TagComponent:
       Tag: Scene Camera
     TransformComponent:
-      LocalPosition: [-3.0975103, 0.9114902, -6.7361593]
+      LocalPosition: [-1.7378262, 0.98504, 0.17900787]
       LocalRotation: [0, 0, 0]
       LocalScale: [1, 1, 1]
     CameraComponent:
@@ -60,7 +51,7 @@ Entities:
       Near: 0.1
       Far: 100
       isPrimary: true
-  - Entity: 1676675353304101070
+  - Entity: 8949501431076337341
     TagComponent:
       Tag: Directional Light
     TransformComponent:
