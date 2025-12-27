@@ -1,13 +1,11 @@
 #include "ScenePanel.h"
 
 ScenePanel::ScenePanel(ZEN::ZEngine* engine, SelectionContext& selection) : m_Engine(engine), m_SelectionContext(selection)  {
-    //m_Engine->getDispatcher().attach<ZEN::SelectEntityEvent, ScenePanel, &ScenePanel::onEntitySelect>(this);
-    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, ScenePanel, &ScenePanel::onToggleEditor>(this);
+
 }
-/*void ScenePanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
-    ZEN::Application::get().popOverlay(this);
-}*/
+
 void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
+
     auto &name = entity.getComponent<ZEN::TagComp>();
 
     ImGuiTreeNodeFlags flags =
@@ -18,7 +16,7 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
     bool hasChildren = false;
     for (auto childEntity : m_Engine->getScene().getEntities<ZEN::ParentComp>()) {
         auto& pc = childEntity.getComponent<ZEN::ParentComp>();
-        if (pc.parent == entity) {
+        if (pc.parentID == entity.getComponent<ZEN::UUIDComp>().uuid) {
             hasChildren = true;
         }
     }
@@ -41,16 +39,11 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
         m_SelectionContext.setEntity(entity);
     }
 
-         //m_Editor.selectedEntity = entity;
-
-
-        //m_Engine->getDispatcher().trigger<ZEN::SelectEntityEvent>({entity});
-
     if (opened) {
         auto entities = m_Engine->getScene().getEntities<ZEN::ParentComp>();
         for(auto e : entities) {
             auto parentComp = e.getComponent<ZEN::ParentComp>();
-            if(parentComp.parent == entity) {
+            if(parentComp.parentID == entity.getComponent<ZEN::UUIDComp>().uuid) {
                 drawEntityNode(e);
             }
         }
@@ -71,35 +64,29 @@ void ScenePanel::onUIRender() {
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-        //m_Engine->getDispatcher().trigger<ZEN::PanelFocusEvent>(
-        //    ZEN::PanelFocusEvent{ .panel = "Scene" }
-        //);
+
     }
     auto view = m_Engine->getScene().getEntities<ZEN::TagComp>();
 
     if (ImGui::BeginPopupContextWindow("SceneContextMenu", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight)) {
         if (ImGui::MenuItem("Add Empty Entity")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity();
-            //m_Engine->getDispatcher().trigger<ZEN::SelectEntityEvent>({.entity = entity});
-            //m_Editor.selectedEntity = entity;
             m_SelectionContext.setEntity(entity);
 
 
         }
         if (ImGui::MenuItem("Add Cube")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity("Cube");
-            entity.addComponent<ZEN::MeshComp>(ZEN::MeshComp{"Cube"});
-            //m_Engine->getDispatcher().trigger<ZEN::SelectEntityEvent>({.entity = entity});
-            //m_Editor.selectedEntity = entity;
+            auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::Project::getActive()->getAssetLibrary()->getCubeID());
+            entity.addComponent<ZEN::MeshComp>(mesh);
             m_SelectionContext.setEntity(entity);
 
 
         }
         if (ImGui::MenuItem("Add Sphere")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity("Sphere");
-            entity.addComponent<ZEN::MeshComp>(ZEN::MeshComp{"Sphere"});
-            //m_Engine->getDispatcher().trigger<ZEN::SelectEntityEvent>({.entity = entity});
-            //m_Editor.selectedEntity = entity;
+            auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::Project::getActive()->getAssetLibrary()->getSphereID());
+            entity.addComponent<ZEN::MeshComp>(mesh);
             m_SelectionContext.setEntity(entity);
 
 
@@ -107,7 +94,7 @@ void ScenePanel::onUIRender() {
         ImGui::EndPopup();
     }
     for(auto entity : view) {
-        if (!entity.hasComponent<ZEN::ParentComp>() || !entity.getComponent<ZEN::ParentComp>().parent.isValid()) {
+        if (!entity.hasComponent<ZEN::ParentComp>()) {
             drawEntityNode(entity);
         }
     }

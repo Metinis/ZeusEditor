@@ -1,12 +1,11 @@
-cmake_minimum_required(VERSION 3.28)
-project(ZeusEditor)
+cmake_minimum_required(VERSION 3.5)
+project(ZeusEditor LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(ZeusEditor
-        src/imgui/panels/SelectionContext.h)
+add_executable(ZeusEditor)
 
 file(GLOB_RECURSE ZEUSEDITOR_SOURCES
         src/*.cpp

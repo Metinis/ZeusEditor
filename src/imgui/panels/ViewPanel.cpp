@@ -67,18 +67,22 @@ void ViewPanel::onUIRender() {
     ImVec2 mousePos = ImGui::GetMousePos();
     if(ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESH_NAME")) {
-            const char* data = (const char*)payload->Data;
-            //auto mesh = m_Engine->getModelLibrary().getMesh(data);
+            ZEN::AssetID assetID;
+            if (payload->DataSize == sizeof(ZEN::AssetID)) {
+                std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
+            }
             // Mouse position relative to viewport
             ImVec2 relative = {
                 mousePos.x - imagePos.x,
                 mousePos.y - imagePos.y
             };
 
-            std::cout << "Dropped payload " << data
+            std::cout << "Dropped payload " << assetID
                       << " at viewport coords: "
                       << relative.x << ", " << relative.y << "\n";
-            m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(ZEN::MeshComp{.name = data});
+            if(ZEN::Project::getActive()->getAssetLibrary()->get<ZEN::MeshData>(assetID)) {
+                m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(ZEN::AssetHandle<ZEN::MeshData>(assetID));
+            }
         }
         ImGui::EndDragDropTarget();
     }

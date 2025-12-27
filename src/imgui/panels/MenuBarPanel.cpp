@@ -6,9 +6,21 @@ MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine, SelectionContext& selection) : 
 void MenuBarPanel::onUIRender() {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Open")) {}
-            if (ImGui::MenuItem("Save")) {}
-            if (ImGui::MenuItem("Exit")) {}
+            if (ImGui::MenuItem("Open")) {
+                ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
+                assetSerializer.deserialize("/assets/default.zenpackage");
+                ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                serializer.deserialize("/scenes/default.zen");
+            }
+            if (ImGui::MenuItem("Save")) {
+                ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
+                assetSerializer.serialize("/assets/default.zenpackage");
+                ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                serializer.serialize("/scenes/default.zen");
+            }
+            if (ImGui::MenuItem("Exit")) {
+                ZEN::Application::get().close();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")) {

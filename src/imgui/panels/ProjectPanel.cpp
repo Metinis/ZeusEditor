@@ -5,7 +5,7 @@
 ProjectPanel::ProjectPanel(ZEN::ZEngine* engine, SelectionContext& selection)
     : m_Engine(engine), m_SelectionContext(selection)  {
     //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, ProjectPanel, &ProjectPanel::onToggleEditor>(this);
-
+    m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
 }
 
 /*void ProjectPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
@@ -17,9 +17,8 @@ static std::string getFileName(const std::string& path) {
 }
 
 static std::string getNameWithoutExtension(const std::string& path) {
-    std::string filename = getFileName(path);
-    size_t dot = filename.find_last_of('.');
-    return (dot == std::string::npos) ? filename : filename.substr(0, dot);
+    std::filesystem::path p(path);
+    return p.stem().string();
 }
 
 static void checkWindowFocus(ZEN::EventDispatcher& dispatcher) {
@@ -37,38 +36,40 @@ static void drawSearchBar() {
 }
 
 static auto processThumbnail = [](
-    const std::string& name,
-    std::vector<std::string>& toRemove,
+    const ZEN::AssetID& assetID,
+    const std::string& assetName,
+    std::vector<ZEN::AssetID>& toRemove,
     const std::unordered_set<std::string>& defaultNames,
     const std::string& payloadType,
     void* texHandle = nullptr,
     const std::function<void()>& onClick = nullptr
 ) {
     constexpr float size = 64.0f;
-    ImGui::PushID(name.c_str());
+    ImGui::PushID(assetID);
 
     if (ImGui::ImageButton("##thumbnail", texHandle, { size, size }, { 0,1 }, { 1,0 }) && onClick)
         onClick();
 
     if (ImGui::BeginDragDropSource()) {
-        const char* payload = name.c_str();
-        ImGui::SetDragDropPayload(payloadType.c_str(), payload, strlen(payload) + 1);
+        ImGui::SetDragDropPayload(payloadType.c_str(), &assetID, sizeof(assetID));
         ImGui::Image(texHandle, { 16, 16 });
-        ImGui::Text("%s", payload);
+        ImGui::Text("%s", assetName.c_str());
         ImGui::EndDragDropSource();
     }
 
-    if (!defaultNames.contains(name) &&
-        ImGui::BeginPopupContextItem(("ThumbnailContext_" + name).c_str())) {
-        if (ImGui::MenuItem("Delete")) toRemove.push_back(name);
-        if (ImGui::MenuItem("Rename")) { /* TODO */ }
+    auto popupName = "ThumbnailContext_" + assetName;
+    if (ImGui::BeginPopupContextItem(assetName.c_str())) {
+        if (ImGui::MenuItem("Delete")) toRemove.push_back(assetID);
+        if (ImGui::MenuItem("Rename")) {  }
         ImGui::EndPopup();
     }
 
-    ImGui::TextWrapped("%s", name.c_str());
+    ImGui::TextWrapped("%s", assetName.c_str());
     ImGui::NextColumn();
     ImGui::PopID();
+
 };
+
 
 void ProjectPanel::drawFolderTree() {
     ImGui::BeginChild("LeftPane", ImVec2(200, 0), true);
@@ -105,59 +106,78 @@ void ProjectPanel::drawContextMenu() {
 }
 
 void ProjectPanel::drawMeshesGrid() {
-    std::vector<std::string> toRemove;
-    for (auto& [name, mesh] : m_Engine->getModelLibrary().getAllMeshData())
-        processThumbnail(name, toRemove, ZEN::defaultMeshes, "MESH_NAME");
 
-    for (auto& name : toRemove) {
-        m_Engine->getModelLibrary().removeMeshData(name);
-        m_Engine->getModelLibrary().removeMeshDrawable(name);
+    std::vector<ZEN::AssetID> toRemove;
+    for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::MeshData>())
+        processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes, "MESH_NAME");
+
+    for (auto& assetID : toRemove) {
+        m_AssetLibrary->remove(assetID);
+        m_AssetLibrary->remove(assetID);
     }
 }
 
 void ProjectPanel::drawMaterialsGrid() {
-    std::vector<std::string> toRemove;
-    for (auto& [name, material] : m_Engine->getModelLibrary().getAllMaterials()) {
-        void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-                m_Engine->getRenderer().getResourceManager()->getTexture(material->textureID)));
+    std::vector<ZEN::AssetID> toRemove;
+
+    for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::Material>()) {
+        auto material = m_AssetLibrary->getMaterialRaw(assetID);
+
+        void* texHandle = nullptr;
+        if (material.textureID != 0) {
+            texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
+                m_Engine->getRenderer().getResourceManager()->getTexture(material.textureID)
+            ));
+        }
 
         processThumbnail(
-            name,
+            assetID,
+            m_AssetLibrary->getName(assetID),
             toRemove,
             ZEN::defaultMaterials,
             "MATERIAL_NAME",
             texHandle,
-            [&, name]() {
-                m_SelectionContext.setMaterial(m_Engine->getModelLibrary().getMaterial(name));
-                //m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
-                    //ZEN::SelectMaterialEvent{ .materialName = name });
+            [&, assetID]() {
+                m_SelectionContext.setMaterial(m_AssetLibrary->get<ZEN::Material>(assetID));
             }
         );
     }
 
-    for (auto& name : toRemove) {
-        m_Engine->getModelLibrary().removeMaterial(name);
+    for (auto& assetID : toRemove) {
+        m_AssetLibrary->remove(assetID);
     }
 }
 
 void ProjectPanel::drawTexturesGrid() {
-    std::vector<std::string> toRemove;
-    for (auto& [name, texID] : m_Engine->getModelLibrary().getAllTextures()) {
+    std::vector<ZEN::AssetID> toRemove;
+
+    for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::TextureData>()) {
+        auto* tex = m_AssetLibrary->get<ZEN::TextureData>(assetID);
+        if (!tex) continue;
+
+        auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
+        int texID = resourceManager->get<ZEN::GPUTexture>(assetID)->drawableID;
+
         void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-            m_Engine->getRenderer().getResourceManager()->getTexture(texID)));
+            m_Engine->getRenderer().getResourceManager()->getTexture(texID)
+        ));
 
         processThumbnail(
-            name, toRemove, {}, "TEXTURE_NAME", texHandle,
-            [&, name]() {
-                //m_Engine->getDispatcher().trigger<ZEN::SelectMaterialEvent>(
-                    //ZEN::SelectMaterialEvent{ .materialName = name });
-                m_SelectionContext.setMaterial(m_Engine->getModelLibrary().getMaterial(name));
-
+            assetID,
+            m_AssetLibrary->getName(assetID),
+            toRemove,
+            {},
+            "TEXTURE_NAME",
+            texHandle,
+            [&, assetID]() {
+                m_SelectionContext.setMaterial(m_AssetLibrary->get<ZEN::Material>(assetID));
             }
         );
     }
-    for (auto& name : toRemove)
-        m_Engine->getModelLibrary().removeTexture(name);
+
+    for (auto& assetID : toRemove) {
+        m_AssetLibrary->remove(assetID);
+    }
 }
 
 void ProjectPanel::drawAssetGrid() {

@@ -10,6 +10,7 @@ InspectorPanel::InspectorPanel(ZEN::ZEngine *engine, SelectionContext& selection
     //m_Engine->getDispatcher().attach<ZEN::SelectEntityEvent, InspectorPanel, &InspectorPanel::onEntitySelect>(this);
     //m_Engine->getDispatcher().attach<ZEN::SelectMaterialEvent, InspectorPanel, &InspectorPanel::onMaterialSelect>(this);
     //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, InspectorPanel, &InspectorPanel::onToggleEditor>(this);
+    m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
 }
 /*void InspectorPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
 }*/
@@ -17,31 +18,30 @@ void InspectorPanel::editMesh() {
     if (auto *meshComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MeshComp>()) {
         ImGui::SeparatorText("Mesh");
 
+        const auto &assets = m_AssetLibrary->getAll();
+        static ZEN::AssetID selectedMeshID = meshComp->handle.id();
 
-        const auto &meshes = m_Engine->getModelLibrary().getAllMeshData();
-        static std::string selectedMesh;
-
-        for (auto &[name, mesh]: meshes) {
-            if (name == meshComp->name) {
-                selectedMesh = name;
-                break;
-            }
+        if (selectedMeshID != meshComp->handle.id()) {
+            selectedMeshID = meshComp->handle.id();
         }
-        ImGui::BeginGroup();
-        //ImGui::PushID("Mesh")
 
+        ImGui::BeginGroup();
         float buttonWidth = ImGui::CalcTextSize("X").x + ImGui::GetStyle().FramePadding.x * 2;
         float itemSpacing = ImGui::GetStyle().ItemSpacing.x;
         float comboWidth = ImGui::GetContentRegionAvail().x - buttonWidth - itemSpacing;
 
         ImGui::SetNextItemWidth(comboWidth);
-        if (ImGui::BeginCombo("##mesh", selectedMesh.c_str())) {
-            for (auto &[name, mesh] : meshes) {
-                bool isSelected = (selectedMesh == name);
-                if (ImGui::Selectable(name.c_str(), isSelected)) {
-                    meshComp->name = name;
-                    //remove current drawable for regenaration
-                    if(m_SelectionContext.getEntity().hasComponent<ZEN::MeshDrawableComp>())
+        if (ImGui::BeginCombo("##mesh", m_AssetLibrary->getName(selectedMeshID).c_str())) {
+            for (auto &[id, asset] : assets) {
+                if (!std::holds_alternative<ZEN::MeshData>(asset)) continue;
+
+                bool isSelected = (selectedMeshID == id);
+                std::string label = m_AssetLibrary->getName(id);
+                if (ImGui::Selectable(label.c_str(), isSelected)) {
+                    meshComp->handle.setID(id);
+                    selectedMeshID = id;
+
+                    if (m_SelectionContext.getEntity().hasComponent<ZEN::MeshDrawableComp>())
                         m_SelectionContext.getEntity().removeComponent<ZEN::MeshDrawableComp>();
                 }
                 if (isSelected)
@@ -49,7 +49,6 @@ void InspectorPanel::editMesh() {
             }
             ImGui::EndCombo();
         }
-
 
         ImGui::SameLine();
         ImGui::PushID("RemoveMesh");
@@ -59,10 +58,9 @@ void InspectorPanel::editMesh() {
         ImGui::PopID();
 
         ImGui::EndGroup();
-
-
     }
 }
+
 void InspectorPanel::editComponents() {
     if (ImGui::Button("Add Component"))
         ImGui::OpenPopup("AddComponentPopup");
@@ -99,20 +97,23 @@ void InspectorPanel::editComponents() {
     }
     ImGui::EndChild();
 }
-void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, uint32_t& outTexture) {
-    const char *data = (const char *) payload->Data;
-    auto texture = m_Engine->getModelLibrary().getTexture(data);
-    outTexture = texture;
+void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture) {
+    ZEN::AssetID assetID;
+    if (payload->DataSize == sizeof(ZEN::AssetID)) {
+        std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
+    }
+    outTexture = assetID;
 }
-void InspectorPanel::renderTextureDrop(uint32_t& texture, const char* name) {
+void InspectorPanel::renderTextureDrop(ZEN::AssetID& textureID, const char* name) {
     constexpr float thumbnailSize = 8.0f;
 
-    int texID = static_cast<int>(texture);
+    auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
+    int texID = resourceManager->get<ZEN::GPUTexture>(textureID)->drawableID;
     ImGui::ImageButton(name, (void*)m_Engine->getRenderer().getResourceManager()->getTexture(texID),
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0,1), ImVec2(1,0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
-            handleTextureDrop(payload, texture);
+            handleTextureDrop(payload, textureID);
         }
         ImGui::EndDragDropTarget();
     }
@@ -123,28 +124,24 @@ void InspectorPanel::editMaterialComp() {
     if (auto *materialComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MaterialComp>()) {
         ImGui::SeparatorText("Material");
 
+        const auto &materials = m_AssetLibrary->getAll();
+        static ZEN::AssetID selectedMaterialID = materialComp->handle.id();
 
-        const auto &materials = m_Engine->getModelLibrary().getAllMaterials();
-        std::string selectedMaterial;
-
-        for (auto &[name, material] : materials) {
-            if (name == materialComp->name) {
-                selectedMaterial = name;
-                break;
-            }
-        }
         ImGui::BeginGroup();
-
         float buttonWidth = ImGui::CalcTextSize("X").x + ImGui::GetStyle().FramePadding.x * 2;
         float itemSpacing = ImGui::GetStyle().ItemSpacing.x;
         float comboWidth = ImGui::GetContentRegionAvail().x - buttonWidth - itemSpacing;
 
         ImGui::SetNextItemWidth(comboWidth);
-        if (ImGui::BeginCombo("##material", selectedMaterial.c_str())) {
-            for (auto &[name, mesh] : materials) {
-                bool isSelected = (selectedMaterial == name);
-                if (ImGui::Selectable(name.c_str(), isSelected)) {
-                    materialComp->name = name;
+        if (ImGui::BeginCombo("##material", m_AssetLibrary->getName(selectedMaterialID).c_str())) {
+            for (auto &[id, asset] : materials) {
+                if (!std::holds_alternative<ZEN::Material>(asset)) continue;
+
+                bool isSelected = (selectedMaterialID == id);
+                std::string label = m_AssetLibrary->getName(id);
+                if (ImGui::Selectable(label.c_str(), isSelected)) {
+                    materialComp->handle.setID(id);
+                    selectedMaterialID = id;
                 }
                 if (isSelected)
                     ImGui::SetItemDefaultFocus();
@@ -152,28 +149,24 @@ void InspectorPanel::editMaterialComp() {
             ImGui::EndCombo();
         }
 
-
         ImGui::SameLine();
         ImGui::PushID("RemoveMat");
         if (ImGui::Button("X")) {
-            //reset to default if has mesh, otherwise allow removal
-            if(m_SelectionContext.getEntity().hasComponent<ZEN::MeshDrawableComp>()) {
-                m_SelectionContext.getEntity().getComponent<ZEN::MaterialComp>() = ZEN::MaterialComp{.name = "Default"};
-            }
-            else {
+            if (m_SelectionContext.getEntity().hasComponent<ZEN::MeshDrawableComp>()) {
+                materialComp->handle.id() = m_AssetLibrary->getDefaultMaterialID();
+            } else {
                 m_SelectionContext.getEntity().removeComponent<ZEN::MaterialComp>();
             }
         }
         ImGui::PopID();
 
         ImGui::EndGroup();
-
-
     }
 }
 
 
 void InspectorPanel::editMaterialProps() {
+
     ImGui::SeparatorText("Material");
 
     ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f);
@@ -183,36 +176,37 @@ void InspectorPanel::editMaterialProps() {
     ImGui::Checkbox("Is Metal", &m_SelectionContext.getMaterial()->metal);
 
     if (ImGui::TreeNode("Shader")) {
-        ImGui::Text("Current Shader ID: %u", m_SelectionContext.getMaterial()->shaderID);
+        //ImGui::Text("Current Shader ID: %u", m_SelectionContext.getMaterial()->shader);
         ImGui::TreePop();
     }
+
 
     if (ImGui::TreeNode("Texture")) {
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnWidth(0, 150);
         ImGui::SetColumnWidth(1, 100);
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->textureID, "Albedo");
+        renderTextureDrop(m_SelectionContext.getMaterial()->texture, "Albedo");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Albedo", &m_SelectionContext.getMaterial()->useAlbedo);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->metallicTexID, "Metallic");
+        renderTextureDrop(m_SelectionContext.getMaterial()->metallicTex, "Metallic");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Metallic", &m_SelectionContext.getMaterial()->useMetallic);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTexID, "Roughness");
+        renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTex, "Roughness");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Roughness", &m_SelectionContext.getMaterial()->useRoughness);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->aoTexID, "AO");
+        renderTextureDrop(m_SelectionContext.getMaterial()->aoTex, "AO");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##AO", &m_SelectionContext.getMaterial()->useAO);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->normalTexID, "Normal");
+        renderTextureDrop(m_SelectionContext.getMaterial()->normalTex, "Normal");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Normal", &m_SelectionContext.getMaterial()->useNormal);
         ImGui::NextColumn();
@@ -239,6 +233,18 @@ void InspectorPanel::inspectEntity() {
     editMesh();
 
     editMaterialComp();
+
+    ImGui::Separator();
+
+    if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
+        ImGui::SeparatorText("Material");
+
+        ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Near", &cameraComp->near, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Far", &cameraComp->far, 0.1f, 0.0f, 1000.0f);
+        ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
+    }
 
     ImGui::Separator();
 
@@ -291,27 +297,25 @@ bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
 }
 
 void InspectorPanel::handleMaterialDrop(const ImGuiPayload *payload) {
-    const char *data = (const char *) payload->Data;
-    //auto material = m_Engine->getModelLibrary().getMaterial(data);
+    ZEN::AssetID droppedID = *(ZEN::AssetID*)payload->Data;
 
-    std::cout << "Dropped Material \n";
-
-    if (!m_SelectionContext.getEntity().hasComponent<ZEN::MaterialComp>())
-        m_SelectionContext.getEntity().addComponent<ZEN::MaterialComp>(ZEN::MaterialComp{.name = data});
-    else
-        m_SelectionContext.getEntity().getComponent<ZEN::MaterialComp>() = ZEN::MaterialComp{.name = data};
+    if (!m_SelectionContext.getEntity().hasComponent<ZEN::MaterialComp>()) {
+        m_SelectionContext.getEntity().addComponent<ZEN::MaterialComp>(ZEN::AssetHandle<ZEN::Material>(droppedID));
+    } else {
+        m_SelectionContext.getEntity().getComponent<ZEN::MaterialComp>().handle.setID(droppedID);
+    }
 }
 
-void InspectorPanel::handleMeshDrop(const ImGuiPayload *payload) {
-    const char *data = (const char *) payload->Data;
-    //auto mesh = m_Engine->getModelLibrary().getMesh(data);
 
-    std::cout << "Dropped Mesh \n";
+void InspectorPanel::handleMeshDrop(const ImGuiPayload *payload) {
+    ZEN::AssetID droppedID = *(ZEN::AssetID*)payload->Data;
 
     if (!m_SelectionContext.getEntity().hasComponent<ZEN::MeshComp>()) {
-        m_SelectionContext.getEntity().addComponent<ZEN::MeshComp>(ZEN::MeshComp{.name = data});
+        m_SelectionContext.getEntity().addComponent<ZEN::MeshComp>(ZEN::AssetHandle<ZEN::MeshData>(droppedID));
     } else {
-        m_SelectionContext.getEntity().getComponent<ZEN::MeshComp>() = ZEN::MeshComp{.name = data};
+        auto &meshComp = m_SelectionContext.getEntity().getComponent<ZEN::MeshComp>();
+        meshComp.handle.setID(droppedID);
+
         if (m_SelectionContext.getEntity().hasComponent<ZEN::MeshDrawableComp>())
             m_SelectionContext.getEntity().removeComponent<ZEN::MeshDrawableComp>();
     }
