@@ -37,6 +37,9 @@ void InspectorPanel::editMesh() {
 
                 bool isSelected = (selectedMeshID == id);
                 std::string label = m_AssetLibrary->getName(id);
+                if (label.empty()) {
+                    label = std::to_string(id);
+                }
                 if (ImGui::Selectable(label.c_str(), isSelected)) {
                     meshComp->handle.setID(id);
                     selectedMeshID = id;
@@ -139,6 +142,9 @@ void InspectorPanel::editMaterialComp() {
 
                 bool isSelected = (selectedMaterialID == id);
                 std::string label = m_AssetLibrary->getName(id);
+                if (label.empty()) {
+                    label = std::to_string(id);
+                }
                 if (ImGui::Selectable(label.c_str(), isSelected)) {
                     materialComp->handle.setID(id);
                     selectedMaterialID = id;
@@ -177,6 +183,43 @@ void InspectorPanel::editMaterialProps() {
 
     if (ImGui::TreeNode("Shader")) {
         //ImGui::Text("Current Shader ID: %u", m_SelectionContext.getMaterial()->shader);
+        if (auto shaderComp = m_SelectionContext.getMaterial()->shader) {
+            ImGui::SeparatorText("Shader");
+
+            const auto &assets = m_AssetLibrary->getAll();
+            static ZEN::AssetID selectedShaderID = shaderComp;
+
+            if (selectedShaderID != shaderComp) {
+                selectedShaderID = shaderComp;
+            }
+
+            ImGui::BeginGroup();
+            float buttonWidth = ImGui::CalcTextSize("X").x + ImGui::GetStyle().FramePadding.x * 2;
+            float itemSpacing = ImGui::GetStyle().ItemSpacing.x;
+            float comboWidth = ImGui::GetContentRegionAvail().x - buttonWidth - itemSpacing;
+
+            ImGui::SetNextItemWidth(comboWidth);
+            if (ImGui::BeginCombo("##shader", m_AssetLibrary->getName(selectedShaderID).c_str())) {
+                for (auto &[id, asset] : assets) {
+                    if (!std::holds_alternative<ZEN::ShaderData>(asset)) continue;
+
+                    bool isSelected = (selectedShaderID == id);
+                    std::string label = m_AssetLibrary->getName(id);
+                    if (label.empty()) {
+                        label = std::to_string(id);
+                    }
+                    if (ImGui::Selectable(label.c_str(), isSelected)) {
+                        m_SelectionContext.getMaterial()->shader = id;
+                        selectedShaderID = id;
+                    }
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            ImGui::EndGroup();
+        }
         ImGui::TreePop();
     }
 
