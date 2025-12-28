@@ -10,6 +10,9 @@ ViewPanel::ViewPanel(ZEN::ZEngine* engine, SelectionContext& selection) : m_Engi
 }*/
 void ViewPanel::onUIRender() {
     ImGuiIO& io = ImGui::GetIO();
+
+    m_ImGuiWantsMouse = io.WantCaptureMouse;
+    m_ImGuiWantsKeyboard = io.WantCaptureKeyboard;
     ImVec2 displaySize = io.DisplaySize;
     float menuBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
 
@@ -26,8 +29,10 @@ void ViewPanel::onUIRender() {
     ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoCollapse);
 
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+        ImGui::SetWindowFocus();
+    }
 
-    m_IsFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
     ImVec2 newSize = ImGui::GetContentRegionAvail();
     if (m_PanelSize.x != newSize.x || m_PanelSize.y != newSize.y) {
         m_PanelSize = newSize;
@@ -61,6 +66,9 @@ void ViewPanel::onUIRender() {
         ImVec2(0, 1), // uv0 (top-left)
         ImVec2(1, 0)  // uv1 (bottom-right)
     );
+    m_IsViewportHovered = ImGui::IsItemHovered();
+    m_IsFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+
     ImVec2 imagePos = ImGui::GetItemRectMin(); // top-left corner of the last item
     ImVec2 mousePos = ImGui::GetMousePos();
     if(ImGui::BeginDragDropTarget()) {
@@ -109,6 +117,8 @@ bool ViewPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
 
 bool ViewPanel::onKeyPressedEvent(ZEN::KeyPressedEvent &e) {
     //this blocks input if we are not focused on this panel
+    if (m_ImGuiWantsKeyboard)
+        return true;
     if (!m_IsFocused) {
         return true;
     }
@@ -116,23 +126,21 @@ bool ViewPanel::onKeyPressedEvent(ZEN::KeyPressedEvent &e) {
 }
 
 bool ViewPanel::onMouseButtonPressedEvent(ZEN::MouseButtonPressedEvent &e) {
-    if (!m_IsFocused) {
+    if (m_ImGuiWantsMouse && !m_IsViewportHovered)
         return true;
-    }
+
+    if (!m_IsViewportHovered)
+        return true;
     return false;
 }
 
 bool ViewPanel::onMouseButtonReleasedEvent(ZEN::MouseButtonReleasedEvent &e) {
-    //if (!m_IsFocused) {
-    //    return true;
-    //}
     return false;
 }
 
 bool ViewPanel::onMouseMovedEvent(ZEN::MouseMovedEvent &e) {
-    if (!m_IsFocused) {
+    if (!m_IsFocused)
         return true;
-    }
     return false;
 }
 

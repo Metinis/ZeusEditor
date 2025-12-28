@@ -60,12 +60,9 @@ void ScenePanel::onUIRender() {
 
 
     ImGui::Begin("Scene Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-    /*if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
-        ImGui::SetWindowFocus(); // make panel focused, same as left-click
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+        ImGui::SetWindowFocus();
     }
-    if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
-
-    }*/
     auto view = m_Engine->getScene().getEntities<ZEN::TagComp>();
 
     if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) &&

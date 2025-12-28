@@ -250,7 +250,6 @@ void ProjectPanel::onUIRender() {
     ImGui::Begin("Project Panel", nullptr,
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-    //checkWindowFocus(m_Engine->getDispatcher());
     drawSearchBar();
     drawFolderTree();
     ImGui::SameLine();

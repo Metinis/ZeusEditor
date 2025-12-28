@@ -15,6 +15,9 @@ private:
     bool onMouseButtonReleasedEvent(ZEN::MouseButtonReleasedEvent &e);
     bool onMouseMovedEvent(ZEN::MouseMovedEvent &e);
     bool m_EditorToggled{true};
+    bool m_ImGuiWantsMouse{false};
+    bool m_ImGuiWantsKeyboard{false};
+    bool m_IsViewportHovered{false};
     bool m_IsFocused{false};
     ZEN::ZEngine* m_Engine{};
     SelectionContext& m_SelectionContext;
