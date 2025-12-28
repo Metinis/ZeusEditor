@@ -16,7 +16,10 @@ private:
     void drawMeshesGrid();
     void drawMaterialsGrid();
     void drawTexturesGrid();
+
+    void createMaterialPopup();
     SelectionContext& m_SelectionContext;
+    bool m_OpenCreateMaterialPopup = false;
     std::shared_ptr<ZEN::AssetLibrary> m_AssetLibrary{};
     ZEN::ZEngine* m_Engine{};
 };

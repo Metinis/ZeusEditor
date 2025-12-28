@@ -60,15 +60,22 @@ void ScenePanel::onUIRender() {
 
 
     ImGui::Begin("Scene Panel", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+    /*if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
         ImGui::SetWindowFocus(); // make panel focused, same as left-click
     }
     if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
 
-    }
+    }*/
     auto view = m_Engine->getScene().getEntities<ZEN::TagComp>();
 
-    if (ImGui::BeginPopupContextWindow("SceneContextMenu", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight)) {
+    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) &&
+    ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+    {
+        ImGui::OpenPopup("SceneContextMenu");
+    }
+
+    if (ImGui::BeginPopup("SceneContextMenu"))
+    {
         if (ImGui::MenuItem("Add Empty Entity")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity();
             m_SelectionContext.setEntity(entity);

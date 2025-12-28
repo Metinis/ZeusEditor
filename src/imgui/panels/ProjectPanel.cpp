@@ -91,15 +91,23 @@ void ProjectPanel::drawContextMenu() {
     {
         if (ImGui::MenuItem("Add Model from Disk")) {
             constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
-            const char* path = tinyfd_openFileDialog("Choose a model", "", filters.size(), filters.data(), "3D Model Files", 0);
+            const char* path = tinyfd_openFileDialog("Choose a model", "",
+                filters.size(), filters.data(), "3D Model Files", 1);
             if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
             constexpr std::array filters = { "*.png", "*.jpg", "*.tga" };
-            const char* path = tinyfd_openFileDialog("Choose a texture", "", filters.size(), filters.data(), "Image Files", 0);
+            const char* path = tinyfd_openFileDialog("Choose a texture", "",
+                filters.size(), filters.data(), "Image Files", 1);
             if (path) m_Engine->getModelImporter().loadTexture(getNameWithoutExtension(path), path);
         }
+        if (ImGui::MenuItem("Create Material")) {
+            //ImGui::OpenPopup("CreateMaterialPopup");
+            m_OpenCreateMaterialPopup = true;
+        }
+
+
 
         ImGui::EndPopup();
     }
@@ -180,9 +188,44 @@ void ProjectPanel::drawTexturesGrid() {
     }
 }
 
+void ProjectPanel::createMaterialPopup() {
+    ImGui::Text("Create a new material?");
+    static char matName[256] = "";
+    ImGui::InputText("##MaterialName", matName, IM_ARRAYSIZE(matName));
+    ImGui::Separator();
+
+    if (ImGui::Button("Create", ImVec2(120, 0))) {
+        ZEN::Material material = *ZEN::AssetHandle<ZEN::Material>(m_AssetLibrary->getDefaultMaterialID());
+        m_AssetLibrary->createAsset(material, matName);
+        ImGui::CloseCurrentPopup();
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+        ImGui::CloseCurrentPopup();
+    }
+
+    ImGui::EndPopup();
+}
+
 void ProjectPanel::drawAssetGrid() {
     ImGui::BeginChild("RightPane", ImVec2(0, 0), true);
     drawContextMenu();
+
+    //Material popup logic
+    if (m_OpenCreateMaterialPopup) {
+        ImGui::OpenPopup("CreateMaterialPopup");
+        m_OpenCreateMaterialPopup = false;
+    }
+    if (ImGui::BeginPopupModal(
+        "CreateMaterialPopup",
+        nullptr,
+        ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        createMaterialPopup();
+    }
+
 
     constexpr float thumbSize = 64.0f, padding = 16.0f;
     const float cellSize = thumbSize + padding;

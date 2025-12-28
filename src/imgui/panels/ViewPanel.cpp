@@ -27,9 +27,7 @@ void ViewPanel::onUIRender() {
         | ImGuiWindowFlags_NoCollapse);
 
 
-    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
-        ImGui::SetWindowFocus(); // make panel focused, same as left-click
-    }
+    m_IsFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
     ImVec2 newSize = ImGui::GetContentRegionAvail();
     if (m_PanelSize.x != newSize.x || m_PanelSize.y != newSize.y) {
         m_PanelSize = newSize;
@@ -94,11 +92,46 @@ void ViewPanel::onEvent(ZEN::Event &event) {
     ZEN::EventDispatcher dispatcher(event);
 
     dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
+    dispatcher.dispatch<ZEN::KeyPressedEvent>([this](ZEN::KeyPressedEvent& e) {return onKeyPressedEvent(e); });
+    dispatcher.dispatch<ZEN::MouseButtonPressedEvent>([this](ZEN::MouseButtonPressedEvent& e) {return onMouseButtonPressedEvent(e); });
+    dispatcher.dispatch<ZEN::MouseButtonReleasedEvent>([this](ZEN::MouseButtonReleasedEvent& e) {return onMouseButtonReleasedEvent(e); });
+    dispatcher.dispatch<ZEN::MouseMovedEvent>([this](ZEN::MouseMovedEvent& e) {return onMouseMovedEvent(e); });
+
+
 }
 
 bool ViewPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
     if(e.getPlaying()) {
         ZEN::Application::get().popOverlay(this);
+    }
+    return false;
+}
+
+bool ViewPanel::onKeyPressedEvent(ZEN::KeyPressedEvent &e) {
+    //this blocks input if we are not focused on this panel
+    if (!m_IsFocused) {
+        return true;
+    }
+    return false;
+}
+
+bool ViewPanel::onMouseButtonPressedEvent(ZEN::MouseButtonPressedEvent &e) {
+    if (!m_IsFocused) {
+        return true;
+    }
+    return false;
+}
+
+bool ViewPanel::onMouseButtonReleasedEvent(ZEN::MouseButtonReleasedEvent &e) {
+    //if (!m_IsFocused) {
+    //    return true;
+    //}
+    return false;
+}
+
+bool ViewPanel::onMouseMovedEvent(ZEN::MouseMovedEvent &e) {
+    if (!m_IsFocused) {
+        return true;
     }
     return false;
 }
