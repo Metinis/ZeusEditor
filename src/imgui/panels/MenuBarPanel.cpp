@@ -8,15 +8,15 @@ void MenuBarPanel::onUIRender() {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("Open")) {
                 ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
-                assetSerializer.deserialize("/assets/default.zenpackage");
+                assetSerializer.deserialize("assets/default.zenpackage");
                 ZEN::SceneSerializer serializer(&m_Engine->getScene());
-                serializer.deserialize("/scenes/default.zen");
+                serializer.deserialize("assets/scenes/default.zen");
             }
             if (ImGui::MenuItem("Save")) {
                 ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
-                assetSerializer.serialize("/assets/default.zenpackage");
+                assetSerializer.serialize("assets/default.zenpackage");
                 ZEN::SceneSerializer serializer(&m_Engine->getScene());
-                serializer.serialize("/scenes/default.zen");
+                serializer.serialize("assets/scenes/default.zen");
             }
             if (ImGui::MenuItem("Exit")) {
                 ZEN::Application::get().close();
