@@ -97,6 +97,7 @@ void ProjectPanel::drawContextMenu() {
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
+            //todo allow more than 1 texture loaded
             constexpr std::array filters = { "*.png", "*.jpg", "*.tga" };
             const char* path = tinyfd_openFileDialog("Choose a texture", "",
                 filters.size(), filters.data(), "Image Files", 1);
@@ -120,7 +121,6 @@ void ProjectPanel::drawMeshesGrid() {
         processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes, "MESH_NAME");
 
     for (auto& assetID : toRemove) {
-        m_AssetLibrary->remove(assetID);
         m_AssetLibrary->remove(assetID);
     }
 }

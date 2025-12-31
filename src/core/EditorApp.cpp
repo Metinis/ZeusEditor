@@ -1,8 +1,6 @@
 #include "EditorApp.h"
 #include "src/config.h"
 
-
-
 using namespace ZED;
 
 EditorApp::EditorApp(ZEN::eRendererAPI api) {
