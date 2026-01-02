@@ -81,9 +81,18 @@ void InspectorPanel::editComponents() {
                 ImGui::CloseCurrentPopup();
             }
         }
+        ImGui::EndPopup();
+    }
+    if (ImGui::Button("Add Custom Component"))
+        ImGui::OpenPopup("AddCustomComponentPopup");
 
-
-
+    if (ImGui::BeginPopup("AddCustomComponentPopup")) {
+        for (const auto& comp : ZEN::CompRegistry::get()->getComponents()) {
+            if (ImGui::MenuItem(comp.name)) {
+                m_SelectionContext.getEntity().addComponent<ZEN::ComponentInfo>(comp);
+                ImGui::CloseCurrentPopup();
+            }
+        }
 
         ImGui::EndPopup();
     }
