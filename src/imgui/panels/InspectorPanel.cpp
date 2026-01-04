@@ -8,14 +8,9 @@ static auto const inspectTransform = [](ZEN::TransformComp &out) {
 
 InspectorPanel::InspectorPanel(ZEN::ZEngine *engine, SelectionContext &selection) : m_Engine(engine),
     m_SelectionContext(selection) {
-    //m_Engine->getDispatcher().attach<ZEN::SelectEntityEvent, InspectorPanel, &InspectorPanel::onEntitySelect>(this);
-    //m_Engine->getDispatcher().attach<ZEN::SelectMaterialEvent, InspectorPanel, &InspectorPanel::onMaterialSelect>(this);
-    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, InspectorPanel, &InspectorPanel::onToggleEditor>(this);
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
 }
 
-/*void InspectorPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
-}*/
 void InspectorPanel::editMesh() {
     if (auto *meshComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MeshComp>()) {
         ImGui::SeparatorText("Mesh");
@@ -247,7 +242,6 @@ void InspectorPanel::editMaterialProps() {
     ImGui::Checkbox("Is Metal", &m_SelectionContext.getMaterial()->metal);
 
     if (ImGui::TreeNode("Shader")) {
-        //ImGui::Text("Current Shader ID: %u", m_SelectionContext.getMaterial()->shader);
         if (auto shaderComp = m_SelectionContext.getMaterial()->shader) {
             ImGui::SeparatorText("Shader");
 
@@ -343,6 +337,15 @@ void InspectorPanel::inspectEntity() {
 
     ImGui::Separator();
 
+    if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::SceneCameraComp>()) {
+        ImGui::SeparatorText("Material");
+
+        ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Near", &cameraComp->near, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Far", &cameraComp->far, 0.1f, 0.0f, 1000.0f);
+        //ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
+    }
     if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
         ImGui::SeparatorText("Material");
 
