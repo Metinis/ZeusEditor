@@ -89,7 +89,7 @@ void InspectorPanel::editComponents() {
     if (ImGui::BeginPopup("AddCustomComponentPopup")) {
         for (const auto& comp : ZEN::CompRegistry::get()->getComponents()) {
             if (ImGui::MenuItem(comp.name)) {
-                m_SelectionContext.getEntity().addComponent<ZEN::ComponentInfo>(comp);
+                m_Engine->getScene().addRuntimeComponent(static_cast<entt::entity>(m_SelectionContext.getEntity()), comp);
                 ImGui::CloseCurrentPopup();
             }
         }
