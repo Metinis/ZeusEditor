@@ -107,7 +107,7 @@ void InspectorPanel::editRuntimeComps() {
         ImGui::OpenPopup("AddCustomComponentPopup");
 
     if (ImGui::BeginPopup("AddCustomComponentPopup")) {
-        for (const auto &comp: ZEN::CompRegistry::get()->getComponents()) {
+        for (const auto &comp: m_Engine->getCompRegistry().getComponents()) {
             if (ImGui::MenuItem(comp.name)) {
                 m_SelectionContext.getEntity().addRuntimeComponent(comp);
                 ImGui::CloseCurrentPopup();
@@ -116,7 +116,7 @@ void InspectorPanel::editRuntimeComps() {
 
         ImGui::EndPopup();
     }
-    for (auto& compInfo : ZEN::CompRegistry::get()->getComponents()) {
+    for (auto& compInfo : m_Engine->getCompRegistry().getComponents()) {
         if (auto* comp = m_SelectionContext.getEntity().getRuntimeComponent(compInfo.name))
         {
             if (ImGui::CollapsingHeader(compInfo.name)) {
