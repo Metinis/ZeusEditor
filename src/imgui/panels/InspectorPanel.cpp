@@ -109,8 +109,7 @@ void InspectorPanel::editRuntimeComps() {
     if (ImGui::BeginPopup("AddCustomComponentPopup")) {
         for (const auto &comp: ZEN::CompRegistry::get()->getComponents()) {
             if (ImGui::MenuItem(comp.name)) {
-                m_Engine->getScene().addRuntimeComponent(static_cast<entt::entity>(m_SelectionContext.getEntity()),
-                                                         comp);
+                m_SelectionContext.getEntity().addRuntimeComponent(comp);
                 ImGui::CloseCurrentPopup();
             }
         }
@@ -118,26 +117,21 @@ void InspectorPanel::editRuntimeComps() {
         ImGui::EndPopup();
     }
     for (auto& compInfo : ZEN::CompRegistry::get()->getComponents()) {
-        if (auto* comp = m_Engine->getScene().getRuntimeComponent(
-                static_cast<entt::entity>(m_SelectionContext.getEntity()),
-                compInfo.name))
+        if (auto* comp = m_SelectionContext.getEntity().getRuntimeComponent(compInfo.name))
         {
             if (ImGui::CollapsingHeader(compInfo.name)) {
                 ImGui::SameLine();
                 ImGui::PushID(std::format("RemoveCustom{}", compInfo.name).c_str());
                 if (ImGui::Button("X")) {
-                    m_Engine->getScene().removeRuntimeComponent(
-                        static_cast<entt::entity>(m_SelectionContext.getEntity()),
-                        compInfo.name
-                    );
+                    m_SelectionContext.getEntity().removeRuntimeComponent(compInfo.name);
                 }
                 ImGui::PopID();
 
                 for (auto& field : compInfo.fields) {
-                    void* ptr = comp->buffer.data() + field.offset;
+                    void* ptr = comp->getFieldPtr(field.name);
 
                     ImGui::Text("%s", field.name);
-                    ImGui::SameLine(150); // align inputs
+                    ImGui::SameLine(150);
 
                     switch (field.type) {
                         case ZEN::FieldType::Float: {
@@ -183,7 +177,7 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name
 
     auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
     int texID = resourceManager->get<ZEN::GPUTexture>(textureID)->drawableID;
-    ImGui::ImageButton(name, (void *) m_Engine->getRenderer().getResourceManager()->getTexture(texID),
+    ImGui::ImageButton(name, reinterpret_cast<void*>(static_cast<uintptr_t>( m_Engine->getRenderer().getResourceManager()->getTexture(texID))),
                        ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
@@ -192,7 +186,7 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine();
-    ImGui::Text(name);
+    ImGui::Text("%s", name);
 }
 
 void InspectorPanel::editMaterialComp() {
