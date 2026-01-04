@@ -13,6 +13,7 @@ private:
     bool onPlayModeEvent(ZEN::RunPlayModeEvent &e);
     void editMesh();
     void editComponents();
+    void editRuntimeComps();
     void editMaterialProps();
     void editMaterialComp();
     void inspectEntity();
