@@ -16,7 +16,7 @@ private:
     bool onMouseButtonPressedEvent(ZEN::MouseButtonPressedEvent &e);
     bool onMouseButtonReleasedEvent(ZEN::MouseButtonReleasedEvent &e);
     bool onMouseMovedEvent(ZEN::MouseMovedEvent &e);
-    ImGuizmo::OPERATION m_GizmoType{ImGuizmo::SCALE};
+    ImGuizmo::OPERATION m_GizmoType{ImGuizmo::TRANSLATE};
     ImGuizmo::MODE m_GizmoMode{ImGuizmo::WORLD};
     bool m_EditorToggled{true};
     bool m_ImGuiWantsMouse{false};

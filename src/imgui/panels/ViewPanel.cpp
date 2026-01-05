@@ -142,12 +142,13 @@ void ViewPanel::drawGizmo() {
 
     auto& tc = selection.getComponent<ZEN::TransformComp>();
     glm::mat4 worldMatrix = tc.worldMatrix;
-    bool manipulated = ImGuizmo::Manipulate(
-        glm::value_ptr(view),
-        glm::value_ptr(proj),
-        m_GizmoType,
-        m_GizmoMode,
-        glm::value_ptr(worldMatrix)
+
+    ImGuizmo::Manipulate(
+    glm::value_ptr(view),
+    glm::value_ptr(proj),
+    m_GizmoType,
+    m_GizmoMode,
+    glm::value_ptr(worldMatrix)
     );
 
     if (ImGuizmo::IsUsing()) {
