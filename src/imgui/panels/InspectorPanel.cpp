@@ -6,14 +6,11 @@ static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("scale", &out.localScale.x, 0.01f, 0.0f, 100.0f);
 };
 
-InspectorPanel::InspectorPanel(ZEN::ZEngine *engine, SelectionContext& selection) : m_Engine(engine), m_SelectionContext(selection)  {
-    //m_Engine->getDispatcher().attach<ZEN::SelectEntityEvent, InspectorPanel, &InspectorPanel::onEntitySelect>(this);
-    //m_Engine->getDispatcher().attach<ZEN::SelectMaterialEvent, InspectorPanel, &InspectorPanel::onMaterialSelect>(this);
-    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, InspectorPanel, &InspectorPanel::onToggleEditor>(this);
+InspectorPanel::InspectorPanel(ZEN::ZEngine *engine, SelectionContext &selection) : m_Engine(engine),
+    m_SelectionContext(selection) {
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
 }
-/*void InspectorPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
-}*/
+
 void InspectorPanel::editMesh() {
     if (auto *meshComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MeshComp>()) {
         ImGui::SeparatorText("Mesh");
@@ -32,7 +29,7 @@ void InspectorPanel::editMesh() {
 
         ImGui::SetNextItemWidth(comboWidth);
         if (ImGui::BeginCombo("##mesh", m_AssetLibrary->getName(selectedMeshID).c_str())) {
-            for (auto &[id, asset] : assets) {
+            for (auto &[id, asset]: assets) {
                 if (!std::holds_alternative<ZEN::MeshData>(asset)) continue;
 
                 bool isSelected = (selectedMeshID == id);
@@ -81,12 +78,11 @@ void InspectorPanel::editComponents() {
                 ImGui::CloseCurrentPopup();
             }
         }
-
-
-
-
         ImGui::EndPopup();
     }
+    ImGui::SameLine();
+    editRuntimeComps();
+
     ImGui::BeginChild("Drop", ImVec2(0, 200), true);
     ImGui::Dummy(ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
     if (ImGui::BeginDragDropTarget()) {
@@ -100,20 +96,84 @@ void InspectorPanel::editComponents() {
     }
     ImGui::EndChild();
 }
-void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture) {
+
+void InspectorPanel::editRuntimeComps() {
+    if (ImGui::Button("Add Custom Component"))
+        ImGui::OpenPopup("AddCustomComponentPopup");
+
+    if (ImGui::BeginPopup("AddCustomComponentPopup")) {
+        for (const auto &comp: m_Engine->getCompRegistry().getComponents()) {
+            if (ImGui::MenuItem(comp.name)) {
+                m_SelectionContext.getEntity().addRuntimeComponent(comp);
+                ImGui::CloseCurrentPopup();
+            }
+        }
+
+        ImGui::EndPopup();
+    }
+    for (auto& compInfo : m_Engine->getCompRegistry().getComponents()) {
+        if (auto* comp = m_SelectionContext.getEntity().getRuntimeComponent(compInfo.name))
+        {
+            if (ImGui::CollapsingHeader(compInfo.name)) {
+                ImGui::SameLine();
+                ImGui::PushID(std::format("RemoveCustom{}", compInfo.name).c_str());
+                if (ImGui::Button("X")) {
+                    m_SelectionContext.getEntity().removeRuntimeComponent(compInfo.name);
+                }
+                ImGui::PopID();
+
+                for (auto& field : compInfo.fields) {
+                    void* ptr = comp->getFieldPtr(field.name);
+
+                    ImGui::Text("%s", field.name);
+                    ImGui::SameLine(150);
+
+                    switch (field.type) {
+                        case ZEN::FieldType::Float: {
+                            float* val = reinterpret_cast<float*>(ptr);
+                            ImGui::PushID(field.name);
+                            ImGui::InputFloat("", val);
+                            ImGui::PopID();
+                            break;
+                        }
+                        case ZEN::FieldType::Int: {
+                            int* val = reinterpret_cast<int*>(ptr);
+                            ImGui::PushID(field.name);
+                            ImGui::InputInt("", val);
+                            ImGui::PopID();
+                            break;
+                        }
+                        case ZEN::FieldType::Bool: {
+                            bool* val = reinterpret_cast<bool*>(ptr);
+                            ImGui::PushID(field.name);
+                            ImGui::Checkbox("", val);
+                            ImGui::PopID();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+}
+
+void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID &outTexture) {
     ZEN::AssetID assetID;
     if (payload->DataSize == sizeof(ZEN::AssetID)) {
         std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
     }
     outTexture = assetID;
 }
-void InspectorPanel::renderTextureDrop(ZEN::AssetID& textureID, const char* name) {
+
+void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
     constexpr float thumbnailSize = 8.0f;
 
     auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
     int texID = resourceManager->get<ZEN::GPUTexture>(textureID)->drawableID;
-    ImGui::ImageButton(name, (void*)m_Engine->getRenderer().getResourceManager()->getTexture(texID),
-        ImVec2(thumbnailSize, thumbnailSize), ImVec2(0,1), ImVec2(1,0));
+    ImGui::ImageButton(name, reinterpret_cast<void*>(static_cast<uintptr_t>( m_Engine->getRenderer().getResourceManager()->getTexture(texID))),
+                       ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
             handleTextureDrop(payload, textureID);
@@ -121,8 +181,9 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID& textureID, const char* name
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine();
-    ImGui::Text(name);
+    ImGui::Text("%s", name);
 }
+
 void InspectorPanel::editMaterialComp() {
     if (auto *materialComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MaterialComp>()) {
         ImGui::SeparatorText("Material");
@@ -137,7 +198,7 @@ void InspectorPanel::editMaterialComp() {
 
         ImGui::SetNextItemWidth(comboWidth);
         if (ImGui::BeginCombo("##material", m_AssetLibrary->getName(selectedMaterialID).c_str())) {
-            for (auto &[id, asset] : materials) {
+            for (auto &[id, asset]: materials) {
                 if (!std::holds_alternative<ZEN::Material>(asset)) continue;
 
                 bool isSelected = (selectedMaterialID == id);
@@ -159,7 +220,7 @@ void InspectorPanel::editMaterialComp() {
         ImGui::PushID("RemoveMat");
         if (ImGui::Button("X")) {
             if (m_SelectionContext.getEntity().hasComponent<ZEN::MeshDrawableComp>()) {
-                materialComp->handle.id() = m_AssetLibrary->getDefaultMaterialID();
+                materialComp->handle.id() = ZEN::defaultMaterialID;
             } else {
                 m_SelectionContext.getEntity().removeComponent<ZEN::MaterialComp>();
             }
@@ -172,7 +233,6 @@ void InspectorPanel::editMaterialComp() {
 
 
 void InspectorPanel::editMaterialProps() {
-
     ImGui::SeparatorText("Material");
 
     ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f);
@@ -182,7 +242,6 @@ void InspectorPanel::editMaterialProps() {
     ImGui::Checkbox("Is Metal", &m_SelectionContext.getMaterial()->metal);
 
     if (ImGui::TreeNode("Shader")) {
-        //ImGui::Text("Current Shader ID: %u", m_SelectionContext.getMaterial()->shader);
         if (auto shaderComp = m_SelectionContext.getMaterial()->shader) {
             ImGui::SeparatorText("Shader");
 
@@ -200,7 +259,7 @@ void InspectorPanel::editMaterialProps() {
 
             ImGui::SetNextItemWidth(comboWidth);
             if (ImGui::BeginCombo("##shader", m_AssetLibrary->getName(selectedShaderID).c_str())) {
-                for (auto &[id, asset] : assets) {
+                for (auto &[id, asset]: assets) {
                     if (!std::holds_alternative<ZEN::ShaderData>(asset)) continue;
 
                     bool isSelected = (selectedShaderID == id);
@@ -257,7 +316,6 @@ void InspectorPanel::editMaterialProps() {
         ImGui::Columns(1);
         ImGui::TreePop();
     }
-
 }
 
 void InspectorPanel::inspectEntity() {
@@ -279,6 +337,15 @@ void InspectorPanel::inspectEntity() {
 
     ImGui::Separator();
 
+    if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::SceneCameraComp>()) {
+        ImGui::SeparatorText("Material");
+
+        ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Near", &cameraComp->near, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Far", &cameraComp->far, 0.1f, 0.0f, 1000.0f);
+        //ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
+    }
     if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
         ImGui::SeparatorText("Material");
 
@@ -292,9 +359,8 @@ void InspectorPanel::inspectEntity() {
     ImGui::Separator();
 
     editComponents();
-
-
 }
+
 void InspectorPanel::inspectMaterial() {
     editMaterialProps();
 }
@@ -316,31 +382,30 @@ void InspectorPanel::onUIRender() {
         //    ZEN::PanelFocusEvent{.panel = "Inspector"}
         //);
     }
-    if(m_SelectionContext.getEntity().isValid()) {
+    if (m_SelectionContext.getEntity().isValid()) {
         inspectEntity();
-    }
-    else if(m_SelectionContext.getMaterial()) {
+    } else if (m_SelectionContext.getMaterial()) {
         inspectMaterial();
     }
 
     ImGui::End();
 }
 
-void InspectorPanel::onEvent(ZEN::Event& event) {
+void InspectorPanel::onEvent(ZEN::Event &event) {
     ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
+    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent &e) { return onPlayModeEvent(e); });
 }
 
 bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if(e.getPlaying()) {
+    if (e.getPlaying()) {
         ZEN::Application::get().popOverlay(this);
     }
     return false;
 }
 
 void InspectorPanel::handleMaterialDrop(const ImGuiPayload *payload) {
-    ZEN::AssetID droppedID = *(ZEN::AssetID*)payload->Data;
+    ZEN::AssetID droppedID = *(ZEN::AssetID *) payload->Data;
 
     if (!m_SelectionContext.getEntity().hasComponent<ZEN::MaterialComp>()) {
         m_SelectionContext.getEntity().addComponent<ZEN::MaterialComp>(ZEN::AssetHandle<ZEN::Material>(droppedID));
@@ -351,7 +416,7 @@ void InspectorPanel::handleMaterialDrop(const ImGuiPayload *payload) {
 
 
 void InspectorPanel::handleMeshDrop(const ImGuiPayload *payload) {
-    ZEN::AssetID droppedID = *(ZEN::AssetID*)payload->Data;
+    ZEN::AssetID droppedID = *(ZEN::AssetID *) payload->Data;
 
     if (!m_SelectionContext.getEntity().hasComponent<ZEN::MeshComp>()) {
         m_SelectionContext.getEntity().addComponent<ZEN::MeshComp>(ZEN::AssetHandle<ZEN::MeshData>(droppedID));

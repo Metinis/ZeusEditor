@@ -195,7 +195,7 @@ void ProjectPanel::createMaterialPopup() {
     ImGui::Separator();
 
     if (ImGui::Button("Create", ImVec2(120, 0))) {
-        ZEN::Material material = *ZEN::AssetHandle<ZEN::Material>(m_AssetLibrary->getDefaultMaterialID());
+        ZEN::Material material = *ZEN::AssetHandle<ZEN::Material>(ZEN::defaultMaterialID);
         m_AssetLibrary->createAsset(material, matName);
         ImGui::CloseCurrentPopup();
     }
