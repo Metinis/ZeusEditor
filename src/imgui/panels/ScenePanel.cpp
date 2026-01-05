@@ -126,7 +126,7 @@ void ScenePanel::onUIRender() {
         }
         if (ImGui::MenuItem("Add Cube")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity("Cube");
-            auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::Project::getActive()->getAssetLibrary()->getCubeID());
+            auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::defaultCubeID);
             entity.addComponent<ZEN::MeshComp>(mesh);
             m_SelectionContext.setEntity(entity);
 
@@ -134,7 +134,7 @@ void ScenePanel::onUIRender() {
         }
         if (ImGui::MenuItem("Add Sphere")) {
             ZEN::Entity entity = m_Engine->getScene().createEntity("Sphere");
-            auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::Project::getActive()->getAssetLibrary()->getSphereID());
+            auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::defaultSphereID);
             entity.addComponent<ZEN::MeshComp>(mesh);
             m_SelectionContext.setEntity(entity);
 

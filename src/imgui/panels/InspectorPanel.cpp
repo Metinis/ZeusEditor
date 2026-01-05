@@ -220,7 +220,7 @@ void InspectorPanel::editMaterialComp() {
         ImGui::PushID("RemoveMat");
         if (ImGui::Button("X")) {
             if (m_SelectionContext.getEntity().hasComponent<ZEN::MeshDrawableComp>()) {
-                materialComp->handle.id() = m_AssetLibrary->getDefaultMaterialID();
+                materialComp->handle.id() = ZEN::defaultMaterialID;
             } else {
                 m_SelectionContext.getEntity().removeComponent<ZEN::MaterialComp>();
             }
