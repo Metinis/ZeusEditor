@@ -160,7 +160,7 @@ void ViewPanel::drawGizmo() {
             localMatrix = glm::inverse(parentTC.worldMatrix) * worldMatrix;
         }
 
-        ZEN::TransformComp::decomposeTransform(localMatrix, tc.localPosition, tc.localRotation, tc.localScale);
+        selection.getComponent<ZEN::TransformComp>().decomposeTransform(localMatrix);
     }
 }
 

@@ -2,7 +2,10 @@
 
 static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("position", &out.localPosition.x, 0.01f);
-    ImGui::DragFloat3("rotation", &out.localRotation.x);
+    glm::vec3 euler = glm::degrees(glm::eulerAngles(out.localRotation));
+    if (ImGui::DragFloat3("rotation", &euler.x)) {
+        out.localRotation = glm::quat(glm::radians(euler));
+    }
     ImGui::DragFloat3("scale", &out.localScale.x, 0.01f, 0.0f, 100.0f);
 };
 
