@@ -1,6 +1,6 @@
 #pragma once
-#include <ZeusEngineCore/Entity.h>
-#include <ZeusEngineCore/AssetLibrary.h>
+#include <ZeusEngineCore/engine/Entity.h>
+#include <ZeusEngineCore/asset/AssetLibrary.h>
 
 class SelectionContext {
 public:

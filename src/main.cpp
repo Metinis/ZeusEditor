@@ -1,5 +1,5 @@
 #include "core/EditorApp.h"
-#include "ZeusEngineCore/API.h"
+#include "ZeusEngineCore/core/API.h"
 
 int main(int argc, char** argv) {
     ZEN::eRendererAPI api = ZEN::eRendererAPI::OpenGL;
