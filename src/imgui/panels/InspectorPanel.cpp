@@ -322,6 +322,7 @@ void InspectorPanel::editMaterialProps() {
 }
 
 void InspectorPanel::inspectEntity() {
+    ImGui::Text("%s", std::format("Scene Entity ID: {}", (uint32_t)((entt::entity)(m_SelectionContext.getEntity()))).c_str());
     if (auto name = m_SelectionContext.getEntity().tryGetComponent<ZEN::TagComp>()) {
         char buffer[128];
         strncpy(buffer, name->tag.c_str(), sizeof(buffer));

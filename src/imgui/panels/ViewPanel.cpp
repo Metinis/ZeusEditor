@@ -4,17 +4,13 @@
 #include "imgui_internal.h"
 #include "glm/gtc/type_ptr.hpp"
 #include "ZeusEngineCore/input/KeyCodes.h"
+#include "ZeusEngineCore/input/MouseCodes.h"
 
 ViewPanel::ViewPanel(ZEN::ZEngine *engine, SelectionContext &selection) : m_Engine(engine),
                                                                           m_SelectionContext(selection) {
     m_PanelSize = {800, 600};
-    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, ViewPanel, &ViewPanel::onToggleEditor>(this);
 }
 
-/*void ViewPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
-    //ZEN::Application::get().popOverlay(this);
-    m_EditorToggled = false;
-}*/
 void ViewPanel::onUIRender() {
     ImGuiIO &io = ImGui::GetIO();
 
@@ -31,7 +27,6 @@ void ViewPanel::onUIRender() {
         ImGui::SetNextWindowSize(ImVec2(displaySize.x, displaySize.y));
     }
 
-
     ImGui::Begin("Scene View", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
                                         | ImGuiWindowFlags_NoCollapse);
 
@@ -43,6 +38,48 @@ void ViewPanel::onUIRender() {
     if (m_PanelSize.x != newSize.x || m_PanelSize.y != newSize.y) {
         m_PanelSize = newSize;
     }
+
+    drawColorImage();
+
+    //calculate bounds
+    auto minBound = ImGui::GetItemRectMin();
+    ImVec2 maxBound = ImGui::GetItemRectMax();
+    m_ViewportBounds[0] = {minBound.x, minBound.y};
+    m_ViewportBounds[1] = {maxBound.x, maxBound.y};
+
+    drawGizmo();
+
+    if (m_DoMousePick && !ImGuizmo::IsUsing()) {
+        doMousePick();
+    }
+    else {
+        m_DoMousePick = false;
+    }
+
+    m_IsViewportHovered = ImGui::IsItemHovered();
+    m_IsFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+
+    handleDrop();
+
+    ImGui::End();
+    m_ImGuiWantsMouse = false;
+}
+
+void ViewPanel::onEvent(ZEN::Event &event) {
+    ZEN::EventDispatcher dispatcher(event);
+
+    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent &e) { return onPlayModeEvent(e); });
+    dispatcher.dispatch<ZEN::KeyPressedEvent>([this](ZEN::KeyPressedEvent &e) { return onKeyPressedEvent(e); });
+    dispatcher.dispatch<ZEN::MouseButtonPressedEvent>([this](ZEN::MouseButtonPressedEvent &e) {
+        return onMouseButtonPressedEvent(e);
+    });
+    dispatcher.dispatch<ZEN::MouseButtonReleasedEvent>([this](ZEN::MouseButtonReleasedEvent &e) {
+        return onMouseButtonReleasedEvent(e);
+    });
+    dispatcher.dispatch<ZEN::MouseMovedEvent>([this](ZEN::MouseMovedEvent &e) { return onMouseMovedEvent(e); });
+}
+
+void ViewPanel::drawColorImage() {
     glm::vec2 rendererSize = m_Engine->getRenderer().getSize();
     ImVec2 texSize(rendererSize.x, rendererSize.y);
     float aspect = texSize.x / texSize.y;
@@ -70,52 +107,6 @@ void ViewPanel::onUIRender() {
         ImVec2(0, 1), // uv0 (top-left)
         ImVec2(1, 0) // uv1 (bottom-right)
     );
-
-    drawGizmo();
-
-    m_IsViewportHovered = ImGui::IsItemHovered();
-    m_IsFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
-
-    ImVec2 imagePos = ImGui::GetItemRectMin(); // top-left corner of the last item
-    ImVec2 mousePos = ImGui::GetMousePos();
-    if (ImGui::BeginDragDropTarget()) {
-        if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("MESH_NAME")) {
-            ZEN::AssetID assetID;
-            if (payload->DataSize == sizeof(ZEN::AssetID)) {
-                std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
-            }
-            // Mouse position relative to viewport
-            ImVec2 relative = {
-                mousePos.x - imagePos.x,
-                mousePos.y - imagePos.y
-            };
-
-            std::cout << "Dropped payload " << assetID
-                    << " at viewport coords: "
-                    << relative.x << ", " << relative.y << "\n";
-            if (ZEN::Project::getActive()->getAssetLibrary()->get<ZEN::MeshData>(assetID)) {
-                m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(
-                    ZEN::AssetHandle<ZEN::MeshData>(assetID));
-            }
-        }
-        ImGui::EndDragDropTarget();
-    }
-
-    ImGui::End();
-}
-
-void ViewPanel::onEvent(ZEN::Event &event) {
-    ZEN::EventDispatcher dispatcher(event);
-
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent &e) { return onPlayModeEvent(e); });
-    dispatcher.dispatch<ZEN::KeyPressedEvent>([this](ZEN::KeyPressedEvent &e) { return onKeyPressedEvent(e); });
-    dispatcher.dispatch<ZEN::MouseButtonPressedEvent>([this](ZEN::MouseButtonPressedEvent &e) {
-        return onMouseButtonPressedEvent(e);
-    });
-    dispatcher.dispatch<ZEN::MouseButtonReleasedEvent>([this](ZEN::MouseButtonReleasedEvent &e) {
-        return onMouseButtonReleasedEvent(e);
-    });
-    dispatcher.dispatch<ZEN::MouseMovedEvent>([this](ZEN::MouseMovedEvent &e) { return onMouseMovedEvent(e); });
 }
 
 void ViewPanel::drawGizmo() {
@@ -123,18 +114,11 @@ void ViewPanel::drawGizmo() {
     if (!selection.isValid()) {
         return;
     }
-    ImVec2 imageMin = ImGui::GetItemRectMin();
-    ImVec2 imageMax = ImGui::GetItemRectMax();
-    ImVec2 imageSize(imageMax.x - imageMin.x, imageMax.y - imageMin.y);
-
-    if (imageSize.x <= 0 || imageSize.y <= 0) {
-        std::cout << "ERROR: Invalid image size!" << std::endl;
-        return;
-    }
 
     ImGuizmo::SetDrawlist();
     ImGuizmo::SetOrthographic(false);
-    ImGuizmo::SetRect(imageMin.x, imageMin.y, imageSize.x, imageSize.y);
+    glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+    ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, viewportSize.x, viewportSize.y);
 
     auto cameraEntity = m_Engine->getScene().getSceneCamera();
     glm::mat4 view = cameraEntity.getComponent<ZEN::TransformComp>().getViewMatrix();
@@ -162,6 +146,35 @@ void ViewPanel::drawGizmo() {
         }
 
         selection.getComponent<ZEN::TransformComp>().decomposeTransform(localMatrix);
+    }
+    else {
+        m_ImGuiWantsMouse = false;
+    }
+}
+
+void ViewPanel::handleDrop() {
+    ImVec2 imagePos = ImGui::GetItemRectMin();
+    ImVec2 mousePos = ImGui::GetMousePos();
+    if (ImGui::BeginDragDropTarget()) {
+        if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("MESH_NAME")) {
+            ZEN::AssetID assetID;
+            if (payload->DataSize == sizeof(ZEN::AssetID)) {
+                std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
+            }
+            ImVec2 relative = {
+                mousePos.x - imagePos.x,
+                mousePos.y - imagePos.y
+            };
+
+            std::cout << "Dropped payload " << assetID
+                    << " at viewport coords: "
+                    << relative.x << ", " << relative.y << "\n";
+            if (ZEN::Project::getActive()->getAssetLibrary()->get<ZEN::MeshData>(assetID)) {
+                m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(
+                    ZEN::AssetHandle<ZEN::MeshData>(assetID));
+            }
+        }
+        ImGui::EndDragDropTarget();
     }
 }
 
@@ -198,11 +211,14 @@ bool ViewPanel::onKeyPressedEvent(ZEN::KeyPressedEvent &e) {
 }
 
 bool ViewPanel::onMouseButtonPressedEvent(ZEN::MouseButtonPressedEvent &e) {
-    if (m_ImGuiWantsMouse && !m_IsViewportHovered)
+    if (e.getKeyCode() == ZEN::Mouse::Button::ButtonLeft && m_IsViewportHovered &&
+        !m_DoMousePick && !m_ImGuiWantsMouse) {
+        m_DoMousePick = true;
+        return true;
+    }
+    if (m_ImGuiWantsMouse || !m_IsViewportHovered)
         return true;
 
-    if (!m_IsViewportHovered)
-        return true;
     return false;
 }
 
@@ -214,4 +230,31 @@ bool ViewPanel::onMouseMovedEvent(ZEN::MouseMovedEvent &e) {
     if (!m_IsFocused)
         return true;
     return false;
+}
+
+void ViewPanel::doMousePick() {
+    auto [mx, my] = ImGui::GetMousePos();
+
+    mx -= m_ViewportBounds[0].x;
+    my -= m_ViewportBounds[0].y;
+
+    glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+    my = viewportSize.y - my;
+
+    int mouseX = (int)mx;
+    int mouseY = (int)my;
+
+    if (mouseX >= 0 || mouseX < viewportSize.x || mouseY >= 0 || mouseY < viewportSize.y) {
+
+        uint32_t entityID = m_Engine->getRenderer().getPixels(mouseX, mouseY, viewportSize);
+
+        auto entity = m_Engine->getScene().getEntityByRegistryID(entityID);
+        if (entity.isValid() && entityID != 0) {
+            m_SelectionContext.setEntity(entity);
+        }
+        else {
+            m_SelectionContext.setEntity(ZEN::Entity{});
+        }
+    }
+    m_DoMousePick = false;
 }
