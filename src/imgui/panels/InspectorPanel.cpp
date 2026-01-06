@@ -2,7 +2,10 @@
 
 static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("position", &out.localPosition.x, 0.01f);
-    ImGui::DragFloat3("rotation", &out.localRotation.x);
+    glm::vec3 euler = glm::degrees(glm::eulerAngles(out.localRotation));
+    if (ImGui::DragFloat3("rotation", &euler.x)) {
+        out.localRotation = glm::quat(glm::radians(euler));
+    }
     ImGui::DragFloat3("scale", &out.localScale.x, 0.01f, 0.0f, 100.0f);
 };
 
@@ -319,6 +322,7 @@ void InspectorPanel::editMaterialProps() {
 }
 
 void InspectorPanel::inspectEntity() {
+    ImGui::Text("%s", std::format("Scene Entity ID: {}", (uint32_t)((entt::entity)(m_SelectionContext.getEntity()))).c_str());
     if (auto name = m_SelectionContext.getEntity().tryGetComponent<ZEN::TagComp>()) {
         char buffer[128];
         strncpy(buffer, name->tag.c_str(), sizeof(buffer));
