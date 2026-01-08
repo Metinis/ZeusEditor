@@ -16,6 +16,9 @@ private:
     void editRuntimeComps();
     void editMaterialProps();
     void editMaterialComp();
+    void editBoxColliderComp();
+    void editSphereColliderComp();
+    void editRigidBodyComp();
     void inspectEntity();
     void inspectMaterial();
     void renderTextureDrop(ZEN::AssetID& textureID, const char* name);
