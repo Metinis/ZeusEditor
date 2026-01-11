@@ -511,13 +511,8 @@ void InspectorPanel::inspectEntity() {
         inspectTransform(*transform);
     }
 
-    editComponents();
-
-
-    ImGui::Separator();
-
     if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::SceneCameraComp>()) {
-        ImGui::SeparatorText("Material");
+        ImGui::SeparatorText("Scene Camera");
 
         ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
         ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
@@ -525,8 +520,8 @@ void InspectorPanel::inspectEntity() {
         ImGui::DragFloat("Far", &cameraComp->far, 0.1f, 0.0f, 1000.0f);
         //ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
     }
-    if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
-        ImGui::SeparatorText("Material");
+    else if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
+        ImGui::SeparatorText("Camera");
 
         ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
         ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
@@ -534,6 +529,13 @@ void InspectorPanel::inspectEntity() {
         ImGui::DragFloat("Far", &cameraComp->far, 0.1f, 0.0f, 1000.0f);
         ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
     }
+
+    editComponents();
+
+
+    ImGui::Separator();
+
+
 }
 
 void InspectorPanel::inspectMaterial() {

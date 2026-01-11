@@ -97,11 +97,29 @@ void ProjectPanel::drawContextMenu() {
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
-            //todo allow more than 1 texture loaded
             constexpr std::array filters = { "*.png", "*.jpg", "*.tga" };
-            const char* path = tinyfd_openFileDialog("Choose a texture", "",
+            const char* paths = tinyfd_openFileDialog("Choose a texture", "",
                 filters.size(), filters.data(), "Image Files", 1);
-            if (path) m_Engine->getModelImporter().loadTexture(getNameWithoutExtension(path), path);
+            if (paths) {
+                std::string allPaths = paths;
+                size_t start = 0;
+                size_t end = 0;
+
+                while ((end = allPaths.find('|', start)) != std::string::npos) {
+                    std::string path = allPaths.substr(start, end - start);
+                    m_Engine->getModelImporter().loadTexture(
+                        getNameWithoutExtension(path.c_str()),
+                        path.c_str()
+                    );
+                    start = end + 1;
+                }
+
+                std::string path = allPaths.substr(start);
+                m_Engine->getModelImporter().loadTexture(
+                    getNameWithoutExtension(path.c_str()),
+                    path.c_str()
+                );
+            }
         }
         if (ImGui::MenuItem("Create Material")) {
             //ImGui::OpenPopup("CreateMaterialPopup");
