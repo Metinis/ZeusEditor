@@ -1,11 +1,14 @@
 #include "EditorLayer.h"
-#include "InspectorPanel.h"
-#include "MenuBarPanel.h"
-#include "ProjectPanel.h"
-#include "ScenePanel.h"
-#include "ViewPanel.h"
+#include "../imgui/panels/InspectorPanel.h"
+#include "../imgui/panels/MenuBarPanel.h"
+#include "../imgui/panels/ProjectPanel.h"
+#include "../imgui/panels/ScenePanel.h"
+#include "../imgui/panels/ViewPanel.h"
 
 EditorLayer::EditorLayer(ZEN::ZEngine* engine) {
+
+    ImGui::SetCurrentContext(ZEN::getEngineImGuiContext());
+
     m_InspectorPanel = new InspectorPanel(engine, m_SelectionContext);
     m_ProjectPanel = new ProjectPanel(engine, m_SelectionContext);
     m_MenuBarPanel = new MenuBarPanel(engine, m_SelectionContext);
@@ -28,10 +31,10 @@ void EditorLayer::onEvent(ZEN::Event &event) {
 
 bool EditorLayer::onRunPlayMode(ZEN::RunPlayModeEvent &e) {
     if(!e.getPlaying()) {
-        ZEN::Application::get().pushOverlay(m_InspectorPanel);
-        ZEN::Application::get().pushOverlay(m_ProjectPanel);
-        ZEN::Application::get().pushOverlay(m_ScenePanel);
-        ZEN::Application::get().pushOverlay(m_ViewPanel);
+        //ZEN::Application::get().pushOverlay(m_InspectorPanel);
+        //ZEN::Application::get().pushOverlay(m_ProjectPanel);
+        //ZEN::Application::get().pushOverlay(m_ScenePanel);
+        //ZEN::Application::get().pushOverlay(m_ViewPanel);
     }
     return false;
 }

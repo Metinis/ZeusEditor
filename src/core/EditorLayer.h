@@ -1,7 +1,7 @@
 #pragma once
 #include <ZeusEngine.h>
 
-#include "SelectionContext.h"
+#include "../imgui/panels/SelectionContext.h"
 
 class ScenePanel;
 class ProjectPanel;

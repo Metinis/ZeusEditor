@@ -1,6 +1,6 @@
 #include "ProjectPanel.h"
 
-#include <tinyfiledialogs.h>
+//#include <tinyfiledialogs.h>
 
 ProjectPanel::ProjectPanel(ZEN::ZEngine* engine, SelectionContext& selection)
     : m_Engine(engine), m_SelectionContext(selection)  {
@@ -91,13 +91,14 @@ void ProjectPanel::drawContextMenu() {
     {
         if (ImGui::MenuItem("Add Model from Disk")) {
             constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
-            const char* path = tinyfd_openFileDialog("Choose a model", "",
+            /*const char* path = tinyfd_openFileDialog("Choose a model", "",
                 filters.size(), filters.data(), "3D Model Files", 1);
-            if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);
+            if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);*/
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
             constexpr std::array filters = { "*.png", "*.jpg", "*.tga" };
+            /*
             const char* paths = tinyfd_openFileDialog("Choose a texture", "",
                 filters.size(), filters.data(), "Image Files", 1);
             if (paths) {
@@ -120,6 +121,7 @@ void ProjectPanel::drawContextMenu() {
                     path.c_str()
                 );
             }
+            */
         }
         if (ImGui::MenuItem("Create Material")) {
             //ImGui::OpenPopup("CreateMaterialPopup");
@@ -284,7 +286,7 @@ void ProjectPanel::onEvent(ZEN::Event &event) {
 
 bool ProjectPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
     if(e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
+        //ZEN::Application::get().popOverlay(this);
     }
     return false;
 }
