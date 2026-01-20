@@ -1,5 +1,7 @@
 #include "InspectorPanel.h"
 
+#include "glm/gtc/type_ptr.hpp"
+
 static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("position", &out.localPosition.x, 0.01f);
     glm::vec3 euler = glm::degrees(glm::eulerAngles(out.localRotation));
@@ -65,6 +67,12 @@ void InspectorPanel::editMesh() {
 }
 
 void InspectorPanel::editComponents() {
+    editRuntimeComps();
+    editMesh();
+    editMaterialComp();
+    editBoxColliderComp();
+    editSphereColliderComp();
+    editRigidBodyComp();
     if (ImGui::Button("Add Component"))
         ImGui::OpenPopup("AddComponentPopup");
 
@@ -81,10 +89,30 @@ void InspectorPanel::editComponents() {
                 ImGui::CloseCurrentPopup();
             }
         }
+        if (!m_SelectionContext.getEntity().hasComponent<ZEN::BoxColliderComp>()) {
+            if (ImGui::MenuItem("BoxCollider")) {
+                m_SelectionContext.getEntity().addComponent<ZEN::BoxColliderComp>();
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        if (!m_SelectionContext.getEntity().hasComponent<ZEN::SphereColliderComp>()) {
+            if (ImGui::MenuItem("SphereCollider")) {
+                m_SelectionContext.getEntity().addComponent<ZEN::SphereColliderComp>();
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        if (!m_SelectionContext.getEntity().hasComponent<ZEN::RigidBodyComp>()) {
+            if (ImGui::MenuItem("RigidBody")) {
+                m_SelectionContext.getEntity().addComponent<ZEN::RigidBodyComp>();
+                ImGui::CloseCurrentPopup();
+            }
+        }
         ImGui::EndPopup();
     }
     ImGui::SameLine();
-    editRuntimeComps();
+    if (ImGui::Button("Add Custom Component"))
+        ImGui::OpenPopup("AddCustomComponentPopup");
+
 
     ImGui::BeginChild("Drop", ImVec2(0, 200), true);
     ImGui::Dummy(ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
@@ -101,9 +129,6 @@ void InspectorPanel::editComponents() {
 }
 
 void InspectorPanel::editRuntimeComps() {
-    if (ImGui::Button("Add Custom Component"))
-        ImGui::OpenPopup("AddCustomComponentPopup");
-
     if (ImGui::BeginPopup("AddCustomComponentPopup")) {
         for (const auto &comp: m_Engine->getCompRegistry().getComponents()) {
             if (ImGui::MenuItem(comp.name)) {
@@ -114,9 +139,8 @@ void InspectorPanel::editRuntimeComps() {
 
         ImGui::EndPopup();
     }
-    for (auto& compInfo : m_Engine->getCompRegistry().getComponents()) {
-        if (auto* comp = m_SelectionContext.getEntity().getRuntimeComponent(compInfo.name))
-        {
+    for (auto &compInfo: m_Engine->getCompRegistry().getComponents()) {
+        if (auto *comp = m_SelectionContext.getEntity().getRuntimeComponent(compInfo.name)) {
             if (ImGui::CollapsingHeader(compInfo.name)) {
                 ImGui::SameLine();
                 ImGui::PushID(std::format("RemoveCustom{}", compInfo.name).c_str());
@@ -125,29 +149,29 @@ void InspectorPanel::editRuntimeComps() {
                 }
                 ImGui::PopID();
 
-                for (auto& field : compInfo.fields) {
-                    void* ptr = comp->getFieldPtr(field.name);
+                for (auto &field: compInfo.fields) {
+                    void *ptr = comp->getFieldPtr(field.name);
 
                     ImGui::Text("%s", field.name);
                     ImGui::SameLine(150);
 
                     switch (field.type) {
                         case ZEN::FieldType::Float: {
-                            float* val = reinterpret_cast<float*>(ptr);
+                            float *val = reinterpret_cast<float *>(ptr);
                             ImGui::PushID(field.name);
                             ImGui::InputFloat("", val);
                             ImGui::PopID();
                             break;
                         }
                         case ZEN::FieldType::Int: {
-                            int* val = reinterpret_cast<int*>(ptr);
+                            int *val = reinterpret_cast<int *>(ptr);
                             ImGui::PushID(field.name);
                             ImGui::InputInt("", val);
                             ImGui::PopID();
                             break;
                         }
                         case ZEN::FieldType::Bool: {
-                            bool* val = reinterpret_cast<bool*>(ptr);
+                            bool *val = reinterpret_cast<bool *>(ptr);
                             ImGui::PushID(field.name);
                             ImGui::Checkbox("", val);
                             ImGui::PopID();
@@ -158,8 +182,6 @@ void InspectorPanel::editRuntimeComps() {
             }
         }
     }
-
-
 }
 
 void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID &outTexture) {
@@ -175,8 +197,10 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name
 
     auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
     int texID = resourceManager->get<ZEN::GPUTexture>(textureID)->drawableID;
-    ImGui::ImageButton(name, reinterpret_cast<void*>(static_cast<uintptr_t>( m_Engine->getRenderer().getResourceManager()->getTexture(texID))),
-                       ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::ImageButton(
+        name, reinterpret_cast<void *>(static_cast<uintptr_t>(m_Engine->getRenderer().getResourceManager()->
+            getTexture(texID))),
+        ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
             handleTextureDrop(payload, textureID);
@@ -227,6 +251,157 @@ void InspectorPanel::editMaterialComp() {
             } else {
                 m_SelectionContext.getEntity().removeComponent<ZEN::MaterialComp>();
             }
+        }
+        ImGui::PopID();
+
+        ImGui::EndGroup();
+    }
+}
+
+void InspectorPanel::editBoxColliderComp() {
+    if (auto *box = m_SelectionContext.getEntity().tryGetComponent<ZEN::BoxColliderComp>()) {
+        ImGui::SeparatorText("Box Collider");
+
+        ImGui::BeginGroup();
+
+        ImGui::DragFloat3("Half Extents",
+                          glm::value_ptr(box->halfExtents),
+                          0.05f,
+                          0.001f,
+                          1000.0f
+        );
+
+        ImGui::DragFloat3(
+            "Offset",
+            glm::value_ptr(box->offset),
+            0.05f,
+            -1000.0f,
+            1000.0f
+        );
+
+        ImGui::Checkbox("Is Trigger", &box->isTrigger);
+
+        ImGui::SameLine();
+        ImGui::PushID("RemoveBoxCollider");
+        if (ImGui::Button("X")) {
+            m_SelectionContext.getEntity().removeComponent<ZEN::BoxColliderComp>();
+        }
+        ImGui::PopID();
+
+        ImGui::EndGroup();
+    }
+}
+
+void InspectorPanel::editSphereColliderComp() {
+    if (auto *sphere = m_SelectionContext.getEntity().tryGetComponent<ZEN::SphereColliderComp>()) {
+        ImGui::SeparatorText("Sphere Collider");
+
+        ImGui::BeginGroup();
+
+        ImGui::DragFloat("Radius",
+                         &sphere->radius,
+                         0.05f,
+                         0.001f,
+                         1000.0f
+        );
+
+        ImGui::DragFloat3(
+            "Offset",
+            glm::value_ptr(sphere->offset),
+            0.05f,
+            -1000.0f,
+            1000.0f
+        );
+
+        ImGui::Checkbox("Is Trigger", &sphere->isTrigger);
+
+        ImGui::SameLine();
+        ImGui::PushID("RemoveSphereCollider");
+        if (ImGui::Button("X")) {
+            m_SelectionContext.getEntity().removeComponent<ZEN::SphereColliderComp>();
+        }
+        ImGui::PopID();
+
+        ImGui::EndGroup();
+    }
+}
+
+void InspectorPanel::editRigidBodyComp() {
+    if (auto *rb = m_SelectionContext.getEntity().tryGetComponent<ZEN::RigidBodyComp>()) {
+        ImGui::SeparatorText("Rigid Body");
+
+        ImGui::BeginGroup();
+
+        const char *motionTypes[] = {"Static", "Dynamic", "Kinematic"};
+        int motionIndex = 0;
+
+        switch (rb->motionType) {
+            case JPH::EMotionType::Static: motionIndex = 0;
+                break;
+            case JPH::EMotionType::Dynamic: motionIndex = 1;
+                break;
+            case JPH::EMotionType::Kinematic: motionIndex = 2;
+                break;
+        }
+
+        if (ImGui::Combo("Motion Type", &motionIndex, motionTypes, IM_ARRAYSIZE(motionTypes))) {
+            switch (motionIndex) {
+                case 0: rb->motionType = JPH::EMotionType::Static;
+                    break;
+                case 1: rb->motionType = JPH::EMotionType::Dynamic;
+                    break;
+                case 2: rb->motionType = JPH::EMotionType::Kinematic;
+                    break;
+            }
+        }
+
+        if (rb->motionType == JPH::EMotionType::Dynamic) {
+            ImGui::DragFloat(
+                "Mass",
+                &rb->mass,
+                0.1f,
+                0.001f,
+                10000.0f
+            );
+        }
+
+        ImGui::DragFloat(
+            "Linear Damping",
+            &rb->linearDamping,
+            0.01f,
+            0.0f,
+            10.0f
+        );
+
+        ImGui::DragFloat(
+            "Angular Damping",
+            &rb->angularDamping,
+            0.01f,
+            0.0f,
+            10.0f
+        );
+
+        ImGui::Checkbox("Allow Sleep", &rb->allowSleep);
+
+        ImGui::Spacing();
+        ImGui::Text("Constraints");
+
+        ImGui::Checkbox("Lock Pos X", &rb->lockPosX);
+        ImGui::SameLine();
+        ImGui::Checkbox("Lock Pos Y", &rb->lockPosY);
+        ImGui::SameLine();
+        ImGui::Checkbox("Lock Pos Z", &rb->lockPosZ);
+
+        ImGui::Checkbox("Lock Rot X", &rb->lockRotX);
+        ImGui::SameLine();
+        ImGui::Checkbox("Lock Rot Y", &rb->lockRotY);
+        ImGui::SameLine();
+        ImGui::Checkbox("Lock Rot Z", &rb->lockRotZ);
+
+        ImGui::SameLine();
+        ImGui::PushID("RemoveRigidBody");
+        if (ImGui::Button("X")) {
+            m_SelectionContext.getEntity().removeComponent<ZEN::RigidBodyComp>();
         }
         ImGui::PopID();
 
@@ -322,7 +497,8 @@ void InspectorPanel::editMaterialProps() {
 }
 
 void InspectorPanel::inspectEntity() {
-    ImGui::Text("%s", std::format("Scene Entity ID: {}", (uint32_t)((entt::entity)(m_SelectionContext.getEntity()))).c_str());
+    ImGui::Text(
+        "%s", std::format("Scene Entity ID: {}", (uint32_t) ((entt::entity) (m_SelectionContext.getEntity()))).c_str());
     if (auto name = m_SelectionContext.getEntity().tryGetComponent<ZEN::TagComp>()) {
         char buffer[128];
         strncpy(buffer, name->tag.c_str(), sizeof(buffer));
@@ -335,14 +511,8 @@ void InspectorPanel::inspectEntity() {
         inspectTransform(*transform);
     }
 
-    editMesh();
-
-    editMaterialComp();
-
-    ImGui::Separator();
-
     if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::SceneCameraComp>()) {
-        ImGui::SeparatorText("Material");
+        ImGui::SeparatorText("Scene Camera");
 
         ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
         ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
@@ -350,8 +520,8 @@ void InspectorPanel::inspectEntity() {
         ImGui::DragFloat("Far", &cameraComp->far, 0.1f, 0.0f, 1000.0f);
         //ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
     }
-    if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
-        ImGui::SeparatorText("Material");
+    else if (auto *cameraComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::CameraComp>()) {
+        ImGui::SeparatorText("Camera");
 
         ImGui::DragFloat("Aspect", &cameraComp->aspect, 0.01f, 0.0f, 2.0f);
         ImGui::DragFloat("FOV", &cameraComp->fov, 0.01f, 0.0f, 2.0f);
@@ -360,9 +530,12 @@ void InspectorPanel::inspectEntity() {
         ImGui::Checkbox("IsPrimary", &cameraComp->isPrimary);
     }
 
+    editComponents();
+
+
     ImGui::Separator();
 
-    editComponents();
+
 }
 
 void InspectorPanel::inspectMaterial() {
@@ -403,7 +576,7 @@ void InspectorPanel::onEvent(ZEN::Event &event) {
 
 bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
     if (e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
+        //ZEN::Application::get().popOverlay(this);
     }
     return false;
 }

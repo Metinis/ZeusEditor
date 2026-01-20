@@ -180,7 +180,7 @@ void ViewPanel::handleDrop() {
 
 bool ViewPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
     if (e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
+        //ZEN::Application::get().popOverlay(this);
     }
     return false;
 }

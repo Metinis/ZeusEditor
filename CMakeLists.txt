@@ -41,10 +41,15 @@ configure_file(
 )
 
 target_include_directories(ZeusEditor PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
-target_include_directories(ZeusEditor PRIVATE "${PROJECT_SOURCE_DIR}/src/imgui/panels")
-
 
 target_compile_definitions(ZeusEditor PRIVATE
     $<$<CONFIG:Debug>:DEBUG>
 )
+
+add_custom_command(TARGET ZeusEditor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:ZeusEngineCore>
+        $<TARGET_FILE_DIR:ZeusEditor>
+)
+
 
