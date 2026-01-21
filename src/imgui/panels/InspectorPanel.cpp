@@ -576,7 +576,7 @@ void InspectorPanel::onEvent(ZEN::Event &event) {
 
 bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
     if (e.getPlaying()) {
-        //ZEN::Application::get().popOverlay(this);
+       ZEN::Application::get().popOverlay(this);
     }
     return false;
 }

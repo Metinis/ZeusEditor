@@ -177,8 +177,8 @@ void ScenePanel::onEvent(ZEN::Event &event) {
 }
 
 bool ScenePanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if(e.getPlaying()) {
-        //ZEN::Application::get().popOverlay(this);
+    if (e.getPlaying()) {
+        ZEN::Application::get().popOverlay(this);
     }
     return false;
 }

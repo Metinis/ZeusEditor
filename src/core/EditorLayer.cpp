@@ -31,10 +31,10 @@ void EditorLayer::onEvent(ZEN::Event &event) {
 
 bool EditorLayer::onRunPlayMode(ZEN::RunPlayModeEvent &e) {
     if(!e.getPlaying()) {
-        //ZEN::Application::get().pushOverlay(m_InspectorPanel);
-        //ZEN::Application::get().pushOverlay(m_ProjectPanel);
-        //ZEN::Application::get().pushOverlay(m_ScenePanel);
-        //ZEN::Application::get().pushOverlay(m_ViewPanel);
+        ZEN::Application::get().pushOverlay(m_InspectorPanel);
+        ZEN::Application::get().pushOverlay(m_ProjectPanel);
+        ZEN::Application::get().pushOverlay(m_ScenePanel);
+        ZEN::Application::get().pushOverlay(m_ViewPanel);
     }
     return false;
 }
