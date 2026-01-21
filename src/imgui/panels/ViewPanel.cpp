@@ -110,12 +110,13 @@ void ViewPanel::drawColorImage() {
 }
 
 void ViewPanel::drawGizmo() {
+    ImGuizmo::BeginFrame();
     auto selection = m_SelectionContext.getEntity();
     if (!selection.isValid()) {
         return;
     }
 
-    ImGuizmo::SetDrawlist();
+    ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
     ImGuizmo::SetOrthographic(false);
     glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
     ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, viewportSize.x, viewportSize.y);

@@ -78,6 +78,7 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
     }
 }
 void ScenePanel::onUIRender() {
+    
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
     float menuBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
