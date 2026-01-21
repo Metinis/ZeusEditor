@@ -13,8 +13,10 @@ if(MSVC)
 endif()
 file(GLOB_RECURSE ZEUSEDITOR_SOURCES
         src/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tinyfiledialogs/tinyfiledialogs.c
 )
 target_sources(ZeusEditor PRIVATE ${ZEUSEDITOR_SOURCES})
+
 
 target_link_libraries(ZeusEditor PRIVATE
         ZeusEngineCore

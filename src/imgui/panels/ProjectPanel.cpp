@@ -1,16 +1,12 @@
 #include "ProjectPanel.h"
+#include <tinyfiledialogs.h>
 
-//#include <tinyfiledialogs.h>
 
 ProjectPanel::ProjectPanel(ZEN::ZEngine* engine, SelectionContext& selection)
     : m_Engine(engine), m_SelectionContext(selection)  {
-    //m_Engine->getDispatcher().attach<ZEN::ToggleEditorEvent, ProjectPanel, &ProjectPanel::onToggleEditor>(this);
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
 }
 
-/*void ProjectPanel::onToggleEditor(ZEN::ToggleEditorEvent &e) {
-    ZEN::Application::get().popOverlay(this);
-}*/
 static std::string getFileName(const std::string& path) {
     size_t pos = std::max(path.find_last_of('/'), path.find_last_of('\\'));
     return (pos == std::string::npos) ? path : path.substr(pos + 1);
@@ -22,11 +18,7 @@ static std::string getNameWithoutExtension(const std::string& path) {
 }
 
 static void checkWindowFocus(ZEN::EventDispatcher& dispatcher) {
-    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-        ImGui::SetWindowFocus();
-
-    //if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
-        //dispatcher.trigger<ZEN::PanelFocusEvent>({ .panel = "Project" });
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right));
 }
 
 static void drawSearchBar() {
@@ -91,14 +83,14 @@ void ProjectPanel::drawContextMenu() {
     {
         if (ImGui::MenuItem("Add Model from Disk")) {
             constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
-            /*const char* path = tinyfd_openFileDialog("Choose a model", "",
+            const char* path = tinyfd_openFileDialog("Choose a model", "",
                 filters.size(), filters.data(), "3D Model Files", 1);
-            if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);*/
+            if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
             constexpr std::array filters = { "*.png", "*.jpg", "*.tga" };
-            /*
+            
             const char* paths = tinyfd_openFileDialog("Choose a texture", "",
                 filters.size(), filters.data(), "Image Files", 1);
             if (paths) {
@@ -121,10 +113,9 @@ void ProjectPanel::drawContextMenu() {
                     path.c_str()
                 );
             }
-            */
+            
         }
         if (ImGui::MenuItem("Create Material")) {
-            //ImGui::OpenPopup("CreateMaterialPopup");
             m_OpenCreateMaterialPopup = true;
         }
 
