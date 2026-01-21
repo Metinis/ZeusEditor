@@ -55,6 +55,7 @@ void MenuBarPanel::onUIRender() {
                     ZEN::SceneSerializer serializer(&m_Engine->getScene());
                     serializer.serialize("/assets/scenes/default.zen");
                     ZEN::RunPlayModeEvent e(true);
+                    ZEN::Application::get().getEngine()->getSystemManager().loadAll(&m_Engine->getScene());
                     ZEN::Application::get().callEvent(e);
                     m_isPLaying = true;
                 }
@@ -66,6 +67,7 @@ void MenuBarPanel::onUIRender() {
                 serializer.deserialize("/assets/scenes/default.zen");
                 ZEN::RunPlayModeEvent e(false);
                 ZEN::Application::get().callEvent(e);
+                ZEN::Application::get().getEngine()->getSystemManager().unloadAll();
                 m_isPLaying = false;
             }
             ImGui::EndMenu();

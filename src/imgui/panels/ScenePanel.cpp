@@ -78,6 +78,7 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
     }
 }
 void ScenePanel::onUIRender() {
+    
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 displaySize = io.DisplaySize;
     float menuBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
@@ -177,8 +178,8 @@ void ScenePanel::onEvent(ZEN::Event &event) {
 }
 
 bool ScenePanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if(e.getPlaying()) {
-        //ZEN::Application::get().popOverlay(this);
+    if (e.getPlaying()) {
+        ZEN::Application::get().popOverlay(this);
     }
     return false;
 }

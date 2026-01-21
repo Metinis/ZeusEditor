@@ -6,11 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(ZeusEditor)
-
+if(MSVC)
+    set_property(TARGET ZeusEditor PROPERTY
+        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+    )
+endif()
 file(GLOB_RECURSE ZEUSEDITOR_SOURCES
         src/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tinyfiledialogs/tinyfiledialogs.c
 )
 target_sources(ZeusEditor PRIVATE ${ZEUSEDITOR_SOURCES})
+
 
 target_link_libraries(ZeusEditor PRIVATE
         ZeusEngineCore
@@ -46,10 +52,13 @@ target_compile_definitions(ZeusEditor PRIVATE
     $<$<CONFIG:Debug>:DEBUG>
 )
 
-add_custom_command(TARGET ZeusEditor POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:ZeusEngineCore>
-        $<TARGET_FILE_DIR:ZeusEditor>
-)
+if (WIN32)
+    add_custom_command(TARGET ZeusEditor POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_RUNTIME_DLLS:ZeusEditor>
+            $<TARGET_FILE_DIR:ZeusEditor>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
 
 

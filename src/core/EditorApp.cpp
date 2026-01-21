@@ -11,8 +11,7 @@ EditorApp::EditorApp(ZEN::eRendererAPI api) {
     //can now actually initialize main app from engine
     init();
 
-    
-
+   
     pushLayer(new EditorLayer(m_Engine.get()));
 }
 
