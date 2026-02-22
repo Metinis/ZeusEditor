@@ -18,6 +18,7 @@ private:
     void editMaterialComp();
     void editBoxColliderComp();
     void editSphereColliderComp();
+    void editMeshColliderComp();
     void editRigidBodyComp();
     void inspectEntity();
     void inspectMaterial();

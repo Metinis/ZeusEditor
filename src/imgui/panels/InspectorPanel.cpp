@@ -72,6 +72,7 @@ void InspectorPanel::editComponents() {
     editMaterialComp();
     editBoxColliderComp();
     editSphereColliderComp();
+    editMeshColliderComp();
     editRigidBodyComp();
     if (ImGui::Button("Add Component"))
         ImGui::OpenPopup("AddComponentPopup");
@@ -98,6 +99,12 @@ void InspectorPanel::editComponents() {
         if (!m_SelectionContext.getEntity().hasComponent<ZEN::SphereColliderComp>()) {
             if (ImGui::MenuItem("SphereCollider")) {
                 m_SelectionContext.getEntity().addComponent<ZEN::SphereColliderComp>();
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        if (!m_SelectionContext.getEntity().hasComponent<ZEN::MeshColliderComp>()) {
+            if (ImGui::MenuItem("MeshCollider")) {
+                m_SelectionContext.getEntity().addComponent<ZEN::MeshColliderComp>();
                 ImGui::CloseCurrentPopup();
             }
         }
@@ -319,6 +326,25 @@ void InspectorPanel::editSphereColliderComp() {
         ImGui::PushID("RemoveSphereCollider");
         if (ImGui::Button("X")) {
             m_SelectionContext.getEntity().removeComponent<ZEN::SphereColliderComp>();
+        }
+        ImGui::PopID();
+
+        ImGui::EndGroup();
+    }
+}
+
+void InspectorPanel::editMeshColliderComp() {
+    if (auto *meshCol = m_SelectionContext.getEntity().tryGetComponent<ZEN::MeshColliderComp>()) {
+        ImGui::SeparatorText("Mesh Collider");
+
+        ImGui::BeginGroup();
+
+        ImGui::Checkbox("Is Trigger", &meshCol->isTrigger);
+
+        ImGui::SameLine();
+        ImGui::PushID("RemoveMeshCollider");
+        if (ImGui::Button("X")) {
+            m_SelectionContext.getEntity().removeComponent<ZEN::BoxColliderComp>();
         }
         ImGui::PopID();
 
