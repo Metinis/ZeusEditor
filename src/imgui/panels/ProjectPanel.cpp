@@ -244,6 +244,7 @@ void ProjectPanel::drawAssetGrid() {
     int columns = std::max(1, (int)(panelWidth / cellSize));
     ImGui::Columns(columns, 0, false);
 
+    //todo, instead of this, iterate over each asset with current folder location and draw it
     if (m_SelectionContext.selectedFolder == "Meshes")       drawMeshesGrid();
     else if (m_SelectionContext.selectedFolder == "Materials") drawMaterialsGrid();
     else if (m_SelectionContext.selectedFolder == "Textures")  drawTexturesGrid();

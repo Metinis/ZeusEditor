@@ -45,6 +45,15 @@ void MenuBarPanel::onUIRender() {
                 }
                 ImGui::EndMenu();
             }
+            if (ImGui::BeginMenu("Camera")) {
+                if (ImGui::MenuItem("Scene")) {
+                    ZEN::Application::get().getEngine()->getCameraSystem().setUseMainCamera(false);
+                }
+                if (ImGui::MenuItem("Game")) {
+                    ZEN::Application::get().getEngine()->getCameraSystem().setUseMainCamera(true);
+                }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Run")) {
