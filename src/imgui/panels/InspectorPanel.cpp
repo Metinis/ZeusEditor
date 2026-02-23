@@ -72,6 +72,7 @@ void InspectorPanel::editComponents() {
     editMaterialComp();
     editBoxColliderComp();
     editSphereColliderComp();
+    editCapsuleColliderComp();
     editMeshColliderComp();
     editRigidBodyComp();
     if (ImGui::Button("Add Component"))
@@ -99,6 +100,12 @@ void InspectorPanel::editComponents() {
         if (!m_SelectionContext.getEntity().hasComponent<ZEN::SphereColliderComp>()) {
             if (ImGui::MenuItem("SphereCollider")) {
                 m_SelectionContext.getEntity().addComponent<ZEN::SphereColliderComp>();
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        if (!m_SelectionContext.getEntity().hasComponent<ZEN::CapsuleColliderComp>()) {
+            if (ImGui::MenuItem("CapsuleCollider")) {
+                m_SelectionContext.getEntity().addComponent<ZEN::CapsuleColliderComp>();
                 ImGui::CloseCurrentPopup();
             }
         }
@@ -326,6 +333,47 @@ void InspectorPanel::editSphereColliderComp() {
         ImGui::PushID("RemoveSphereCollider");
         if (ImGui::Button("X")) {
             m_SelectionContext.getEntity().removeComponent<ZEN::SphereColliderComp>();
+        }
+        ImGui::PopID();
+
+        ImGui::EndGroup();
+    }
+}
+
+void InspectorPanel::editCapsuleColliderComp() {
+    if (auto *capsule = m_SelectionContext.getEntity().tryGetComponent<ZEN::CapsuleColliderComp>()) {
+        ImGui::SeparatorText("Capsule Collider");
+
+        ImGui::BeginGroup();
+
+        ImGui::DragFloat("Half Height",
+                         &capsule->halfHeight,
+                         0.05f,
+                         0.001f,
+                         1000.0f
+        );
+
+        ImGui::DragFloat("Radius",
+                         &capsule->radius,
+                         0.05f,
+                         0.001f,
+                         1000.0f
+        );
+
+        ImGui::DragFloat3(
+            "Offset",
+            glm::value_ptr(capsule->offset),
+            0.05f,
+            -1000.0f,
+            1000.0f
+        );
+
+        ImGui::Checkbox("Is Trigger", &capsule->isTrigger);
+
+        ImGui::SameLine();
+        ImGui::PushID("RemoveCapsuleCollider");
+        if (ImGui::Button("X")) {
+            m_SelectionContext.getEntity().removeComponent<ZEN::CapsuleColliderComp>();
         }
         ImGui::PopID();
 
