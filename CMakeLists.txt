@@ -17,6 +17,12 @@ file(GLOB_RECURSE ZEUSEDITOR_SOURCES
 )
 target_sources(ZeusEditor PRIVATE ${ZEUSEDITOR_SOURCES})
 
+add_custom_target(Shaders ALL
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/resources/shaders/vulkan-shaders/compile.sh
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources/shaders/vulkan-shaders
+        COMMENT "Compiling Vulkan shaders"
+)
+add_dependencies(ZeusEditor Shaders)
 
 target_link_libraries(ZeusEditor PRIVATE
         ZeusEngineCore
