@@ -80,7 +80,8 @@ void ViewPanel::onEvent(ZEN::Event &event) {
 }
 
 void ViewPanel::drawColorImage() {
-    glm::vec2 rendererSize = m_Engine->getRenderer().getSize();
+    glm::vec2 rendererSize = {ZEN::Application::get().getWindow()->getWidth(), ZEN::Application::get().getWindow()->getHeight()};
+    //glm::vec2 rendererSize {1280.0f, 720.0f};
     ImVec2 texSize(rendererSize.x, rendererSize.y);
     float aspect = texSize.x / texSize.y;
     ImVec2 finalSize;
@@ -102,10 +103,10 @@ void ViewPanel::drawColorImage() {
     ));
 
     ImGui::Image(
-        (void *) (intptr_t) m_Engine->getRenderer().getColorTextureHandle(),
+        (ImTextureID)ZEN::Application::get().getVKRenderer()->getImDescSet(),
         finalSize,
-        ImVec2(0, 1), // uv0 (top-left)
-        ImVec2(1, 0) // uv1 (bottom-right)
+        ImVec2(0, 0), // uv0 (top-left)
+        ImVec2(1, 1) // uv1 (bottom-right)
     );
 }
 
