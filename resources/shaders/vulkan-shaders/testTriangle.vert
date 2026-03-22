@@ -18,21 +18,21 @@ struct Vertex {
     float _pad5;
 };
 
-layout(buffer_reference, std430) readonly buffer VertexBuffer{
+layout(buffer_reference, std430) readonly buffer VertexBufferAdr {
     Vertex vertices[];
 };
 
 layout( push_constant ) uniform constants
 {
-    mat4 render_matrix;
-    VertexBuffer vertexBuffer;
-} PushConstants;
+    mat4 u_ModelMat;
+    VertexBuffer vertexBufferAdr;
+} PerObjectData;
 
 void main()
 {
-    Vertex v = PushConstants.vertexBuffer.vertices[gl_VertexIndex];
+    Vertex v = PerObjectData.vertexBufferAdr.vertices[gl_VertexIndex];
 
-    gl_Position = PushConstants.render_matrix * vec4(v.position, 1.0f);
+    gl_Position = PerObjectData.u_ModelMat * vec4(v.position, 1.0f);
     //outColor = v.Color.xyz;
     outColor = vec3(1.0, 1.0, 1.0);
 }
