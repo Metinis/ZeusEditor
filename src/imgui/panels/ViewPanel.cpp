@@ -124,7 +124,9 @@ void ViewPanel::drawGizmo() {
 
     auto cameraEntity = m_Engine->getScene().getSceneCamera();
     glm::mat4 view = cameraEntity.getComponent<ZEN::TransformComp>().getViewMatrix();
+
     glm::mat4 proj = cameraEntity.getComponent<ZEN::SceneCameraComp>().projection;
+    proj[1][1] *= -1;
 
     auto& tc = selection.getComponent<ZEN::TransformComp>();
     glm::mat4 worldMatrix = tc.worldMatrix;

@@ -2,6 +2,8 @@
 #extension GL_EXT_buffer_reference : require
 
 layout (location = 0) out vec3 outColor;
+layout (location = 1) out vec3 outNormal;
+layout (location = 2) out vec3 outFragPos;
 
 struct Vertex {
     vec3 position;
@@ -19,8 +21,6 @@ struct Vertex {
 };
 
 layout(set = 0, binding = 0) uniform SceneData {
-    mat4 view;
-    mat4 proj;
     mat4 viewproj;
     vec4 ambientColor;
     vec4 sunlightDirection; // w for sun power
@@ -41,7 +41,10 @@ void main()
 {
     Vertex v = PerObjectData.vertexBufferAdr.vertices[gl_VertexIndex];
 
+    outFragPos = vec3(PerObjectData.u_ModelMat * vec4(v.position, 1.0f));
     gl_Position = SceneDataBuffer.viewproj * PerObjectData.u_ModelMat * vec4(v.position, 1.0f);
+    outNormal = normalize(v.Normal);
+
     //outColor = v.Color.xyz;
     outColor = vec3(1.0, 1.0, 1.0);
 }
