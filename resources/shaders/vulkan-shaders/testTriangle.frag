@@ -16,7 +16,12 @@ layout(set = 0, binding = 0) uniform SceneData {
 void main()
 {
     vec3 lightDir = normalize(vec3(SceneDataBuffer.sunlightDirection) - inFragPos);
-    float diff = max(dot(inNormal, lightDir), 0.0);
-    vec3 diffuse = diff * vec3(1.0, 1.0, 1.0);
-    outFragColor = vec4(diffuse,1.0f);
+    vec3 norm = normalize(inNormal);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 objectColor = vec3(1.0, 1.0, 1.0);
+    vec3 diffuse = diff * objectColor;
+    vec3 ambient = SceneDataBuffer.ambientColor.xyz * SceneDataBuffer.sunlightColor.xyz;
+
+    vec3 color = (ambient + diffuse) * objectColor;
+    outFragColor = vec4(color, 1.0);
 }

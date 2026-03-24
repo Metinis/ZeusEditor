@@ -18,7 +18,7 @@ void main()
     {
         vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
-        if(gl_LocalInvocationID.x != 0 && gl_LocalInvocationID.y != 0)
+        //if(gl_LocalInvocationID.x != 0 && gl_LocalInvocationID.y != 0)
         {
             vec2 uv = vec2(texelCoord) / vec2(size);
 

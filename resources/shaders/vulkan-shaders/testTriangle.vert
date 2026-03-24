@@ -43,7 +43,7 @@ void main()
 
     outFragPos = vec3(PerObjectData.u_ModelMat * vec4(v.position, 1.0f));
     gl_Position = SceneDataBuffer.viewproj * PerObjectData.u_ModelMat * vec4(v.position, 1.0f);
-    outNormal = normalize(v.Normal);
+    outNormal = mat3(transpose(inverse(PerObjectData.u_ModelMat))) * v.Normal;
 
     //outColor = v.Color.xyz;
     outColor = vec3(1.0, 1.0, 1.0);
