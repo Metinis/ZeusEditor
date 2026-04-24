@@ -175,7 +175,7 @@ void ProjectPanel::drawTexturesGrid() {
         if (!tex) continue;
 
         auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
-        int texID = resourceManager->get<ZEN::GPUTexture>(assetID)->drawableID;
+        int texID = resourceManager->get<ZEN::GPUTex>(assetID)->drawableID;
 
         void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
             m_Engine->getRenderer().getResourceManager()->getTexture(texID)

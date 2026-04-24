@@ -210,7 +210,7 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name
     constexpr float thumbnailSize = 8.0f;
 
     auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
-    int texID = resourceManager->get<ZEN::GPUTexture>(textureID)->drawableID;
+    int texID = resourceManager->get<ZEN::GPUTex>(textureID)->drawableID;
     ImGui::ImageButton(
         name, reinterpret_cast<void *>(static_cast<uintptr_t>(m_Engine->getRenderer().getResourceManager()->
             getTexture(texID))),
