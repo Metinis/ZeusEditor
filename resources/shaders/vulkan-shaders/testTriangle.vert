@@ -4,6 +4,7 @@
 layout (location = 0) out vec3 outColor;
 layout (location = 1) out vec3 outNormal;
 layout (location = 2) out vec3 outFragPos;
+layout (location = 3) out vec2 outUV;
 
 struct Vertex {
     vec3 position;
@@ -20,7 +21,7 @@ struct Vertex {
     float _pad5;
 };
 
-layout(set = 0, binding = 0) uniform SceneData {
+layout(set = 0, binding = 1) uniform SceneData {
     mat4 viewproj;
     vec4 ambientColor;
     vec4 sunlightDirection; // w for sun power
@@ -46,5 +47,6 @@ void main()
     outNormal = mat3(transpose(inverse(PerObjectData.u_ModelMat))) * v.Normal;
 
     //outColor = v.Color.xyz;
+    outUV = v.TexCoords;
     outColor = vec3(1.0, 1.0, 1.0);
 }
