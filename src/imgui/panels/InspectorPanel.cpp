@@ -15,6 +15,7 @@ InspectorPanel::InspectorPanel(ZEN::EngineContext* ctx, SelectionContext &select
     m_SelectionContext(selection) {
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
     m_CompRegistry = ctx->compRegistry.get();
+    m_Renderer = ctx->vkRenderer.get();
 };
 
 void InspectorPanel::editMesh() {
@@ -208,13 +209,9 @@ void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID
 }
 
 void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
-    /*constexpr float thumbnailSize = 8.0f;
-
-    auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
-    int texID = resourceManager->get<ZEN::GPUTex>(textureID)->drawableID;
-    ImGui::ImageButton(
-        name, reinterpret_cast<void *>(static_cast<uintptr_t>(m_Engine->getRenderer().getResourceManager()->
-            getTexture(texID))),
+    constexpr float thumbnailSize = 8.0f;
+    void* texHandle = reinterpret_cast<void*>(m_Renderer->getImDescSet());
+    ImGui::ImageButton(name, texHandle,
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
@@ -223,7 +220,7 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine();
-    ImGui::Text("%s", name);*/
+    ImGui::Text("%s", name);
 }
 
 void InspectorPanel::editMaterialComp() {
@@ -536,7 +533,7 @@ void InspectorPanel::editMaterialProps() {
     }
 
 
-    /*if (ImGui::TreeNode("Texture")) {
+    if (ImGui::TreeNode("Texture")) {
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnWidth(0, 150);
         ImGui::SetColumnWidth(1, 100);
@@ -568,7 +565,7 @@ void InspectorPanel::editMaterialProps() {
 
         ImGui::Columns(1);
         ImGui::TreePop();
-    }*/
+    }
 }
 
 void InspectorPanel::inspectEntity() {

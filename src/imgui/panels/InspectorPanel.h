@@ -29,5 +29,6 @@ private:
     void handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture);
     std::shared_ptr<ZEN::AssetLibrary> m_AssetLibrary;
     ZEN::CompRegistry* m_CompRegistry;
+    ZEN::VKRenderer* m_Renderer;
     SelectionContext& m_SelectionContext;
 };

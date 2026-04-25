@@ -1,11 +1,13 @@
 #include "ProjectPanel.h"
 #include <tinyfiledialogs.h>
+#include <ZeusEngineCore/engine/rendering/VKRenderer.h>
 
 
 ProjectPanel::ProjectPanel(ZEN::EngineContext* ctx, SelectionContext &selection)
     : m_SelectionContext(selection)  {
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
     m_Importer = ctx->modelImporter.get();
+    m_Renderer = ctx->vkRenderer.get();
 }
 
 static std::string getFileName(const std::string& path) {
@@ -130,7 +132,8 @@ void ProjectPanel::drawMeshesGrid() {
 
     std::vector<ZEN::AssetID> toRemove;
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::MeshData>())
-        processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes, "MESH_NAME");
+        processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes,
+            "MESH_NAME", m_Renderer->getImDescSet());
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
@@ -138,17 +141,12 @@ void ProjectPanel::drawMeshesGrid() {
 }
 
 void ProjectPanel::drawMaterialsGrid() {
-    /*std::vector<ZEN::AssetID> toRemove;
+    std::vector<ZEN::AssetID> toRemove;
 
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::Material>()) {
         auto material = m_AssetLibrary->getMaterialRaw(assetID);
 
-        void* texHandle = nullptr;
-        if (material.textureID != 0) {
-            texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-                m_Engine->getRenderer().getResourceManager()->getTexture(material.textureID)
-            ));
-        }
+        void* texHandle = reinterpret_cast<void*>(m_Renderer->getImDescSet());
 
         processThumbnail(
             assetID,
@@ -165,22 +163,17 @@ void ProjectPanel::drawMaterialsGrid() {
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
-    }*/
+    }
 }
 
 void ProjectPanel::drawTexturesGrid() {
-    /*std::vector<ZEN::AssetID> toRemove;
+    std::vector<ZEN::AssetID> toRemove;
 
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::TextureData>()) {
         auto* tex = m_AssetLibrary->get<ZEN::TextureData>(assetID);
         if (!tex) continue;
 
-        auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
-        int texID = resourceManager->get<ZEN::GPUTex>(assetID)->drawableID;
-
-        void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-            m_Engine->getRenderer().getResourceManager()->getTexture(texID)
-        ));
+        void* texHandle = reinterpret_cast<void*>(m_Renderer->getImDescSet());
 
         processThumbnail(
             assetID,
@@ -197,7 +190,7 @@ void ProjectPanel::drawTexturesGrid() {
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
-    }*/
+    }
 }
 
 void ProjectPanel::createMaterialPopup() {
