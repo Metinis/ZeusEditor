@@ -16,6 +16,7 @@ public:
     bool onRunPlayMode(ZEN::RunPlayModeEvent& e);
     ~EditorLayer() override;
 private:
+    ZEN::VKRenderer* m_Renderer;
     SelectionContext m_SelectionContext;
     InspectorPanel* m_InspectorPanel;
     ProjectPanel* m_ProjectPanel;

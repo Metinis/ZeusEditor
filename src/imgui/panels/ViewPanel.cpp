@@ -69,7 +69,6 @@ void ViewPanel::onUIRender() {
 void ViewPanel::onEvent(ZEN::Event &event) {
     ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent &e) { return onPlayModeEvent(e); });
     dispatcher.dispatch<ZEN::KeyPressedEvent>([this](ZEN::KeyPressedEvent &e) { return onKeyPressedEvent(e); });
     dispatcher.dispatch<ZEN::MouseButtonPressedEvent>([this](ZEN::MouseButtonPressedEvent &e) {
         return onMouseButtonPressedEvent(e);
@@ -184,10 +183,7 @@ void ViewPanel::handleDrop() {
 }
 
 bool ViewPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if (e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
-    }
-    return false;
+
 }
 
 bool ViewPanel::onKeyPressedEvent(ZEN::KeyPressedEvent &e) {

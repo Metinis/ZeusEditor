@@ -133,7 +133,7 @@ void ProjectPanel::drawMeshesGrid() {
     std::vector<ZEN::AssetID> toRemove;
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::MeshData>())
         processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes,
-            "MESH_NAME", m_Renderer->getImDescSet());
+            "MESH_NAME", m_Renderer->getImGUIDescSet(assetID));
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
@@ -144,9 +144,9 @@ void ProjectPanel::drawMaterialsGrid() {
     std::vector<ZEN::AssetID> toRemove;
 
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::Material>()) {
-        auto material = m_AssetLibrary->getMaterialRaw(assetID);
-
-        void* texHandle = reinterpret_cast<void*>(m_Renderer->getImDescSet());
+        //auto material = m_AssetLibrary->getMaterialRaw(assetID);
+        const auto mat = m_AssetLibrary->get<ZEN::Material>(assetID);
+        void* texHandle = m_Renderer->getImGUIDescSet(mat->texture);
 
         processThumbnail(
             assetID,
@@ -173,7 +173,7 @@ void ProjectPanel::drawTexturesGrid() {
         auto* tex = m_AssetLibrary->get<ZEN::TextureData>(assetID);
         if (!tex) continue;
 
-        void* texHandle = reinterpret_cast<void*>(m_Renderer->getImDescSet());
+        void* texHandle = m_Renderer->getImGUIDescSet(assetID);
 
         processThumbnail(
             assetID,
@@ -265,14 +265,9 @@ void ProjectPanel::onUIRender() {
 }
 
 void ProjectPanel::onEvent(ZEN::Event &event) {
-    ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
 }
 
 bool ProjectPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if(e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
-    }
-    return false;
+
 }

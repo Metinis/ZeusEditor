@@ -6,6 +6,7 @@
 #include "../imgui/panels/ViewPanel.h"
 
 EditorLayer::EditorLayer(ZEN::EngineContext* ctx) {
+    m_Renderer = ctx->vkRenderer.get();
 
     ImGui::SetCurrentContext(ZEN::getEngineImGuiContext());
 
@@ -31,10 +32,17 @@ void EditorLayer::onEvent(ZEN::Event &event) {
 
 bool EditorLayer::onRunPlayMode(ZEN::RunPlayModeEvent &e) {
     if(!e.getPlaying()) {
+        m_Renderer->setImGUIMode(true);
         ZEN::Application::get().pushOverlay(m_InspectorPanel);
         ZEN::Application::get().pushOverlay(m_ProjectPanel);
         ZEN::Application::get().pushOverlay(m_ScenePanel);
         ZEN::Application::get().pushOverlay(m_ViewPanel);
+    } else {
+        m_Renderer->setImGUIMode(false);
+        ZEN::Application::get().popOverlay(m_InspectorPanel);
+        ZEN::Application::get().popOverlay(m_ProjectPanel);
+        ZEN::Application::get().popOverlay(m_ScenePanel);
+        ZEN::Application::get().popOverlay(m_ViewPanel);
     }
     return false;
 }

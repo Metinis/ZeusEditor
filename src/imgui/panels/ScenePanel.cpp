@@ -172,14 +172,9 @@ void ScenePanel::onUIRender() {
 }
 
 void ScenePanel::onEvent(ZEN::Event &event) {
-    ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
 }
 
 bool ScenePanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if (e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
-    }
-    return false;
+
 }

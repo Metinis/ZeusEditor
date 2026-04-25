@@ -210,7 +210,7 @@ void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID
 
 void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
     constexpr float thumbnailSize = 8.0f;
-    void* texHandle = reinterpret_cast<void*>(m_Renderer->getImDescSet());
+    void* texHandle = m_Renderer->getImGUIDescSet(textureID);
     ImGui::ImageButton(name, texHandle,
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
@@ -643,14 +643,11 @@ void InspectorPanel::onUIRender() {
 void InspectorPanel::onEvent(ZEN::Event &event) {
     ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent &e) { return onPlayModeEvent(e); });
+
 }
 
 bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if (e.getPlaying()) {
-       ZEN::Application::get().popOverlay(this);
-    }
-    return false;
+
 }
 
 void InspectorPanel::handleMaterialDrop(const ImGuiPayload *payload) {
