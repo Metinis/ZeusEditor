@@ -5,6 +5,7 @@ layout (location = 0) out vec3 outColor;
 layout (location = 1) out vec3 outNormal;
 layout (location = 2) out vec3 outFragPos;
 layout (location = 3) out vec2 outUV;
+layout (location = 4) flat out uint outAlbedoIdx;
 
 struct Vertex {
     vec3 position;
@@ -36,6 +37,7 @@ layout( push_constant ) uniform constants
 {
     mat4 u_ModelMat;
     VertexBufferAdr vertexBufferAdr;
+    uint albedoIndex;
 } PerObjectData;
 
 void main()
@@ -47,6 +49,7 @@ void main()
     outNormal = mat3(transpose(inverse(PerObjectData.u_ModelMat))) * v.Normal;
 
     //outColor = v.Color.xyz;
+    outAlbedoIdx = PerObjectData.albedoIndex;
     outUV = v.TexCoords;
     outColor = vec3(1.0, 1.0, 1.0);
 }
