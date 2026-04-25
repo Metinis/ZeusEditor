@@ -2,8 +2,7 @@
 #include "ZeusEngineCore/core/API.h"
 
 int main(int argc, char** argv) {
-    ZEN::eRendererAPI api = ZEN::eRendererAPI::Vulkan;
-    ZED::EditorApp* app = new ZED::EditorApp(api);
+    ZED::EditorApp* app = new ZED::EditorApp();
     app->run();
     delete(app);
 }

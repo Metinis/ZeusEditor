@@ -11,10 +11,11 @@ static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("scale", &out.localScale.x, 0.01f, 0.0f, 100.0f);
 };
 
-InspectorPanel::InspectorPanel(ZEN::ZEngine *engine, SelectionContext &selection) : m_Engine(engine),
+InspectorPanel::InspectorPanel(ZEN::EngineContext* ctx, SelectionContext &selection) :
     m_SelectionContext(selection) {
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
-}
+    m_CompRegistry = ctx->compRegistry.get();
+};
 
 void InspectorPanel::editMesh() {
     if (auto *meshComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MeshComp>()) {
@@ -144,7 +145,7 @@ void InspectorPanel::editComponents() {
 
 void InspectorPanel::editRuntimeComps() {
     if (ImGui::BeginPopup("AddCustomComponentPopup")) {
-        for (const auto &comp: m_Engine->getCompRegistry().getComponents()) {
+        for (const auto &comp: m_CompRegistry->getComponents()) {
             if (ImGui::MenuItem(comp.name)) {
                 m_SelectionContext.getEntity().addRuntimeComponent(comp);
                 ImGui::CloseCurrentPopup();
@@ -153,7 +154,7 @@ void InspectorPanel::editRuntimeComps() {
 
         ImGui::EndPopup();
     }
-    for (auto &compInfo: m_Engine->getCompRegistry().getComponents()) {
+    for (auto &compInfo: m_CompRegistry->getComponents()) {
         if (auto *comp = m_SelectionContext.getEntity().getRuntimeComponent(compInfo.name)) {
             if (ImGui::CollapsingHeader(compInfo.name)) {
                 ImGui::SameLine();
@@ -207,7 +208,7 @@ void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID
 }
 
 void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
-    constexpr float thumbnailSize = 8.0f;
+    /*constexpr float thumbnailSize = 8.0f;
 
     auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
     int texID = resourceManager->get<ZEN::GPUTex>(textureID)->drawableID;
@@ -222,7 +223,7 @@ void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine();
-    ImGui::Text("%s", name);
+    ImGui::Text("%s", name);*/
 }
 
 void InspectorPanel::editMaterialComp() {
@@ -535,7 +536,7 @@ void InspectorPanel::editMaterialProps() {
     }
 
 
-    if (ImGui::TreeNode("Texture")) {
+    /*if (ImGui::TreeNode("Texture")) {
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnWidth(0, 150);
         ImGui::SetColumnWidth(1, 100);
@@ -567,7 +568,7 @@ void InspectorPanel::editMaterialProps() {
 
         ImGui::Columns(1);
         ImGui::TreePop();
-    }
+    }*/
 }
 
 void InspectorPanel::inspectEntity() {

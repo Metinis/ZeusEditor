@@ -11,7 +11,7 @@ class MenuBarPanel;
 
 class EditorLayer : public ZEN::Layer {
 public:
-    EditorLayer(ZEN::ZEngine* engine);
+    EditorLayer(ZEN::EngineContext* ctx);
     void onEvent(ZEN::Event& event) override;
     bool onRunPlayMode(ZEN::RunPlayModeEvent& e);
     ~EditorLayer() override;

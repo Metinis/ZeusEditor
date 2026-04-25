@@ -2,9 +2,10 @@
 #include <tinyfiledialogs.h>
 
 
-ProjectPanel::ProjectPanel(ZEN::ZEngine* engine, SelectionContext& selection)
-    : m_Engine(engine), m_SelectionContext(selection)  {
+ProjectPanel::ProjectPanel(ZEN::EngineContext* ctx, SelectionContext &selection)
+    : m_SelectionContext(selection)  {
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
+    m_Importer = ctx->modelImporter.get();
 }
 
 static std::string getFileName(const std::string& path) {
@@ -85,7 +86,7 @@ void ProjectPanel::drawContextMenu() {
             constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
             const char* path = tinyfd_openFileDialog("Choose a model", "",
                 filters.size(), filters.data(), "3D Model Files", 1);
-            if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);
+            if (path) m_Importer->loadModel(getNameWithoutExtension(path), path);
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
@@ -100,7 +101,7 @@ void ProjectPanel::drawContextMenu() {
 
                 while ((end = allPaths.find('|', start)) != std::string::npos) {
                     std::string path = allPaths.substr(start, end - start);
-                    m_Engine->getModelImporter().loadTexture(
+                    m_Importer->loadTexture(
                         getNameWithoutExtension(path.c_str()),
                         path.c_str()
                     );
@@ -108,7 +109,7 @@ void ProjectPanel::drawContextMenu() {
                 }
 
                 std::string path = allPaths.substr(start);
-                m_Engine->getModelImporter().loadTexture(
+                m_Importer->loadTexture(
                     getNameWithoutExtension(path.c_str()),
                     path.c_str()
                 );
@@ -137,7 +138,7 @@ void ProjectPanel::drawMeshesGrid() {
 }
 
 void ProjectPanel::drawMaterialsGrid() {
-    std::vector<ZEN::AssetID> toRemove;
+    /*std::vector<ZEN::AssetID> toRemove;
 
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::Material>()) {
         auto material = m_AssetLibrary->getMaterialRaw(assetID);
@@ -164,11 +165,11 @@ void ProjectPanel::drawMaterialsGrid() {
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
-    }
+    }*/
 }
 
 void ProjectPanel::drawTexturesGrid() {
-    std::vector<ZEN::AssetID> toRemove;
+    /*std::vector<ZEN::AssetID> toRemove;
 
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::TextureData>()) {
         auto* tex = m_AssetLibrary->get<ZEN::TextureData>(assetID);
@@ -196,7 +197,7 @@ void ProjectPanel::drawTexturesGrid() {
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
-    }
+    }*/
 }
 
 void ProjectPanel::createMaterialPopup() {

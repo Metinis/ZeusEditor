@@ -5,15 +5,15 @@
 #include "../imgui/panels/ScenePanel.h"
 #include "../imgui/panels/ViewPanel.h"
 
-EditorLayer::EditorLayer(ZEN::ZEngine* engine) {
+EditorLayer::EditorLayer(ZEN::EngineContext* ctx) {
 
     ImGui::SetCurrentContext(ZEN::getEngineImGuiContext());
 
-    m_InspectorPanel = new InspectorPanel(engine, m_SelectionContext);
-    m_ProjectPanel = new ProjectPanel(engine, m_SelectionContext);
-    m_MenuBarPanel = new MenuBarPanel(engine, m_SelectionContext);
-    m_ScenePanel = new ScenePanel(engine, m_SelectionContext);
-    m_ViewPanel = new ViewPanel(engine, m_SelectionContext);
+    m_InspectorPanel = new InspectorPanel(ctx, m_SelectionContext);
+    m_ProjectPanel = new ProjectPanel(ctx, m_SelectionContext);
+    m_MenuBarPanel = new MenuBarPanel(ctx, m_SelectionContext);
+    m_ScenePanel = new ScenePanel(ctx, m_SelectionContext);
+    m_ViewPanel = new ViewPanel(ctx, m_SelectionContext);
 
     //pass their lifetime to layer stack
     ZEN::Application::get().pushOverlay(m_InspectorPanel);

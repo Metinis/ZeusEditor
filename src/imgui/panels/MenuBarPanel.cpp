@@ -1,6 +1,10 @@
 #include "MenuBarPanel.h"
 
-MenuBarPanel::MenuBarPanel(ZEN::ZEngine *engine, SelectionContext& selection) : m_Engine(engine), m_SelectionContext(selection)  {
+MenuBarPanel::MenuBarPanel(ZEN::EngineContext* ctx, SelectionContext &selection) : m_SelectionContext(selection)  {
+    m_Scene = ctx->scene;
+    m_CameraSystem = ctx->cameraSystem;
+    m_CompRegistry = ctx->compRegistry.get();
+    m_SystemManager = ctx->systemManager.get();
 }
 
 void MenuBarPanel::onUIRender() {
@@ -9,13 +13,13 @@ void MenuBarPanel::onUIRender() {
             if (ImGui::MenuItem("Open")) {
                 ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
                 assetSerializer.deserialize("/assets/default.zenpackage");
-                ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                ZEN::SceneSerializer serializer(m_Scene, m_CompRegistry);
                 serializer.deserialize("/assets/scenes/default.zen");
             }
             if (ImGui::MenuItem("Save")) {
                 ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
                 assetSerializer.serialize("/assets/default.zenpackage");
-                ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                ZEN::SceneSerializer serializer(m_Scene, m_CompRegistry);
                 serializer.serialize("/assets/scenes/default.zen");
             }
             if (ImGui::MenuItem("Exit")) {
@@ -31,26 +35,26 @@ void MenuBarPanel::onUIRender() {
         if (ImGui::BeginMenu("View")) {
             if (ImGui::MenuItem("Fullscreen")) {}
             if (ImGui::MenuItem("Toggle Normals")) {
-                m_Engine->getRenderSystem().toggleDrawNormals();
+                //m_Engine->getRenderSystem().toggleDrawNormals();
             }
             if (ImGui::BeginMenu("Aspect Ratio")) {
                 if (ImGui::MenuItem("16:9")) {
-                    m_Engine->setAspectRatio(16.0f/9.0f);
+                    //m_Engine->setAspectRatio(16.0f/9.0f);
                 }
                 if (ImGui::MenuItem("16:10")) {
-                    m_Engine->setAspectRatio(16.0f/10.0f);
+                    //m_Engine->setAspectRatio(16.0f/10.0f);
                 }
                 if (ImGui::MenuItem("4:3")) {
-                    m_Engine->setAspectRatio(4.0f/3.0f);
+                    //m_Engine->setAspectRatio(4.0f/3.0f);
                 }
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Camera")) {
                 if (ImGui::MenuItem("Scene")) {
-                    ZEN::Application::get().getEngine()->getCameraSystem().setUseMainCamera(false);
+                    m_CameraSystem->setUseMainCamera(false);
                 }
                 if (ImGui::MenuItem("Game")) {
-                    ZEN::Application::get().getEngine()->getCameraSystem().setUseMainCamera(true);
+                    m_CameraSystem->setUseMainCamera(true);
                 }
                 ImGui::EndMenu();
             }
@@ -61,10 +65,10 @@ void MenuBarPanel::onUIRender() {
                 if (ImGui::MenuItem("Run Project")) {
                     ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
                     assetSerializer.serialize("/assets/default.zenpackage");
-                    ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                    ZEN::SceneSerializer serializer(m_Scene, m_CompRegistry);
                     serializer.serialize("/assets/scenes/default.zen");
                     ZEN::RunPlayModeEvent e(true);
-                    ZEN::Application::get().getEngine()->getSystemManager().loadAll(&m_Engine->getScene());
+                    m_SystemManager->loadAll(m_Scene);
                     ZEN::Application::get().callEvent(e);
                     m_isPLaying = true;
                 }
@@ -72,11 +76,11 @@ void MenuBarPanel::onUIRender() {
             else if(ImGui::MenuItem("Stop Project")) {
                 ZEN::AssetSerializer assetSerializer(ZEN::Project::getActive()->getAssetLibrary().get());
                 assetSerializer.deserialize("/assets/default.zenpackage");
-                ZEN::SceneSerializer serializer(&m_Engine->getScene());
+                ZEN::SceneSerializer serializer(m_Scene, m_CompRegistry);
                 serializer.deserialize("/assets/scenes/default.zen");
                 ZEN::RunPlayModeEvent e(false);
                 ZEN::Application::get().callEvent(e);
-                ZEN::Application::get().getEngine()->getSystemManager().unloadAll();
+                m_SystemManager->unloadAll();
                 m_isPLaying = false;
             }
             ImGui::EndMenu();
