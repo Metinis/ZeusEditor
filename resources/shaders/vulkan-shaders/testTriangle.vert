@@ -5,7 +5,6 @@ layout (location = 0) out vec3 outColor;
 layout (location = 1) out vec3 outNormal;
 layout (location = 2) out vec3 outFragPos;
 layout (location = 3) out vec2 outUV;
-layout (location = 4) flat out uint outAlbedoIdx;
 
 struct Vertex {
     vec3 position;
@@ -25,7 +24,7 @@ struct Vertex {
 layout(set = 0, binding = 0) uniform SceneData {
     mat4 viewproj;
     vec4 ambientColor;
-    vec4 sunlightDirection; // w for sun power
+    vec4 u_LightPos; // w for sun power
     vec4 sunlightColor;
 } SceneDataBuffer;
 
@@ -33,11 +32,18 @@ layout(buffer_reference, std430) readonly buffer VertexBufferAdr {
     Vertex vertices[];
 };
 
-layout( push_constant ) uniform constants
-{
+layout(push_constant) uniform constants {
     mat4 u_ModelMat;
     VertexBufferAdr vertexBufferAdr;
+
+    vec4 u_Albedo;   // xyz = color
+    vec4 u_Params;   // x=metallic, y=roughness, z=ao, w=unused
+
     uint albedoIndex;
+    /*uint metallicIndex;
+    uint roughnessIndex;
+    uint normalIndex;
+    uint aoIndex;*/
 } PerObjectData;
 
 void main()
@@ -49,7 +55,7 @@ void main()
     outNormal = mat3(transpose(inverse(PerObjectData.u_ModelMat))) * v.Normal;
 
     //outColor = v.Color.xyz;
-    outAlbedoIdx = PerObjectData.albedoIndex;
+    //outAlbedoIdx = PerObjectData.albedoIndex;
     outUV = v.TexCoords;
     outColor = vec3(1.0, 1.0, 1.0);
 }
