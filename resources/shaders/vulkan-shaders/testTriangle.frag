@@ -10,14 +10,14 @@ layout (location = 4) flat in uint inAlbedoIdx;
 
 layout (location = 0) out vec4 outFragColor;
 
-layout(set = 0, binding = 0) uniform sampler2D textures[];
-
-layout(set = 0, binding = 1) uniform SceneData {
+layout(set = 0, binding = 0) uniform SceneData {
     mat4 viewproj;
     vec4 ambientColor;
     vec4 sunlightDirection; // w for sun power
     vec4 sunlightColor;
 } SceneDataBuffer;
+
+layout(set = 1, binding = 0) uniform sampler2D textures[];
 
 void main()
 {

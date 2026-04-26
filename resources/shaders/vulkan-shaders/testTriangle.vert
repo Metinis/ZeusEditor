@@ -22,7 +22,7 @@ struct Vertex {
     float _pad5;
 };
 
-layout(set = 0, binding = 1) uniform SceneData {
+layout(set = 0, binding = 0) uniform SceneData {
     mat4 viewproj;
     vec4 ambientColor;
     vec4 sunlightDirection; // w for sun power
