@@ -489,9 +489,8 @@ void InspectorPanel::editMaterialProps() {
     ImGui::DragFloat("Metallic", &m_SelectionContext.getMaterial()->metallic, 0.01f, 0.0f, 1.0f);
     ImGui::DragFloat("Roughness", &m_SelectionContext.getMaterial()->roughness, 0.01f, 0.0f, 1.0f);
     ImGui::DragFloat("Ambient Oclussion", &m_SelectionContext.getMaterial()->ao, 0.01f, 0.0f, 1.0f);
-    ImGui::Checkbox("Is Metal", &m_SelectionContext.getMaterial()->metal);
 
-    if (ImGui::TreeNode("Shader")) {
+    /*if (ImGui::TreeNode("Shader")) {
         if (auto shaderComp = m_SelectionContext.getMaterial()->shader) {
             ImGui::SeparatorText("Shader");
 
@@ -530,7 +529,7 @@ void InspectorPanel::editMaterialProps() {
             ImGui::EndGroup();
         }
         ImGui::TreePop();
-    }
+    }*/
 
 
     if (ImGui::TreeNode("Texture")) {

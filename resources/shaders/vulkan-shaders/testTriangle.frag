@@ -8,6 +8,7 @@ layout (location = 0) in vec3 inColor;
 layout (location = 1) in vec3 inNormal;
 layout (location = 2) in vec3 inFragPos;
 layout (location = 3) in vec2 inUV;
+layout (location = 4) in flat uint inMat;
 
 layout (location = 0) out vec4 outFragColor;
 
@@ -19,40 +20,22 @@ layout(set = 0, binding = 0) uniform SceneData {
     vec4 u_CameraPos;
 } SceneDataBuffer;
 
-struct Vertex {
-    vec3 position;
-    float _pad0;
-    vec3 Normal;
-    float _pad1;
-    vec2 TexCoords;
-    float _pad2;
-    float _pad3;
-    vec4 Color;
-    vec3 Tangent;
-    float _pad4;
-    vec3 Bitangent;
-    float _pad5;
-};
-
-layout(buffer_reference, std430) readonly buffer VertexBufferAdr {
-    Vertex vertices[];
-};
-
-layout(push_constant) uniform constants {
-    mat4 u_ModelMat;
-    VertexBufferAdr vertexBufferAdr;
-
+struct Material {
     vec4 u_Albedo;   // xyz = color
     vec4 u_Params;   // x=metallic, y=roughness, z=ao, w=unused
 
     uint albedoIndex;
-    //uint metallicIndex;
-    //uint roughnessIndex;
-    //uint normalIndex;
-    //uint aoIndex;
-} PerObjectData;
+    uint metallicIndex;
+    uint roughnessIndex;
+    uint normalIndex;
+    uint aoIndex;
+};
 
 layout(set = 1, binding = 0) uniform sampler2D textures[];
+
+layout(std430, set = 2, binding = 0) readonly buffer MaterialBuffer {
+    Material materials[];
+} materialBuffers;
 
 float ggxDistribution(float nDotH, float roughness){
     // a = surface roucghness, when 0, smooth, when 1, rough
@@ -85,17 +68,18 @@ vec3 schlickFresnel(float vDotH, vec3 F0, float roughness){
 
 void main()
 {
+    Material mat = materialBuffers.materials[inMat];
     vec3 albedo;
     vec3 normal;
     float metallic;
     float roughness;
     float ao;
 
-    albedo = pow(texture(textures[PerObjectData.albedoIndex], inUV).rgb, vec3(2.2));
+    albedo = pow(texture(textures[mat.albedoIndex], inUV).rgb, vec3(2.2));
     normal = normalize(inNormal);
-    metallic = PerObjectData.u_Params.x;
-    roughness = PerObjectData.u_Params.y;
-    ao = PerObjectData.u_Params.z;
+    metallic = mat.u_Params.x;
+    roughness = mat.u_Params.y;
+    ao = mat.u_Params.z;
 
     vec3 N = normal;
     //vec3 N = normalize(v_Normal);

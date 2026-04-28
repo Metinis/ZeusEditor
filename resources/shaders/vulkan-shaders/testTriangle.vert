@@ -5,6 +5,7 @@ layout (location = 0) out vec3 outColor;
 layout (location = 1) out vec3 outNormal;
 layout (location = 2) out vec3 outFragPos;
 layout (location = 3) out vec2 outUV;
+layout (location = 4) out flat uint outMat;
 
 struct Vertex {
     vec3 position;
@@ -33,17 +34,9 @@ layout(buffer_reference, std430) readonly buffer VertexBufferAdr {
 };
 
 layout(push_constant) uniform constants {
+    uint matIndex;
     mat4 u_ModelMat;
     VertexBufferAdr vertexBufferAdr;
-
-    vec4 u_Albedo;   // xyz = color
-    vec4 u_Params;   // x=metallic, y=roughness, z=ao, w=unused
-
-    uint albedoIndex;
-    /*uint metallicIndex;
-    uint roughnessIndex;
-    uint normalIndex;
-    uint aoIndex;*/
 } PerObjectData;
 
 void main()
@@ -54,8 +47,7 @@ void main()
     gl_Position = SceneDataBuffer.viewproj * PerObjectData.u_ModelMat * vec4(v.position, 1.0f);
     outNormal = mat3(transpose(inverse(PerObjectData.u_ModelMat))) * v.Normal;
 
-    //outColor = v.Color.xyz;
-    //outAlbedoIdx = PerObjectData.albedoIndex;
+    outMat = PerObjectData.matIndex;
     outUV = v.TexCoords;
     outColor = vec3(1.0, 1.0, 1.0);
 }
