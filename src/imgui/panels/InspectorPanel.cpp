@@ -204,6 +204,7 @@ void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID
     ZEN::AssetID assetID;
     if (payload->DataSize == sizeof(ZEN::AssetID)) {
         std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
+
     }
     outTexture = assetID;
 }
@@ -482,13 +483,21 @@ void InspectorPanel::editRigidBodyComp() {
 }
 
 
-void InspectorPanel::editMaterialProps() {
+bool InspectorPanel::editMaterialProps() {
     ImGui::SeparatorText("Material");
 
-    ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f);
-    ImGui::DragFloat("Metallic", &m_SelectionContext.getMaterial()->metallic, 0.01f, 0.0f, 1.0f);
-    ImGui::DragFloat("Roughness", &m_SelectionContext.getMaterial()->roughness, 0.01f, 0.0f, 1.0f);
-    ImGui::DragFloat("Ambient Oclussion", &m_SelectionContext.getMaterial()->ao, 0.01f, 0.0f, 1.0f);
+    if (ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f)) {
+        return true;
+    }
+    if (ImGui::DragFloat("Metallic", &m_SelectionContext.getMaterial()->metallic, 0.01f, 0.0f, 1.0f)) {
+        return true;
+    }
+    if (ImGui::DragFloat("Roughness", &m_SelectionContext.getMaterial()->roughness, 0.01f, 0.0f, 1.0f)) {
+        return true;
+    }
+    if (ImGui::DragFloat("Ambient Oclussion", &m_SelectionContext.getMaterial()->ao, 0.01f, 0.0f, 1.0f)) {
+        return true;
+    }
 
     /*if (ImGui::TreeNode("Shader")) {
         if (auto shaderComp = m_SelectionContext.getMaterial()->shader) {
@@ -609,8 +618,9 @@ void InspectorPanel::inspectEntity() {
 
 }
 
-void InspectorPanel::inspectMaterial() {
-    editMaterialProps();
+bool InspectorPanel::inspectMaterial() {
+    bool dirty = editMaterialProps();
+    return dirty;
 }
 
 void InspectorPanel::onUIRender() {

@@ -14,7 +14,7 @@ private:
     void editMesh();
     void editComponents();
     void editRuntimeComps();
-    void editMaterialProps();
+    bool editMaterialProps();
     void editMaterialComp();
     void editBoxColliderComp();
     void editSphereColliderComp();
@@ -22,7 +22,7 @@ private:
     void editMeshColliderComp();
     void editRigidBodyComp();
     void inspectEntity();
-    void inspectMaterial();
+    bool inspectMaterial(); //return dirty bit
     void renderTextureDrop(ZEN::AssetID& textureID, const char* name);
     void handleMaterialDrop(const ImGuiPayload* payload);
     void handleMeshDrop(const ImGuiPayload* payload);
