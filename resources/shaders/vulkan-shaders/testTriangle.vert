@@ -33,21 +33,24 @@ layout(buffer_reference, std430) readonly buffer VertexBufferAdr {
     Vertex vertices[];
 };
 
-layout(push_constant) uniform constants {
+struct Object {
     uint matIndex;
-    mat4 u_ModelMat;
+    mat4 matrix;
     VertexBufferAdr vertexBufferAdr;
-} PerObjectData;
+};
+layout(set = 0, binding = 1) readonly buffer ObjectData {
+    Object objects[];
+} ObjectDataBuffer;
 
 void main()
 {
-    Vertex v = PerObjectData.vertexBufferAdr.vertices[gl_VertexIndex];
+    Vertex v = ObjectDataBuffer.objects[gl_InstanceIndex].vertexBufferAdr.vertices[gl_VertexIndex];
 
-    outFragPos = vec3(PerObjectData.u_ModelMat * vec4(v.position, 1.0f));
-    gl_Position = SceneDataBuffer.viewproj * PerObjectData.u_ModelMat * vec4(v.position, 1.0f);
-    outNormal = mat3(transpose(inverse(PerObjectData.u_ModelMat))) * v.Normal;
+    outFragPos = vec3(ObjectDataBuffer.objects[gl_InstanceIndex].matrix * vec4(v.position, 1.0f));
+    gl_Position = SceneDataBuffer.viewproj * ObjectDataBuffer.objects[gl_InstanceIndex].matrix * vec4(v.position, 1.0f);
+    outNormal = mat3(transpose(inverse(ObjectDataBuffer.objects[gl_InstanceIndex].matrix))) * v.Normal;
 
-    outMat = PerObjectData.matIndex;
+    outMat = ObjectDataBuffer.objects[gl_InstanceIndex].matIndex;
     outUV = v.TexCoords;
     outColor = vec3(1.0, 1.0, 1.0);
 }
