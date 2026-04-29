@@ -156,7 +156,7 @@ void ProjectPanel::drawMaterialsGrid() {
             "MATERIAL_NAME",
             texHandle,
             [&, assetID]() {
-                m_SelectionContext.setMaterial(m_AssetLibrary->get<ZEN::Material>(assetID));
+                m_SelectionContext.setMaterial(ZEN::AssetHandle<ZEN::Material>(assetID));
             }
         );
     }
@@ -183,7 +183,7 @@ void ProjectPanel::drawTexturesGrid() {
             "TEXTURE_NAME",
             texHandle,
             [&, assetID]() {
-                m_SelectionContext.setMaterial(m_AssetLibrary->get<ZEN::Material>(assetID));
+                m_SelectionContext.setMaterial(ZEN::AssetHandle<ZEN::Material>(assetID));
             }
         );
     }

@@ -23,10 +23,10 @@ private:
     void editRigidBodyComp();
     void inspectEntity();
     bool inspectMaterial(); //return dirty bit
-    void renderTextureDrop(ZEN::AssetID& textureID, const char* name);
+    bool renderTextureDrop(ZEN::AssetID& textureID, const char* name);
     void handleMaterialDrop(const ImGuiPayload* payload);
     void handleMeshDrop(const ImGuiPayload* payload);
-    void handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture);
+    bool handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture);
     std::shared_ptr<ZEN::AssetLibrary> m_AssetLibrary;
     ZEN::CompRegistry* m_CompRegistry;
     ZEN::VKRenderer* m_Renderer;

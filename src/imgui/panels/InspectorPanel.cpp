@@ -200,28 +200,33 @@ void InspectorPanel::editRuntimeComps() {
     }
 }
 
-void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID &outTexture) {
+bool InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID &outTexture) {
     ZEN::AssetID assetID;
+    bool edited = false;
     if (payload->DataSize == sizeof(ZEN::AssetID)) {
         std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
-
+        edited = true;
     }
     outTexture = assetID;
+    return edited;
 }
 
-void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
+bool InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
+    bool edited = false;
     constexpr float thumbnailSize = 8.0f;
     void* texHandle = m_Renderer->getImGUIDescSet(textureID);
     ImGui::ImageButton(name, texHandle,
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
-            handleTextureDrop(payload, textureID);
+            edited = handleTextureDrop(payload, textureID);
+
         }
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine();
     ImGui::Text("%s", name);
+    return edited;
 }
 
 void InspectorPanel::editMaterialComp() {
@@ -486,18 +491,12 @@ void InspectorPanel::editRigidBodyComp() {
 bool InspectorPanel::editMaterialProps() {
     ImGui::SeparatorText("Material");
 
-    if (ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f)) {
-        return true;
-    }
-    if (ImGui::DragFloat("Metallic", &m_SelectionContext.getMaterial()->metallic, 0.01f, 0.0f, 1.0f)) {
-        return true;
-    }
-    if (ImGui::DragFloat("Roughness", &m_SelectionContext.getMaterial()->roughness, 0.01f, 0.0f, 1.0f)) {
-        return true;
-    }
-    if (ImGui::DragFloat("Ambient Oclussion", &m_SelectionContext.getMaterial()->ao, 0.01f, 0.0f, 1.0f)) {
-        return true;
-    }
+    bool edited = false;
+
+    edited |= ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f);
+    edited |= ImGui::DragFloat("Metallic", &m_SelectionContext.getMaterial()->metallic, 0.01f, 0.0f, 1.0f);
+    edited |= ImGui::DragFloat("Roughness", &m_SelectionContext.getMaterial()->roughness, 0.01f, 0.0f, 1.0f);
+    edited |= ImGui::DragFloat("Ambient Oclussion", &m_SelectionContext.getMaterial()->ao, 0.01f, 0.0f, 1.0f);
 
     /*if (ImGui::TreeNode("Shader")) {
         if (auto shaderComp = m_SelectionContext.getMaterial()->shader) {
@@ -546,27 +545,27 @@ bool InspectorPanel::editMaterialProps() {
         ImGui::SetColumnWidth(0, 150);
         ImGui::SetColumnWidth(1, 100);
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->texture, "Albedo");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->texture, "Albedo");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Albedo", &m_SelectionContext.getMaterial()->useAlbedo);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->metallicTex, "Metallic");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->metallicTex, "Metallic");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Metallic", &m_SelectionContext.getMaterial()->useMetallic);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTex, "Roughness");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTex, "Roughness");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Roughness", &m_SelectionContext.getMaterial()->useRoughness);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->aoTex, "AO");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->aoTex, "AO");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##AO", &m_SelectionContext.getMaterial()->useAO);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->normalTex, "Normal");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->normalTex, "Normal");
         ImGui::NextColumn();
         ImGui::Checkbox("Use##Normal", &m_SelectionContext.getMaterial()->useNormal);
         ImGui::NextColumn();
@@ -574,6 +573,7 @@ bool InspectorPanel::editMaterialProps() {
         ImGui::Columns(1);
         ImGui::TreePop();
     }
+    return edited;
 }
 
 void InspectorPanel::inspectEntity() {
@@ -619,8 +619,11 @@ void InspectorPanel::inspectEntity() {
 }
 
 bool InspectorPanel::inspectMaterial() {
-    bool dirty = editMaterialProps();
-    return dirty;
+    bool edited = editMaterialProps();
+    if (edited) {
+        m_Renderer->uploadMaterial(m_SelectionContext.getMaterialID(), *m_SelectionContext.getMaterial());
+    }
+    return edited;
 }
 
 void InspectorPanel::onUIRender() {
