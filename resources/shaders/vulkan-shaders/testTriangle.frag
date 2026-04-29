@@ -4,11 +4,18 @@
 
 #define PI 3.14159265359
 
+const uint USE_ALBEDO   = 1u << 0u;
+const uint USE_METALLIC = 1u << 1u;
+const uint USE_ROUGHNESS= 1u << 2u;
+const uint USE_NORMAL   = 1u << 3u;
+const uint USE_AO       = 1u << 4u;
+
 layout (location = 0) in vec3 inColor;
 layout (location = 1) in vec3 inNormal;
 layout (location = 2) in vec3 inFragPos;
 layout (location = 3) in vec2 inUV;
 layout (location = 4) in flat uint inMat;
+layout (location = 5) in mat3 inTBN;
 
 layout (location = 0) out vec4 outFragColor;
 
@@ -29,6 +36,8 @@ struct Material {
     uint roughnessIndex;
     uint normalIndex;
     uint aoIndex;
+
+    uint flags;
 };
 
 layout(set = 1, binding = 0) uniform sampler2D textures[];
@@ -69,17 +78,28 @@ vec3 schlickFresnel(float vDotH, vec3 F0, float roughness){
 void main()
 {
     Material mat = materialBuffers.materials[inMat];
-    vec3 albedo;
-    vec3 normal;
-    float metallic;
-    float roughness;
-    float ao;
+    vec3 albedo = mat.u_Albedo.rgb;
+    vec3 normal = normalize(inNormal);
+    float metallic = mat.u_Params.x;
+    float roughness = mat.u_Params.y;;
+    float ao = mat.u_Params.z;
 
-    albedo = pow(texture(textures[mat.albedoIndex], inUV).rgb, vec3(2.2));
-    normal = normalize(inNormal);
-    metallic = mat.u_Params.x;
-    roughness = mat.u_Params.y;
-    ao = mat.u_Params.z;
+    if((mat.flags & USE_ALBEDO) != 0u) {
+        albedo = pow(texture(textures[mat.albedoIndex], inUV).rgb, vec3(2.2));
+    }
+    if((mat.flags & USE_NORMAL) != 0u) {
+        vec3 Nmap = texture(textures[mat.normalIndex], inUV).rgb * 2.0 - 1.0;
+        normal = normalize(inTBN * Nmap);
+    }
+    if((mat.flags & USE_METALLIC) != 0u) {
+        metallic = texture(textures[mat.metallicIndex], inUV).r;
+    }
+    if((mat.flags & USE_ROUGHNESS) != 0u) {
+        roughness = texture(textures[mat.roughnessIndex], inUV).r;
+    }
+    if((mat.flags & USE_AO) != 0u) {
+        ao = texture(textures[mat.aoIndex], inUV).r;
+    }
 
     vec3 N = normal;
     //vec3 N = normalize(v_Normal);

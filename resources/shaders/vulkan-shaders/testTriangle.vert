@@ -6,6 +6,7 @@ layout (location = 1) out vec3 outNormal;
 layout (location = 2) out vec3 outFragPos;
 layout (location = 3) out vec2 outUV;
 layout (location = 4) out flat uint outMat;
+layout (location = 5) out mat3 outTBN;
 
 struct Vertex {
     vec3 position;
@@ -48,9 +49,20 @@ void main()
 
     outFragPos = vec3(ObjectDataBuffer.objects[gl_InstanceIndex].matrix * vec4(v.position, 1.0f));
     gl_Position = SceneDataBuffer.viewproj * ObjectDataBuffer.objects[gl_InstanceIndex].matrix * vec4(v.position, 1.0f);
-    outNormal = mat3(transpose(inverse(ObjectDataBuffer.objects[gl_InstanceIndex].matrix))) * v.Normal;
+
+    mat3 normalMatrix = mat3(transpose(inverse(ObjectDataBuffer.objects[gl_InstanceIndex].matrix)));
+    outNormal = normalMatrix * v.Normal;
 
     outMat = ObjectDataBuffer.objects[gl_InstanceIndex].matIndex;
     outUV = v.TexCoords;
+
+    vec3 T = normalize(normalMatrix * v.Tangent);
+    vec3 N = normalize(normalMatrix * v.Normal);
+    T = normalize(T - dot(T, N) * N);
+    vec3 B = cross(N, T);
+
+    mat3 TBN = mat3(T, B, N);
+    outTBN = TBN;
+
     outColor = vec3(1.0, 1.0, 1.0);
 }

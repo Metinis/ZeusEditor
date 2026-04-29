@@ -547,27 +547,27 @@ bool InspectorPanel::editMaterialProps() {
 
         edited |= renderTextureDrop(m_SelectionContext.getMaterial()->texture, "Albedo");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##Albedo", &m_SelectionContext.getMaterial()->useAlbedo);
+        edited |= ImGui::Checkbox("Use##Albedo", &m_SelectionContext.getMaterial()->useAlbedo);
         ImGui::NextColumn();
 
         edited |= renderTextureDrop(m_SelectionContext.getMaterial()->metallicTex, "Metallic");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##Metallic", &m_SelectionContext.getMaterial()->useMetallic);
+        edited |= ImGui::Checkbox("Use##Metallic", &m_SelectionContext.getMaterial()->useMetallic);
         ImGui::NextColumn();
 
         edited |= renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTex, "Roughness");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##Roughness", &m_SelectionContext.getMaterial()->useRoughness);
+        edited |= ImGui::Checkbox("Use##Roughness", &m_SelectionContext.getMaterial()->useRoughness);
         ImGui::NextColumn();
 
         edited |= renderTextureDrop(m_SelectionContext.getMaterial()->aoTex, "AO");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##AO", &m_SelectionContext.getMaterial()->useAO);
+        edited |= ImGui::Checkbox("Use##AO", &m_SelectionContext.getMaterial()->useAO);
         ImGui::NextColumn();
 
         edited |= renderTextureDrop(m_SelectionContext.getMaterial()->normalTex, "Normal");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##Normal", &m_SelectionContext.getMaterial()->useNormal);
+        edited |= ImGui::Checkbox("Use##Normal", &m_SelectionContext.getMaterial()->useNormal);
         ImGui::NextColumn();
 
         ImGui::Columns(1);
