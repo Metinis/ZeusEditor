@@ -70,7 +70,7 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
         auto entities = m_Scene->getEntities<ZEN::ParentComp>();
         for(auto e : entities) {
             auto parentComp = e.getComponent<ZEN::ParentComp>();
-            if(parentComp.parentID == entity.getComponent<ZEN::UUIDComp>().uuid) {
+            if(entity.isValid() && parentComp.parentID == entity.getComponent<ZEN::UUIDComp>().uuid) {
                 drawEntityNode(e);
             }
         }
