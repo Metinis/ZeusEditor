@@ -24,7 +24,8 @@ struct Vertex {
 };
 
 layout(set = 0, binding = 0) uniform SceneData {
-    mat4 viewproj;
+    mat4 proj;
+    mat4 view;
     vec4 ambientColor;
     vec4 u_LightPos; // w for sun power
     vec4 sunlightColor;
@@ -48,7 +49,7 @@ void main()
     Vertex v = ObjectDataBuffer.objects[gl_InstanceIndex].vertexBufferAdr.vertices[gl_VertexIndex];
 
     outFragPos = vec3(ObjectDataBuffer.objects[gl_InstanceIndex].matrix * vec4(v.position, 1.0f));
-    gl_Position = SceneDataBuffer.viewproj * ObjectDataBuffer.objects[gl_InstanceIndex].matrix * vec4(v.position, 1.0f);
+    gl_Position = SceneDataBuffer.proj * SceneDataBuffer.view * ObjectDataBuffer.objects[gl_InstanceIndex].matrix * vec4(v.position, 1.0f);
 
     mat3 normalMatrix = mat3(transpose(inverse(ObjectDataBuffer.objects[gl_InstanceIndex].matrix)));
     outNormal = normalMatrix * v.Normal;

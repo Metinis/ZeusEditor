@@ -20,7 +20,8 @@ layout (location = 5) in mat3 inTBN;
 layout (location = 0) out vec4 outFragColor;
 
 layout(set = 0, binding = 0) uniform SceneData {
-    mat4 viewproj;
+    mat4 proj;
+    mat4 view;
     vec4 ambientColor;
     vec4 u_LightPos; // w for sun power
     vec4 sunlightColor;
