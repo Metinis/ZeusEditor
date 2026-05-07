@@ -42,6 +42,7 @@ struct Material {
 };
 
 layout(set = 1, binding = 0) uniform sampler2D textures[];
+layout(set = 1, binding = 0) uniform samplerCube cubeTextures[];
 
 layout(std430, set = 2, binding = 0) readonly buffer MaterialBuffer {
     Material materials[];
