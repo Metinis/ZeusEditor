@@ -150,7 +150,7 @@ void ScenePanel::onUIRender() {
     }
 
     ImGui::End();
-    if (m_PendingReparent) {
+    if (m_PendingReparent.has_value()) {
         auto& [childID, parentID] = *m_PendingReparent;
 
         auto child  = m_Scene->getEntity(childID);
@@ -176,5 +176,5 @@ void ScenePanel::onEvent(ZEN::Event &event) {
 }
 
 bool ScenePanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-
+    return false;
 }

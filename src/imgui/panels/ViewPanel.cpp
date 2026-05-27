@@ -183,7 +183,7 @@ void ViewPanel::handleDrop() {
 }
 
 bool ViewPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-
+    return false;
 }
 
 bool ViewPanel::onKeyPressedEvent(ZEN::KeyPressedEvent &e) {

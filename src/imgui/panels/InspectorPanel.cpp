@@ -659,7 +659,7 @@ void InspectorPanel::onEvent(ZEN::Event &event) {
 }
 
 bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-
+    return false;
 }
 
 void InspectorPanel::handleMaterialDrop(const ImGuiPayload *payload) {

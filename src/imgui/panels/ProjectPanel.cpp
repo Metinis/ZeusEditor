@@ -269,5 +269,5 @@ void ProjectPanel::onEvent(ZEN::Event &event) {
 }
 
 bool ProjectPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-
+    return false;
 }
