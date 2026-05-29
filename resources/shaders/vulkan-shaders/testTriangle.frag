@@ -1,6 +1,6 @@
 #version 450
-#extension GL_EXT_buffer_reference : require
-#extension GL_EXT_nonuniform_qualifier : require
+#extension GL_GOOGLE_include_directive : require
+#include "bindless.glsl"
 
 #define PI 3.14159265359
 
@@ -28,25 +28,7 @@ layout(set = 0, binding = 0) uniform SceneData {
     vec4 u_CameraPos;
 } SceneDataBuffer;
 
-struct Material {
-    vec4 u_Albedo;   // xyz = color
-    vec4 u_Params;   // x=metallic, y=roughness, z=ao, w=unused
 
-    uint albedoIndex;
-    uint metallicIndex;
-    uint roughnessIndex;
-    uint normalIndex;
-    uint aoIndex;
-
-    uint flags;
-};
-
-layout(set = 1, binding = 0) uniform sampler2D textures[];
-layout(set = 1, binding = 0) uniform samplerCube cubeTextures[];
-
-layout(std430, set = 2, binding = 0) readonly buffer MaterialBuffer {
-    Material materials[];
-} materialBuffers;
 
 float ggxDistribution(float nDotH, float roughness){
     // a = surface roucghness, when 0, smooth, when 1, rough
