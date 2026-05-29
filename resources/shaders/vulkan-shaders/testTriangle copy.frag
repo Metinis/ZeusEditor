@@ -6,8 +6,13 @@ layout (location = 0) out vec4 outFragColor;
 
 layout (location = 0) in vec3 inUV;
 
+layout( push_constant ) uniform PushConstants
+{
+    uint skyboxIdx;
+} pc;
+
 void main()
 {
     //10 is placeholder
-    outFragColor = texture(cubeTextures[1], inUV);
+    outFragColor = texture(cubeTextures[pc.skyboxIdx], inUV);
 }

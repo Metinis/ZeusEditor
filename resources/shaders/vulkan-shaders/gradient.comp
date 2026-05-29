@@ -8,8 +8,8 @@ layout(local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
 
 layout(push_constant) uniform PushConstants
 {
-    uint equirectangularTextureIndex;
-    uint outputCubeIndex;
+    uint eqTextureIdx;
+    uint skyboxIdx;
 } pc;
 
 const vec2 invAtan = vec2(0.1591, 0.3183);
@@ -43,7 +43,7 @@ void main()
 {
     ivec3 coord = ivec3(gl_GlobalInvocationID.xyz);
 
-    ivec2 size = imageSize(cubeImages[1]);
+    ivec2 size = imageSize(cubeImages[pc.skyboxIdx]);
 
     int face = coord.z;
 
@@ -63,7 +63,7 @@ void main()
 
     vec2 sphericalUV = sampleSphericalMap(dir);
 
-    vec3 color = texture(textures[0], sphericalUV).rgb;
+    vec3 color = texture(textures[pc.eqTextureIdx], sphericalUV).rgb;
 
-    imageStore(cubeImages[1], coord, vec4(color, 1.0));
+    imageStore(cubeImages[pc.skyboxIdx], coord, vec4(color, 1.0));
 }
