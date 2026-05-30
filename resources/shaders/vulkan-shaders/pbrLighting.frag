@@ -28,7 +28,11 @@ layout(set = 0, binding = 0) uniform SceneData {
     vec4 u_CameraPos;
 } SceneDataBuffer;
 
-
+layout( push_constant ) uniform PushConstants
+{
+    uint skyboxIdx;
+    uint irradianceIdx;
+} pc;
 
 float ggxDistribution(float nDotH, float roughness){
     // a = surface roucghness, when 0, smooth, when 1, rough
@@ -120,7 +124,11 @@ void main()
     vec3 lightColor = vec3(1.0);
 
     vec3 Lo = (diffuse + specular) * lightColor * nDotL;
-    vec3 ambient = SceneDataBuffer.ambientColor.rgb * albedo * ao;
+
+    vec3 irradiance = texture(cubeTextures[pc.irradianceIdx], N).rgb;
+    vec3 diffuseIBL = irradiance * albedo;
+    vec3 ambient = (diffuseIBL) * ao;
+
     vec3 color = Lo + ambient;
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2)); //gamma correcltion

@@ -9,6 +9,7 @@ layout (location = 0) in vec3 inUV;
 layout( push_constant ) uniform PushConstants
 {
     uint skyboxIdx;
+    uint irradianceIdx;
 } pc;
 
 void main()
