@@ -32,6 +32,8 @@ layout( push_constant ) uniform PushConstants
 {
     uint skyboxIdx;
     uint irradianceIdx;
+    uint prefilterIdx;
+    uint brdfTexIdx;
 } pc;
 
 float ggxDistribution(float nDotH, float roughness){
@@ -121,17 +123,21 @@ void main()
     vec3 R = reflect(-V, N);
     const float MAX_REFLECTION_LOD = 4.0;
 
+    vec3 prefilteredColor = textureLod(cubeTextures[pc.prefilterIdx], R,  roughness * MAX_REFLECTION_LOD).rgb;
+    vec2 brdf  = texture(textures[pc.brdfTexIdx], vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 specularIBL = prefilteredColor * (F * brdf.x + brdf.y);
+
     vec3 lightColor = vec3(1.0);
 
     vec3 Lo = (diffuse + specular) * lightColor * nDotL;
 
     vec3 irradiance = texture(cubeTextures[pc.irradianceIdx], N).rgb;
     vec3 diffuseIBL = irradiance * albedo;
-    vec3 ambient = (diffuseIBL) * ao;
+    vec3 ambient = (diffuseIBL + specularIBL) * ao;
 
     vec3 color = Lo + ambient;
     color = color / (color + vec3(1.0));
-    color = pow(color, vec3(1.0/2.2)); //gamma correcltion
+    color = pow(color, vec3(1.0/2.2)); //gamma correction
 
     outFragColor = vec4(color, 1.0);
 }

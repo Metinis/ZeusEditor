@@ -11,6 +11,10 @@ layout(push_constant) uniform PushConstants
     uint eqTextureIdx;
     uint skyboxIdx;
     uint conMapIdx;
+    uint prefilterMapIdx;
+    uint prefilterBaseWidth;
+    uint prefilterBaseHeight;
+    float roughness;
 } pc;
 
 const float PI = 3.14159265359;

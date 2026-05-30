@@ -11,6 +11,10 @@ layout(push_constant) uniform PushConstants
     uint eqTextureIdx;
     uint skyboxIdx;
     uint conMapIdx;
+    uint prefilterMapIdx;
+    uint prefilterBaseWidth;
+    uint prefilterBaseHeight;
+    float roughness;
 } pc;
 
 const vec2 invAtan = vec2(0.1591, 0.3183);
