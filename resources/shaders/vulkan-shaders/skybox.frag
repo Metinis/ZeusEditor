@@ -13,6 +13,10 @@ layout( push_constant ) uniform PushConstants
 
 void main()
 {
-    //10 is placeholder
-    outFragColor = texture(cubeTextures[pc.skyboxIdx], inUV);
+    vec3 envColor = texture(cubeTextures[pc.skyboxIdx], inUV).rgb;
+
+    envColor = envColor / (envColor + vec3(1.0));
+    envColor = pow(envColor, vec3(1.0/2.2));
+
+    outFragColor = vec4(envColor, 1.0);
 }

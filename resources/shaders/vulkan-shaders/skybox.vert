@@ -45,5 +45,6 @@ void main()
 
     outUV = v.position;
     vec4 pos = SceneDataBuffer.proj * mat4(mat3(SceneDataBuffer.view)) * vec4(v.position, 1.0);
+
     gl_Position = pos.xyww;
 }

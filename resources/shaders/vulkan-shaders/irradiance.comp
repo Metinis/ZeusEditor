@@ -71,7 +71,7 @@ void main()
             tangentSample.y * up +
             tangentSample.z * normal;
 
-            //sample environment map (assumed cubemap here)
+            //sample environment map
             vec3 envColor = texture(cubeTextures[pc.skyboxIdx], sampleVec).rgb;
 
             irradiance += envColor * cos(theta) * sin(theta);
