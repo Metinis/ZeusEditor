@@ -47,17 +47,13 @@ void main()
 
     int face = coord.z;
 
-    if(coord.x >= size.x ||
-    coord.y >= size.y ||
-    face >= 6)
+    if(coord.x >= size.x || coord.y >= size.y || face >= 6)
     {
         return;
     }
 
     vec2 uv = (vec2(coord.xy) + 0.5) / vec2(size);
     uv = uv * 2.0 - 1.0;
-
-    //uv.y *= -1.0;
 
     vec3 dir = getCubemapDirection(uv, face);
 
