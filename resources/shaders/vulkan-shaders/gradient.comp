@@ -37,7 +37,7 @@ vec3 getCubemapDirection(vec2 uv, int face)
     return vec3(0.0);
 }
 
-layout(set = 1, binding = 1, rgba16f) uniform imageCube cubeImages[];
+
 
 void main()
 {

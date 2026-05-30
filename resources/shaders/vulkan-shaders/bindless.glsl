@@ -7,6 +7,8 @@ layout(set = 1, binding = 0) uniform samplerCube cubeTextures[];
 layout(set = 1, binding = 1, rgba8) uniform image2D rgba8Images[];
 layout(set = 1, binding = 1, rgba16f) uniform image2D rgba16fImages[];
 
+layout(set = 1, binding = 1, rgba16f) uniform imageCube cubeImages[];
+
 struct Material {
     vec4 u_Albedo;   // xyz = color
     vec4 u_Params;   // x=metallic, y=roughness, z=ao, w=unused
