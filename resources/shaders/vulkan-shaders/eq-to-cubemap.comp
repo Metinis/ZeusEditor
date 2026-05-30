@@ -10,6 +10,7 @@ layout(push_constant) uniform PushConstants
 {
     uint eqTextureIdx;
     uint skyboxIdx;
+    uint conMapIdx;
 } pc;
 
 const vec2 invAtan = vec2(0.1591, 0.3183);
