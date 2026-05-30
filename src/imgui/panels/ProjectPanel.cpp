@@ -85,7 +85,7 @@ void ProjectPanel::drawContextMenu() {
             ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
     {
         if (ImGui::MenuItem("Add Model from Disk")) {
-            constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
+            constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf", "*.FBX" };
             const char* path = tinyfd_openFileDialog("Choose a model", "",
                 filters.size(), filters.data(), "3D Model Files", 1);
             if (path) m_Importer->loadModel(getNameWithoutExtension(path), path);
