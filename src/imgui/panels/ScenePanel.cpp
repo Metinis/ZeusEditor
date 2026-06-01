@@ -2,8 +2,8 @@
 
 #include "imgui_internal.h"
 
-ScenePanel::ScenePanel(ZEN::ZEngine* engine, SelectionContext& selection) : m_Engine(engine), m_SelectionContext(selection)  {
-
+ScenePanel::ScenePanel(ZEN::EngineContext* ctx, SelectionContext &selection) : m_SelectionContext(selection)  {
+    m_Scene = ctx->scene;
 }
 static constexpr const char* ENTITY_DRAG_PAYLOAD = "ZEN_ENTITY";
 
@@ -17,7 +17,7 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
         ImGuiTreeNodeFlags_SpanAvailWidth;
 
     bool hasChildren = false;
-    for (auto childEntity : m_Engine->getScene().getEntities<ZEN::ParentComp>()) {
+    for (auto childEntity : m_Scene->getEntities<ZEN::ParentComp>()) {
         auto& pc = childEntity.getComponent<ZEN::ParentComp>();
         if (pc.parentID == entity.getComponent<ZEN::UUIDComp>().uuid) {
             hasChildren = true;
@@ -55,7 +55,7 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
     ImGui::PushID((intptr_t)entity);
     if (ImGui::BeginPopupContextItem("EntityPanelContext", ImGuiPopupFlags_MouseButtonRight)) {
         if (ImGui::MenuItem("Delete")) {
-            m_Engine->getScene().removeEntity(entity);
+            m_Scene->removeEntity(entity);
 
         }
         ImGui::EndPopup();
@@ -67,10 +67,10 @@ void ScenePanel::drawEntityNode(ZEN::Entity& entity) {
     }
 
     if (opened) {
-        auto entities = m_Engine->getScene().getEntities<ZEN::ParentComp>();
+        auto entities = m_Scene->getEntities<ZEN::ParentComp>();
         for(auto e : entities) {
             auto parentComp = e.getComponent<ZEN::ParentComp>();
-            if(parentComp.parentID == entity.getComponent<ZEN::UUIDComp>().uuid) {
+            if(entity.isValid() && parentComp.parentID == entity.getComponent<ZEN::UUIDComp>().uuid) {
                 drawEntityNode(e);
             }
         }
@@ -96,7 +96,7 @@ void ScenePanel::onUIRender() {
             ImGui::AcceptDragDropPayload(ENTITY_DRAG_PAYLOAD))
         {
             ZEN::UUID id = *(const ZEN::UUID*)payload->Data;
-            auto child = m_Engine->getScene().getEntity(id);
+            auto child = m_Scene->getEntity(id);
 
             if (child.isValid() && child.hasComponent<ZEN::ParentComp>())
             {
@@ -109,7 +109,7 @@ void ScenePanel::onUIRender() {
     if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
         ImGui::SetWindowFocus();
     }
-    auto view = m_Engine->getScene().getEntities<ZEN::TagComp>();
+    auto view = m_Scene->getEntities<ZEN::TagComp>();
 
     if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) &&
     ImGui::IsMouseClicked(ImGuiMouseButton_Right))
@@ -120,13 +120,13 @@ void ScenePanel::onUIRender() {
     if (ImGui::BeginPopup("SceneContextMenu"))
     {
         if (ImGui::MenuItem("Add Empty Entity")) {
-            ZEN::Entity entity = m_Engine->getScene().createEntity();
+            ZEN::Entity entity = m_Scene->createEntity();
             m_SelectionContext.setEntity(entity);
 
 
         }
         if (ImGui::MenuItem("Add Cube")) {
-            ZEN::Entity entity = m_Engine->getScene().createEntity("Cube");
+            ZEN::Entity entity = m_Scene->createEntity("Cube");
             auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::defaultCubeID);
             entity.addComponent<ZEN::MeshComp>(mesh);
             m_SelectionContext.setEntity(entity);
@@ -134,7 +134,7 @@ void ScenePanel::onUIRender() {
 
         }
         if (ImGui::MenuItem("Add Sphere")) {
-            ZEN::Entity entity = m_Engine->getScene().createEntity("Sphere");
+            ZEN::Entity entity = m_Scene->createEntity("Sphere");
             auto mesh = ZEN::AssetHandle<ZEN::MeshData>(ZEN::defaultSphereID);
             entity.addComponent<ZEN::MeshComp>(mesh);
             m_SelectionContext.setEntity(entity);
@@ -150,14 +150,14 @@ void ScenePanel::onUIRender() {
     }
 
     ImGui::End();
-    if (m_PendingReparent) {
+    if (m_PendingReparent.has_value()) {
         auto& [childID, parentID] = *m_PendingReparent;
 
-        auto child  = m_Engine->getScene().getEntity(childID);
-        auto parent = m_Engine->getScene().getEntity(parentID);
+        auto child  = m_Scene->getEntity(childID);
+        auto parent = m_Scene->getEntity(parentID);
 
         if (child.isValid() && parent.isValid() &&
-            !m_Engine->getScene().isDescendantOf(child, parent))
+            !m_Scene->isDescendantOf(child, parent))
         {
             auto& pc = child.hasComponent<ZEN::ParentComp>()
                 ? child.getComponent<ZEN::ParentComp>()
@@ -172,14 +172,9 @@ void ScenePanel::onUIRender() {
 }
 
 void ScenePanel::onEvent(ZEN::Event &event) {
-    ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
 }
 
 bool ScenePanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if (e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
-    }
     return false;
 }

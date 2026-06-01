@@ -6,7 +6,7 @@ struct ImGuiPayload;
 
 class InspectorPanel : public ZEN::Layer {
 public:
-    explicit InspectorPanel(ZEN::ZEngine* engine, SelectionContext& selection);
+    explicit InspectorPanel(ZEN::EngineContext* ctx, SelectionContext &selection);
     void onUIRender() override;
     void onEvent(ZEN::Event& event) override;
 private:
@@ -14,7 +14,7 @@ private:
     void editMesh();
     void editComponents();
     void editRuntimeComps();
-    void editMaterialProps();
+    bool editMaterialProps();
     void editMaterialComp();
     void editBoxColliderComp();
     void editSphereColliderComp();
@@ -22,12 +22,13 @@ private:
     void editMeshColliderComp();
     void editRigidBodyComp();
     void inspectEntity();
-    void inspectMaterial();
-    void renderTextureDrop(ZEN::AssetID& textureID, const char* name);
+    bool inspectMaterial(); //return dirty bit
+    bool renderTextureDrop(ZEN::AssetID& textureID, const char* name);
     void handleMaterialDrop(const ImGuiPayload* payload);
     void handleMeshDrop(const ImGuiPayload* payload);
-    void handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture);
-    ZEN::ZEngine* m_Engine{};
+    bool handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID& outTexture);
     std::shared_ptr<ZEN::AssetLibrary> m_AssetLibrary;
+    ZEN::CompRegistry* m_CompRegistry;
+    ZEN::VKRenderer* m_Renderer;
     SelectionContext& m_SelectionContext;
 };

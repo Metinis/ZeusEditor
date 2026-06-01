@@ -6,7 +6,7 @@
 
 class ViewPanel : public ZEN::Layer  {
 public:
-    explicit ViewPanel(ZEN::ZEngine* engine, SelectionContext& selection);
+    explicit ViewPanel(ZEN::EngineContext* ctx, SelectionContext &selection);
     void onUIRender() override;
     void onEvent(ZEN::Event& event) override;
 private:
@@ -28,7 +28,8 @@ private:
     bool m_IsFocused{false};
     bool m_DoMousePick{false};
     glm::vec2 m_ViewportBounds[2];
-    ZEN::ZEngine* m_Engine{};
     SelectionContext& m_SelectionContext;
+    ZEN::VKRenderer* m_Renderer{};
+    ZEN::Scene* m_Scene{};
     ImVec2 m_PanelSize;
 };

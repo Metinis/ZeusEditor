@@ -1,10 +1,13 @@
 #include "ProjectPanel.h"
 #include <tinyfiledialogs.h>
+#include <ZeusEngineCore/engine/rendering/VKRenderer.h>
 
 
-ProjectPanel::ProjectPanel(ZEN::ZEngine* engine, SelectionContext& selection)
-    : m_Engine(engine), m_SelectionContext(selection)  {
+ProjectPanel::ProjectPanel(ZEN::EngineContext* ctx, SelectionContext &selection)
+    : m_SelectionContext(selection)  {
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
+    m_Importer = ctx->modelImporter.get();
+    m_Renderer = ctx->vkRenderer.get();
 }
 
 static std::string getFileName(const std::string& path) {
@@ -82,10 +85,10 @@ void ProjectPanel::drawContextMenu() {
             ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
     {
         if (ImGui::MenuItem("Add Model from Disk")) {
-            constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf" };
+            constexpr std::array filters = { "*.obj", "*.fbx", "*.glb", "*.gltf", "*.FBX" };
             const char* path = tinyfd_openFileDialog("Choose a model", "",
                 filters.size(), filters.data(), "3D Model Files", 1);
-            if (path) m_Engine->getModelImporter().loadModel(getNameWithoutExtension(path), path);
+            if (path) m_Importer->loadModel(getNameWithoutExtension(path), path);
         }
 
         if (ImGui::MenuItem("Add Texture from Disk")) {
@@ -100,7 +103,7 @@ void ProjectPanel::drawContextMenu() {
 
                 while ((end = allPaths.find('|', start)) != std::string::npos) {
                     std::string path = allPaths.substr(start, end - start);
-                    m_Engine->getModelImporter().loadTexture(
+                    m_Importer->loadTexture(
                         getNameWithoutExtension(path.c_str()),
                         path.c_str()
                     );
@@ -108,7 +111,7 @@ void ProjectPanel::drawContextMenu() {
                 }
 
                 std::string path = allPaths.substr(start);
-                m_Engine->getModelImporter().loadTexture(
+                m_Importer->loadTexture(
                     getNameWithoutExtension(path.c_str()),
                     path.c_str()
                 );
@@ -129,7 +132,8 @@ void ProjectPanel::drawMeshesGrid() {
 
     std::vector<ZEN::AssetID> toRemove;
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::MeshData>())
-        processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes, "MESH_NAME");
+        processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes,
+            "MESH_NAME", m_Renderer->getImGUIDescSet(assetID));
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
@@ -140,14 +144,9 @@ void ProjectPanel::drawMaterialsGrid() {
     std::vector<ZEN::AssetID> toRemove;
 
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::Material>()) {
-        auto material = m_AssetLibrary->getMaterialRaw(assetID);
-
-        void* texHandle = nullptr;
-        if (material.textureID != 0) {
-            texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-                m_Engine->getRenderer().getResourceManager()->getTexture(material.textureID)
-            ));
-        }
+        //auto material = m_AssetLibrary->getMaterialRaw(assetID);
+        const auto mat = m_AssetLibrary->get<ZEN::Material>(assetID);
+        void* texHandle = m_Renderer->getImGUIDescSet(mat->texture);
 
         processThumbnail(
             assetID,
@@ -157,7 +156,7 @@ void ProjectPanel::drawMaterialsGrid() {
             "MATERIAL_NAME",
             texHandle,
             [&, assetID]() {
-                m_SelectionContext.setMaterial(m_AssetLibrary->get<ZEN::Material>(assetID));
+                m_SelectionContext.setMaterial(ZEN::AssetHandle<ZEN::Material>(assetID));
             }
         );
     }
@@ -174,12 +173,7 @@ void ProjectPanel::drawTexturesGrid() {
         auto* tex = m_AssetLibrary->get<ZEN::TextureData>(assetID);
         if (!tex) continue;
 
-        auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
-        int texID = resourceManager->get<ZEN::GPUTexture>(assetID)->drawableID;
-
-        void* texHandle = reinterpret_cast<void*>(static_cast<uintptr_t>(
-            m_Engine->getRenderer().getResourceManager()->getTexture(texID)
-        ));
+        void* texHandle = m_Renderer->getImGUIDescSet(assetID);
 
         processThumbnail(
             assetID,
@@ -189,7 +183,7 @@ void ProjectPanel::drawTexturesGrid() {
             "TEXTURE_NAME",
             texHandle,
             [&, assetID]() {
-                m_SelectionContext.setMaterial(m_AssetLibrary->get<ZEN::Material>(assetID));
+                m_SelectionContext.setMaterial(ZEN::AssetHandle<ZEN::Material>(assetID));
             }
         );
     }
@@ -207,7 +201,7 @@ void ProjectPanel::createMaterialPopup() {
 
     if (ImGui::Button("Create", ImVec2(120, 0))) {
         ZEN::Material material = *ZEN::AssetHandle<ZEN::Material>(ZEN::defaultMaterialID);
-        m_AssetLibrary->createAsset(material, matName);
+        m_AssetLibrary->createAsset<ZEN::Material>(std::move(material), matName);
         ImGui::CloseCurrentPopup();
     }
 
@@ -271,14 +265,9 @@ void ProjectPanel::onUIRender() {
 }
 
 void ProjectPanel::onEvent(ZEN::Event &event) {
-    ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent& e) {return onPlayModeEvent(e); });
 }
 
 bool ProjectPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if(e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
-    }
     return false;
 }

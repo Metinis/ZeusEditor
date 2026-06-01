@@ -6,9 +6,10 @@
 #include "ZeusEngineCore/input/KeyCodes.h"
 #include "ZeusEngineCore/input/MouseCodes.h"
 
-ViewPanel::ViewPanel(ZEN::ZEngine *engine, SelectionContext &selection) : m_Engine(engine),
-                                                                          m_SelectionContext(selection) {
+ViewPanel::ViewPanel(ZEN::EngineContext* ctx, SelectionContext &selection) : m_SelectionContext(selection) {
     m_PanelSize = {800, 600};
+    m_Renderer = ctx->vkRenderer.get();
+    m_Scene = ctx->scene;
 }
 
 void ViewPanel::onUIRender() {
@@ -68,7 +69,6 @@ void ViewPanel::onUIRender() {
 void ViewPanel::onEvent(ZEN::Event &event) {
     ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent &e) { return onPlayModeEvent(e); });
     dispatcher.dispatch<ZEN::KeyPressedEvent>([this](ZEN::KeyPressedEvent &e) { return onKeyPressedEvent(e); });
     dispatcher.dispatch<ZEN::MouseButtonPressedEvent>([this](ZEN::MouseButtonPressedEvent &e) {
         return onMouseButtonPressedEvent(e);
@@ -80,7 +80,8 @@ void ViewPanel::onEvent(ZEN::Event &event) {
 }
 
 void ViewPanel::drawColorImage() {
-    glm::vec2 rendererSize = m_Engine->getRenderer().getSize();
+    glm::vec2 rendererSize = {ZEN::Application::get().getWindow()->getWidth(), ZEN::Application::get().getWindow()->getHeight()};
+    //glm::vec2 rendererSize {1280.0f, 720.0f};
     ImVec2 texSize(rendererSize.x, rendererSize.y);
     float aspect = texSize.x / texSize.y;
     ImVec2 finalSize;
@@ -102,10 +103,10 @@ void ViewPanel::drawColorImage() {
     ));
 
     ImGui::Image(
-        (void *) (intptr_t) m_Engine->getRenderer().getColorTextureHandle(),
+        (ImTextureID)m_Renderer->getImDescSet(),
         finalSize,
-        ImVec2(0, 1), // uv0 (top-left)
-        ImVec2(1, 0) // uv1 (bottom-right)
+        ImVec2(0, 0), // uv0 (top-left)
+        ImVec2(1, 1) // uv1 (bottom-right)
     );
 }
 
@@ -121,9 +122,11 @@ void ViewPanel::drawGizmo() {
     glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
     ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, viewportSize.x, viewportSize.y);
 
-    auto cameraEntity = m_Engine->getScene().getSceneCamera();
+    auto cameraEntity = m_Scene->getSceneCamera();
     glm::mat4 view = cameraEntity.getComponent<ZEN::TransformComp>().getViewMatrix();
+
     glm::mat4 proj = cameraEntity.getComponent<ZEN::SceneCameraComp>().projection;
+    proj[1][1] *= -1;
 
     auto& tc = selection.getComponent<ZEN::TransformComp>();
     glm::mat4 worldMatrix = tc.worldMatrix;
@@ -141,7 +144,7 @@ void ViewPanel::drawGizmo() {
         glm::mat4 localMatrix = worldMatrix;
 
         if (selection.hasComponent<ZEN::ParentComp>()) {
-            auto parent = m_Engine->getScene().getEntity(selection.getComponent<ZEN::ParentComp>().parentID);
+            auto parent = m_Scene->getEntity(selection.getComponent<ZEN::ParentComp>().parentID);
             auto& parentTC = parent.getComponent<ZEN::TransformComp>();
             localMatrix = glm::inverse(parentTC.worldMatrix) * worldMatrix;
         }
@@ -171,7 +174,7 @@ void ViewPanel::handleDrop() {
                     << " at viewport coords: "
                     << relative.x << ", " << relative.y << "\n";
             if (ZEN::Project::getActive()->getAssetLibrary()->get<ZEN::MeshData>(assetID)) {
-                m_Engine->getScene().createEntity().addComponent<ZEN::MeshComp>(
+                m_Scene->createEntity().addComponent<ZEN::MeshComp>(
                     ZEN::AssetHandle<ZEN::MeshData>(assetID));
             }
         }
@@ -180,9 +183,6 @@ void ViewPanel::handleDrop() {
 }
 
 bool ViewPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if (e.getPlaying()) {
-        ZEN::Application::get().popOverlay(this);
-    }
     return false;
 }
 
@@ -247,7 +247,7 @@ void ViewPanel::doMousePick() {
 
     if (mouseX >= 0 || mouseX < viewportSize.x || mouseY >= 0 || mouseY < viewportSize.y) {
 
-        uint32_t entityID = m_Engine->getRenderer().getPixels(mouseX, mouseY, viewportSize);
+        /*uint32_t entityID = m_Engine->getRenderer().getPixels(mouseX, mouseY, viewportSize);
 
         auto entity = m_Engine->getScene().getEntityByRegistryID(entityID);
         if (entity.isValid() && entityID != 0) {
@@ -255,7 +255,7 @@ void ViewPanel::doMousePick() {
         }
         else {
             m_SelectionContext.setEntity(ZEN::Entity{});
-        }
+        }*/
     }
     m_DoMousePick = false;
 }

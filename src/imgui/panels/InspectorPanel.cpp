@@ -11,10 +11,12 @@ static auto const inspectTransform = [](ZEN::TransformComp &out) {
     ImGui::DragFloat3("scale", &out.localScale.x, 0.01f, 0.0f, 100.0f);
 };
 
-InspectorPanel::InspectorPanel(ZEN::ZEngine *engine, SelectionContext &selection) : m_Engine(engine),
+InspectorPanel::InspectorPanel(ZEN::EngineContext* ctx, SelectionContext &selection) :
     m_SelectionContext(selection) {
     m_AssetLibrary = ZEN::Project::getActive()->getAssetLibrary();
-}
+    m_CompRegistry = ctx->compRegistry.get();
+    m_Renderer = ctx->vkRenderer.get();
+};
 
 void InspectorPanel::editMesh() {
     if (auto *meshComp = m_SelectionContext.getEntity().tryGetComponent<ZEN::MeshComp>()) {
@@ -144,7 +146,7 @@ void InspectorPanel::editComponents() {
 
 void InspectorPanel::editRuntimeComps() {
     if (ImGui::BeginPopup("AddCustomComponentPopup")) {
-        for (const auto &comp: m_Engine->getCompRegistry().getComponents()) {
+        for (const auto &comp: m_CompRegistry->getComponents()) {
             if (ImGui::MenuItem(comp.name)) {
                 m_SelectionContext.getEntity().addRuntimeComponent(comp);
                 ImGui::CloseCurrentPopup();
@@ -153,7 +155,7 @@ void InspectorPanel::editRuntimeComps() {
 
         ImGui::EndPopup();
     }
-    for (auto &compInfo: m_Engine->getCompRegistry().getComponents()) {
+    for (auto &compInfo: m_CompRegistry->getComponents()) {
         if (auto *comp = m_SelectionContext.getEntity().getRuntimeComponent(compInfo.name)) {
             if (ImGui::CollapsingHeader(compInfo.name)) {
                 ImGui::SameLine();
@@ -198,31 +200,33 @@ void InspectorPanel::editRuntimeComps() {
     }
 }
 
-void InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID &outTexture) {
+bool InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID &outTexture) {
     ZEN::AssetID assetID;
+    bool edited = false;
     if (payload->DataSize == sizeof(ZEN::AssetID)) {
         std::memcpy(&assetID, payload->Data, sizeof(ZEN::AssetID));
+        edited = true;
     }
     outTexture = assetID;
+    return edited;
 }
 
-void InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
+bool InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
+    bool edited = false;
     constexpr float thumbnailSize = 8.0f;
-
-    auto resourceManager = ZEN::Application::get().getEngine()->getRenderer().getResourceManager();
-    int texID = resourceManager->get<ZEN::GPUTexture>(textureID)->drawableID;
-    ImGui::ImageButton(
-        name, reinterpret_cast<void *>(static_cast<uintptr_t>(m_Engine->getRenderer().getResourceManager()->
-            getTexture(texID))),
+    void* texHandle = m_Renderer->getImGUIDescSet(textureID);
+    ImGui::ImageButton(name, texHandle,
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("TEXTURE_NAME")) {
-            handleTextureDrop(payload, textureID);
+            edited = handleTextureDrop(payload, textureID);
+
         }
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine();
     ImGui::Text("%s", name);
+    return edited;
 }
 
 void InspectorPanel::editMaterialComp() {
@@ -484,16 +488,17 @@ void InspectorPanel::editRigidBodyComp() {
 }
 
 
-void InspectorPanel::editMaterialProps() {
+bool InspectorPanel::editMaterialProps() {
     ImGui::SeparatorText("Material");
 
-    ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f);
-    ImGui::DragFloat("Metallic", &m_SelectionContext.getMaterial()->metallic, 0.01f, 0.0f, 1.0f);
-    ImGui::DragFloat("Roughness", &m_SelectionContext.getMaterial()->roughness, 0.01f, 0.0f, 1.0f);
-    ImGui::DragFloat("Ambient Oclussion", &m_SelectionContext.getMaterial()->ao, 0.01f, 0.0f, 1.0f);
-    ImGui::Checkbox("Is Metal", &m_SelectionContext.getMaterial()->metal);
+    bool edited = false;
 
-    if (ImGui::TreeNode("Shader")) {
+    edited |= ImGui::DragFloat3("Albedo", &m_SelectionContext.getMaterial()->albedo.x, 0.01f, 0.0f, 1.0f);
+    edited |= ImGui::DragFloat("Metallic", &m_SelectionContext.getMaterial()->metallic, 0.01f, 0.0f, 1.0f);
+    edited |= ImGui::DragFloat("Roughness", &m_SelectionContext.getMaterial()->roughness, 0.01f, 0.0f, 1.0f);
+    edited |= ImGui::DragFloat("Ambient Oclussion", &m_SelectionContext.getMaterial()->ao, 0.01f, 0.0f, 1.0f);
+
+    /*if (ImGui::TreeNode("Shader")) {
         if (auto shaderComp = m_SelectionContext.getMaterial()->shader) {
             ImGui::SeparatorText("Shader");
 
@@ -532,7 +537,7 @@ void InspectorPanel::editMaterialProps() {
             ImGui::EndGroup();
         }
         ImGui::TreePop();
-    }
+    }*/
 
 
     if (ImGui::TreeNode("Texture")) {
@@ -540,34 +545,35 @@ void InspectorPanel::editMaterialProps() {
         ImGui::SetColumnWidth(0, 150);
         ImGui::SetColumnWidth(1, 100);
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->texture, "Albedo");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->texture, "Albedo");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##Albedo", &m_SelectionContext.getMaterial()->useAlbedo);
-        ImGui::NextColumn();
-
-        renderTextureDrop(m_SelectionContext.getMaterial()->metallicTex, "Metallic");
-        ImGui::NextColumn();
-        ImGui::Checkbox("Use##Metallic", &m_SelectionContext.getMaterial()->useMetallic);
+        edited |= ImGui::Checkbox("Use##Albedo", &m_SelectionContext.getMaterial()->useAlbedo);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTex, "Roughness");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->metallicTex, "Metallic");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##Roughness", &m_SelectionContext.getMaterial()->useRoughness);
-        ImGui::NextColumn();
-
-        renderTextureDrop(m_SelectionContext.getMaterial()->aoTex, "AO");
-        ImGui::NextColumn();
-        ImGui::Checkbox("Use##AO", &m_SelectionContext.getMaterial()->useAO);
+        edited |= ImGui::Checkbox("Use##Metallic", &m_SelectionContext.getMaterial()->useMetallic);
         ImGui::NextColumn();
 
-        renderTextureDrop(m_SelectionContext.getMaterial()->normalTex, "Normal");
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->roughnessTex, "Roughness");
         ImGui::NextColumn();
-        ImGui::Checkbox("Use##Normal", &m_SelectionContext.getMaterial()->useNormal);
+        edited |= ImGui::Checkbox("Use##Roughness", &m_SelectionContext.getMaterial()->useRoughness);
+        ImGui::NextColumn();
+
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->aoTex, "AO");
+        ImGui::NextColumn();
+        edited |= ImGui::Checkbox("Use##AO", &m_SelectionContext.getMaterial()->useAO);
+        ImGui::NextColumn();
+
+        edited |= renderTextureDrop(m_SelectionContext.getMaterial()->normalTex, "Normal");
+        ImGui::NextColumn();
+        edited |= ImGui::Checkbox("Use##Normal", &m_SelectionContext.getMaterial()->useNormal);
         ImGui::NextColumn();
 
         ImGui::Columns(1);
         ImGui::TreePop();
     }
+    return edited;
 }
 
 void InspectorPanel::inspectEntity() {
@@ -612,8 +618,12 @@ void InspectorPanel::inspectEntity() {
 
 }
 
-void InspectorPanel::inspectMaterial() {
-    editMaterialProps();
+bool InspectorPanel::inspectMaterial() {
+    bool edited = editMaterialProps();
+    if (edited) {
+        m_Renderer->uploadMaterial(m_SelectionContext.getMaterialID(), *m_SelectionContext.getMaterial());
+    }
+    return edited;
 }
 
 void InspectorPanel::onUIRender() {
@@ -645,13 +655,10 @@ void InspectorPanel::onUIRender() {
 void InspectorPanel::onEvent(ZEN::Event &event) {
     ZEN::EventDispatcher dispatcher(event);
 
-    dispatcher.dispatch<ZEN::RunPlayModeEvent>([this](ZEN::RunPlayModeEvent &e) { return onPlayModeEvent(e); });
+
 }
 
 bool InspectorPanel::onPlayModeEvent(ZEN::RunPlayModeEvent &e) {
-    if (e.getPlaying()) {
-       ZEN::Application::get().popOverlay(this);
-    }
     return false;
 }
 

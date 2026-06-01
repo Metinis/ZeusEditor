@@ -17,8 +17,6 @@ uniform samplerCube u_IrradianceMap;
 uniform samplerCube u_PrefilterMap;
 uniform sampler2D u_BRDFLUT;
 
-
-
 layout(std140) uniform Material {
   vec4 u_Albedo;     //RGB in xyz, ignore w
   vec4 u_Params;     //x = metallic, y = roughness, z = ao, w = if 0, non metal, if > 0 metal

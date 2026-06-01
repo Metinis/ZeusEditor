@@ -11,11 +11,12 @@ class MenuBarPanel;
 
 class EditorLayer : public ZEN::Layer {
 public:
-    EditorLayer(ZEN::ZEngine* engine);
+    EditorLayer(ZEN::EngineContext* ctx);
     void onEvent(ZEN::Event& event) override;
     bool onRunPlayMode(ZEN::RunPlayModeEvent& e);
     ~EditorLayer() override;
 private:
+    ZEN::VKRenderer* m_Renderer;
     SelectionContext m_SelectionContext;
     InspectorPanel* m_InspectorPanel;
     ProjectPanel* m_ProjectPanel;

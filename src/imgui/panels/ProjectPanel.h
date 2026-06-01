@@ -2,9 +2,12 @@
 #include <ZeusEngine.h>
 #include "SelectionContext.h"
 
+namespace ZEN {
+    class VKRenderer;
+}
 class ProjectPanel : public ZEN::Layer  {
 public:
-    explicit ProjectPanel(ZEN::ZEngine* engine, SelectionContext& selection);
+    explicit ProjectPanel(ZEN::EngineContext* ctx, SelectionContext &selection);
     void onUIRender() override;
     void onEvent(ZEN::Event& event) override;
 private:
@@ -21,5 +24,6 @@ private:
     SelectionContext& m_SelectionContext;
     bool m_OpenCreateMaterialPopup = false;
     std::shared_ptr<ZEN::AssetLibrary> m_AssetLibrary{};
-    ZEN::ZEngine* m_Engine{};
+    ZEN::ModelImporter* m_Importer{};
+    ZEN::VKRenderer* m_Renderer{};
 };
