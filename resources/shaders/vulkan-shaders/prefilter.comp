@@ -127,7 +127,7 @@ void main()
 
             float mipLevel = (pc.roughness <= 0.0) ? 0.0 : 0.5 * log2(saSample / saTexel);
 
-            vec3 envColor = sampleWithIdxLod(pc.skyboxIdx, 0, L, mipLevel).rgb;
+            vec3 envColor = sampleWithIdxLod(pc.skyboxIdx, LINEAR_SAMPLER_CLAMPED_INDEX, L, mipLevel).rgb;
             prefilteredColor += envColor * NdotL;
             totalWeight += NdotL;
         }

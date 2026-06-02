@@ -127,15 +127,15 @@ void main()
     vec3 R = reflect(-V, N);
     const float MAX_REFLECTION_LOD = 4.0;
 
-    vec3 prefilteredColor = sampleWithIdxLod(pc.prefilterIdx, 1, R, roughness * MAX_REFLECTION_LOD).rgb;
-    vec2 brdf = sampleWithIdx(pc.brdfTexIdx, 0, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 prefilteredColor = sampleWithIdxLod(pc.prefilterIdx, LINEAR_SAMPLER_CLAMPED_INDEX, R, roughness * MAX_REFLECTION_LOD).rgb;
+    vec2 brdf = sampleWithIdx(pc.brdfTexIdx, LINEAR_SAMPLER_CLAMPED_INDEX, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specularIBL = prefilteredColor * (F * brdf.x + brdf.y);
 
     vec3 lightColor = vec3(1.0);
 
     vec3 Lo = (diffuse + specular) * lightColor * nDotL;
 
-    vec3 irradiance = sampleWithIdx(pc.irradianceIdx, 0, N).rgb;
+    vec3 irradiance = sampleWithIdx(pc.irradianceIdx, LINEAR_SAMPLER_CLAMPED_INDEX, N).rgb;
     vec3 diffuseIBL = irradiance * albedo;
     vec3 ambient = (diffuseIBL + specularIBL) * ao;
 

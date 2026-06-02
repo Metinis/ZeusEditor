@@ -1,6 +1,11 @@
 #extension GL_EXT_buffer_reference : require
 #extension GL_EXT_nonuniform_qualifier : require
 
+#define LINEAR_SAMPLER_CLAMPED_INDEX 0
+#define NEAREST_SAMPLER_CLAMPED_INDEX 1
+#define LINEAR_SAMPLER_REPEAT_INDEX 2
+#define NEAREST_SAMPLER_REPEAT_INDEX 3
+
 layout(set = 1, binding = 0) uniform texture2D textures[];
 layout(set = 1, binding = 0) uniform textureCube cubeTextures[];
 
@@ -9,7 +14,6 @@ layout(set = 1, binding = 1, rgba16f) uniform image2D rgba16fImages[];
 
 layout(set = 1, binding = 1, rgba16f) uniform imageCube cubeImages[];
 
-//todo reserve some sampler indices for skybox/common stuff
 layout(set = 1, binding = 2) uniform sampler samplers[];
 
 struct Material {

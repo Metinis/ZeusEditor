@@ -62,7 +62,7 @@ void main()
 
     vec2 sphericalUV = sampleSphericalMap(dir);
 
-    vec3 color = sampleWithIdx(pc.eqTextureIdx, 0, sphericalUV).rgb;
+    vec3 color = sampleWithIdx(pc.eqTextureIdx, LINEAR_SAMPLER_CLAMPED_INDEX, sphericalUV).rgb;
 
     imageStore(cubeImages[pc.skyboxIdx], coord, vec4(color, 1.0));
 }
