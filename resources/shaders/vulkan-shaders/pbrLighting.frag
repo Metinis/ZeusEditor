@@ -75,20 +75,24 @@ void main()
     float ao = mat.u_Params.z;
 
     if((mat.flags & USE_ALBEDO) != 0u) {
-        albedo = pow(texture(textures[mat.albedoIndex], inUV).rgb, vec3(2.2));
+        albedo = pow(sampleWithIdx(mat.albedoIndex, mat.samplerIndex, inUV).rgb, vec3(2.2));
     }
+
     if((mat.flags & USE_NORMAL) != 0u) {
-        vec3 Nmap = texture(textures[mat.normalIndex], inUV).rgb * 2.0 - 1.0;
+        vec3 Nmap = sampleWithIdx(mat.normalIndex, mat.samplerIndex, inUV).rgb * 2.0 - 1.0;
         normal = normalize(inTBN * Nmap);
     }
+
     if((mat.flags & USE_METALLIC) != 0u) {
-        metallic = texture(textures[mat.metallicIndex], inUV).r;
+        metallic = sampleWithIdx(mat.metallicIndex, mat.samplerIndex, inUV).r;
     }
+
     if((mat.flags & USE_ROUGHNESS) != 0u) {
-        roughness = texture(textures[mat.roughnessIndex], inUV).r;
+        roughness = sampleWithIdx(mat.roughnessIndex, mat.samplerIndex, inUV).r;
     }
+
     if((mat.flags & USE_AO) != 0u) {
-        ao = texture(textures[mat.aoIndex], inUV).r;
+        ao = sampleWithIdx(mat.aoIndex, mat.samplerIndex, inUV).r;
     }
 
     vec3 N = normal;
@@ -123,15 +127,15 @@ void main()
     vec3 R = reflect(-V, N);
     const float MAX_REFLECTION_LOD = 4.0;
 
-    vec3 prefilteredColor = textureLod(cubeTextures[pc.prefilterIdx], R,  roughness * MAX_REFLECTION_LOD).rgb;
-    vec2 brdf  = texture(textures[pc.brdfTexIdx], vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 prefilteredColor = sampleWithIdxLod(pc.prefilterIdx, 1, R, roughness * MAX_REFLECTION_LOD).rgb;
+    vec2 brdf = sampleWithIdx(pc.brdfTexIdx, 0, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specularIBL = prefilteredColor * (F * brdf.x + brdf.y);
 
     vec3 lightColor = vec3(1.0);
 
     vec3 Lo = (diffuse + specular) * lightColor * nDotL;
 
-    vec3 irradiance = texture(cubeTextures[pc.irradianceIdx], N).rgb;
+    vec3 irradiance = sampleWithIdx(pc.irradianceIdx, 0, N).rgb;
     vec3 diffuseIBL = irradiance * albedo;
     vec3 ambient = (diffuseIBL + specularIBL) * ao;
 

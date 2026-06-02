@@ -42,8 +42,6 @@ vec3 getCubemapDirection(vec2 uv, int face)
     return vec3(0.0);
 }
 
-
-
 void main()
 {
     ivec3 coord = ivec3(gl_GlobalInvocationID.xyz);
@@ -64,7 +62,7 @@ void main()
 
     vec2 sphericalUV = sampleSphericalMap(dir);
 
-    vec3 color = texture(textures[pc.eqTextureIdx], sphericalUV).rgb;
+    vec3 color = sampleWithIdx(pc.eqTextureIdx, 0, sphericalUV).rgb;
 
     imageStore(cubeImages[pc.skyboxIdx], coord, vec4(color, 1.0));
 }

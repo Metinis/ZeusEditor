@@ -14,7 +14,7 @@ layout( push_constant ) uniform PushConstants
 
 void main()
 {
-    vec3 envColor = texture(cubeTextures[pc.skyboxIdx], inUV).rgb;
+    vec3 envColor = sampleWithIdx(pc.skyboxIdx, 0, inUV).rgb;
 
     envColor = envColor / (envColor + vec3(1.0));
     envColor = pow(envColor, vec3(1.0/2.2));
