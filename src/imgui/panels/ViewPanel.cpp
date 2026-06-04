@@ -103,7 +103,7 @@ void ViewPanel::drawColorImage() {
     ));
 
     ImGui::Image(
-        (ImTextureID)m_Renderer->getImDescSet(),
+        (ImTextureID)m_Renderer->getResources()->getImDescSet(),
         finalSize,
         ImVec2(0, 0), // uv0 (top-left)
         ImVec2(1, 1) // uv1 (bottom-right)

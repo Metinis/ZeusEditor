@@ -214,7 +214,7 @@ bool InspectorPanel::handleTextureDrop(const ImGuiPayload *payload, ZEN::AssetID
 bool InspectorPanel::renderTextureDrop(ZEN::AssetID &textureID, const char *name) {
     bool edited = false;
     constexpr float thumbnailSize = 8.0f;
-    void* texHandle = m_Renderer->getImGUIDescSet(textureID);
+    void* texHandle = m_Renderer->getResources()->getImGUIDescSet(textureID);
     ImGui::ImageButton(name, texHandle,
         ImVec2(thumbnailSize, thumbnailSize), ImVec2(0, 1), ImVec2(1, 0));
     if (ImGui::BeginDragDropTarget()) {
@@ -621,7 +621,7 @@ void InspectorPanel::inspectEntity() {
 bool InspectorPanel::inspectMaterial() {
     bool edited = editMaterialProps();
     if (edited) {
-        m_Renderer->uploadMaterial(m_SelectionContext.getMaterialID(), *m_SelectionContext.getMaterial());
+        m_Renderer->getResources()->uploadMaterial(m_SelectionContext.getMaterialID(), *m_SelectionContext.getMaterial());
     }
     return edited;
 }

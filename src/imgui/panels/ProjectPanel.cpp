@@ -133,7 +133,7 @@ void ProjectPanel::drawMeshesGrid() {
     std::vector<ZEN::AssetID> toRemove;
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::MeshData>())
         processThumbnail(assetID, m_AssetLibrary->getName(assetID), toRemove, ZEN::defaultMeshes,
-            "MESH_NAME", m_Renderer->getImGUIDescSet(assetID));
+            "MESH_NAME", m_Renderer->getResources()->getImGUIDescSet(assetID));
 
     for (auto& assetID : toRemove) {
         m_AssetLibrary->remove(assetID);
@@ -146,7 +146,7 @@ void ProjectPanel::drawMaterialsGrid() {
     for (auto& assetID : m_AssetLibrary->getAllIDsOfType<ZEN::Material>()) {
         //auto material = m_AssetLibrary->getMaterialRaw(assetID);
         const auto mat = m_AssetLibrary->get<ZEN::Material>(assetID);
-        void* texHandle = m_Renderer->getImGUIDescSet(mat->texture);
+        void* texHandle = m_Renderer->getResources()->getImGUIDescSet(mat->texture);
 
         processThumbnail(
             assetID,
@@ -173,7 +173,7 @@ void ProjectPanel::drawTexturesGrid() {
         auto* tex = m_AssetLibrary->get<ZEN::TextureData>(assetID);
         if (!tex) continue;
 
-        void* texHandle = m_Renderer->getImGUIDescSet(assetID);
+        void* texHandle = m_Renderer->getResources()->getImGUIDescSet(assetID);
 
         processThumbnail(
             assetID,
